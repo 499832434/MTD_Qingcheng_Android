@@ -1,39 +1,61 @@
 package com.qcjkjg.trafficrules;
 
-import android.support.v7.app.ActionBarActivity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import com.qcjkjg.trafficrules.db.DbCreateHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
+    private List<String> firstList=new ArrayList<String>();
+    private Map<String,List<String>> map=new HashMap<String,List<String>>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initView();
     }
 
+    private void initView(){
+        //打开数据库输出流
+        DbCreateHelper s = new DbCreateHelper();
+        SQLiteDatabase db =s.openDatabase(getApplicationContext());
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Cursor cursor = db.rawQuery("select Name,ID from areacode4 where Dep=?", new String[]{"5"});
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex("Name"));
+            int id=cursor.getInt(cursor.getColumnIndex("ID"));
+            firstList.add(name);
+            List<String> secondList=new ArrayList<String>();
+            Cursor cursor1 = db.rawQuery("select Name,ID from areacode4 where Dep=? and ParentID=?", new String[]{"6",id+""});
+            while (cursor1.moveToNext()) {
+                String name1 = cursor1.getString(cursor.getColumnIndex("Name"));
+                int id1=cursor1.getInt(cursor.getColumnIndex("ID"));
+                secondList.add(name1);
+                Log.e("aaa",name+"===="+name1+"===="+id1);
+            }
+            Log.e("ssss",secondList.size()+"");
+            map.put(name,secondList);
         }
 
-        return super.onOptionsItemSelected(item);
+        int numbe=0;
+        for(String key:map.keySet()){
+            numbe+=map.get(key).size();
+            Log.e("ccc",key+"===="+map.get(key).size()+"===="+numbe);
+        }
     }
+
+
 }
