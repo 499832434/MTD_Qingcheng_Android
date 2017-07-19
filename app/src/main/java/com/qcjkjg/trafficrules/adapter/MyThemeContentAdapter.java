@@ -1,21 +1,27 @@
 package com.qcjkjg.trafficrules.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
+import com.qcjkjg.trafficrules.view.MyGridLayout;
 import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.view.MyListView;
 import com.qcjkjg.trafficrules.vo.Message;
 import com.qcjkjg.trafficrules.vo.MessageTheme;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -37,7 +43,7 @@ public class MyThemeContentAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 9;
+        return 2;
     }
 
     @Override
@@ -69,5 +75,27 @@ public class MyThemeContentAdapter extends BaseAdapter {
     public final class ViewHolder {
         private MyGridView pictureMGV;
     }
+
+//    private void addImageView(MyGridLayout myGL){
+//        myGL.removeAllViews();
+//        for(int i=0;i<9;i++){
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            RelativeLayout lineLayout = new RelativeLayout(context);
+//            lineLayout.setLayoutParams(new MyGridLayout.LayoutParams(15, 15));
+//            lineLayout.setGravity(Gravity.CENTER_VERTICAL);
+//            lineLayout.setBackgroundColor(Color.parseColor("#000000"));
+//
+//            int width=(DensityUtil.getResolution((MyThemeActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
+//            ImageView imageView = new ImageView(context);
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, width);
+//            imageView.setLayoutParams(lp);
+//
+//
+//            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+//            Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(imageView);
+//            lineLayout.addView(imageView);
+//            myGL.addView(lineLayout);
+//        }
+//    }
 
 }
