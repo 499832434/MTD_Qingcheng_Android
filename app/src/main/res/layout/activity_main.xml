@@ -1,16 +1,98 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context=".MainActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="#ffffff">
 
-    <TextView
-            android:text="@string/hello_world"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <com.qcjkjg.trafficrules.view.CustomViewPager
+            android:id="@+id/masterViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+    </com.qcjkjg.trafficrules.view.CustomViewPager>
 
-</RelativeLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#e1e1e1"/>
+
+    <RadioGroup
+            android:id="@+id/tabGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <RadioButton
+                android:id="@+id/signupRB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:drawableTop="@drawable/ic_tab_signup_selector"
+                android:text="报名"
+                android:textColor="@color/bottom_tab_text_selector"
+                android:checked="true"/>
+
+        <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="考试"
+                android:textColor="@color/bottom_tab_text_selector"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:drawableTop="@drawable/ic_tab_examination_selector"
+                android:id="@+id/examinationRB"
+                />
+
+
+
+        <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="考友圈"
+                android:textColor="@color/bottom_tab_text_selector"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:drawableTop="@drawable/ic_tab_circle_selector"
+                android:id="@+id/circleRB"
+                />
+
+        <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="我的"
+                android:textColor="@color/bottom_tab_text_selector"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:drawableTop="@drawable/ic_tab_account_selector"
+                android:id="@+id/accountRB"
+                />
+    </RadioGroup>
+
+</LinearLayout>
+

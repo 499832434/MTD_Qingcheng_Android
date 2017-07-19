@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="match_parent"
+              android:textColor="#333333"
+              android:lineSpacingExtra="5dp"
+              android:textSize="18sp"
+              android:id="@+id/titleTV"
+              android:text="听说撩妹都靠这个!听说撩妹都靠这个!听说撩妹都靠这个!听说撩妹都靠这个!听说撩妹都靠这个!"
+              android:layout_height="wrap_content"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="40dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:layout_height="wrap_content"
+                  android:textColor="#999999"
+                  android:text="20分钟前"
+                  android:textSize="16sp"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_comments"
+                   android:layout_toLeftOf="@+id/leaveTV"
+                   android:scaleType="centerInside"
+                   android:layout_marginRight="10dp"
+                   android:layout_centerVertical="true"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:layout_height="wrap_content"
+                  android:textColor="#999999"
+                  android:id="@+id/leaveTV"
+                  android:layout_toLeftOf="@+id/fabulousIV"
+                  android:text="10"
+                  android:layout_marginRight="10dp"
+                  android:textSize="16sp"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_comments"
+                   android:layout_toLeftOf="@+id/fabulousTV"
+                   android:id="@+id/fabulousIV"
+                   android:scaleType="centerInside"
+                   android:layout_marginRight="10dp"
+                   android:layout_centerVertical="true"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:layout_height="wrap_content"
+                  android:textColor="#999999"
+                  android:id="@+id/fabulousTV"
+                  android:layout_alignParentRight="true"
+                  android:text="10"
+                  android:textSize="16sp"/>
+    </RelativeLayout>
+    <com.qcjkjg.trafficrules.view.MyGridView
+            android:layout_marginTop="10dp"
+            android:numColumns="3"
+            android:id="@+id/pictureMGV"
+            android:layout_gravity="center"
+            android:horizontalSpacing="5dp"
+            android:verticalSpacing="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    </com.qcjkjg.trafficrules.view.MyGridView>
+</LinearLayout>

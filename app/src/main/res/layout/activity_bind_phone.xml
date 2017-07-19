@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="#ffffff"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.qcjkjg.trafficrules.view.CustomTitleBar
+            android:id="@+id/customTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            custom:text="绑定手机"
+            />
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_below="@+id/customTitleBar"
+                    android:id="@+id/RL1"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_height="40dp">
+        <ImageView android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:id="@+id/IV1"
+                   android:src="@drawable/ic_account"
+                   android:scaleType="centerInside"/>
+        <EditText android:layout_width="match_parent"
+                  android:background="@null"
+                  android:hint="请输入手机号"
+                  android:textSize="16sp"
+                  android:textColor="#bbbbbb"
+                  android:gravity="center_vertical"
+                  android:layout_toRightOf="@+id/IV1"
+                  android:textColorHint="#bbbbbb"
+                  android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:layout_below="@+id/RL1"
+          android:id="@+id/V1"
+          android:layout_marginRight="20dp"
+          android:layout_marginLeft="20dp"
+          android:background="#e1e1e1"
+            />
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_below="@+id/V1"
+                    android:id="@+id/RL2"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="40dp">
+        <ImageView android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:id="@+id/IV2"
+                   android:src="@drawable/ic_validation"
+                   android:scaleType="centerInside"/>
+        <EditText android:layout_width="match_parent"
+                  android:background="@null"
+                  android:hint="请输入验证码"
+                  android:textSize="16sp"
+                  android:textColor="#bbbbbb"
+                  android:gravity="center_vertical"
+                  android:layout_toRightOf="@+id/IV2"
+                  android:textColorHint="#bbbbbb"
+                  android:layout_height="match_parent"/>
+
+        <View android:layout_width="0.5dp"
+              android:layout_height="30dp"
+              android:layout_toLeftOf="@+id/verificationCodeTV"
+              android:layout_centerVertical="true"
+              android:background="#e1e1e1"/>
+        <TextView android:layout_width="100dp"
+                  android:id="@+id/verificationCodeTV"
+                  android:layout_height="match_parent"
+                  android:gravity="center"
+                  android:layout_alignParentRight="true"
+                  android:textColor="#41b3eb"
+                  android:textSize="16sp"
+                  android:text="获取验证码"/>
+    </RelativeLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:layout_below="@+id/RL2"
+          android:id="@+id/V2"
+          android:layout_marginRight="20dp"
+          android:background="#e1e1e1"
+          android:layout_marginLeft="20dp"
+            />
+
+    <Button android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:text="确定"
+            android:layout_below="@+id/V2"
+            android:id="@+id/commitB"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ic_bg_login_button"
+            android:layout_height="48dp"/>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="30dp"
+              android:layout_alignParentBottom="true"
+              android:gravity="center"
+              android:visibility="gone"
+              android:id="@+id/phoneTV"
+              android:layout_marginBottom="20dp"
+              android:textColor="#999999"
+              android:textSize="14sp"
+              android:text="登录新手机号码自动注册"/>
+</RelativeLayout>
