@@ -1,4 +1,4 @@
-package com.qcjkjg.trafficrules;
+package com.qcjkjg.trafficrules.activity;
 
 import android.content.Context;
 import android.content.Intent;
