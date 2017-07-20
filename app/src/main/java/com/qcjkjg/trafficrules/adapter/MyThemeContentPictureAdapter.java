@@ -68,6 +68,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
         return convertView;
     }
 
+
     public final class ViewHolder {
         private ImageView pictureIV;
     }
