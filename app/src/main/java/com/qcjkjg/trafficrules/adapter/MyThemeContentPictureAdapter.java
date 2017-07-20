@@ -33,7 +33,6 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
         this.width=(DensityUtil.getResolution((MyThemeActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
     }
 
-
     @Override
     public int getCount() {
         return 9;
