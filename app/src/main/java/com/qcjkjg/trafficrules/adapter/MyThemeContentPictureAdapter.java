@@ -34,7 +34,6 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
     }
 
 
-
     @Override
     public int getCount() {
         return 9;
