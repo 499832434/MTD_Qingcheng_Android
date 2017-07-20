@@ -32,7 +32,7 @@
             android:layout_toRightOf="@+id/leftLL"
             android:layout_marginLeft="10dp"
             android:id="@+id/myThemeLV"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
     </com.qcjkjg.trafficrules.view.MyListView>
 </RelativeLayout>
