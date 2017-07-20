@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
+import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
 import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
+import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.view.MyListView;
+import com.qcjkjg.trafficrules.vo.MessageMyReply;
 import com.qcjkjg.trafficrules.vo.MessageTheme;
 
 import java.util.List;
@@ -17,13 +20,13 @@ import java.util.List;
 /**
  * Created by zongshuo on 2017/7/19.
  */
-public class MyThemeAdapter extends BaseAdapter {
+public class MessageMyReplyAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<MessageTheme> mData;
+    private List<MessageMyReply> mData;
     private Context context;
 
-    public MyThemeAdapter(FragmentActivity context, List<MessageTheme> data) {
+    public MessageMyReplyAdapter(FragmentActivity context, List<MessageMyReply> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
@@ -31,7 +34,7 @@ public class MyThemeAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 9;
+        return 4;
     }
 
     @Override
@@ -49,19 +52,19 @@ public class MyThemeAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.item_my_theme, null);
-            holder.myThemeLV= (MyListView) convertView.findViewById(R.id.myThemeLV);
+            convertView = mInflater.inflate(R.layout.item_message_my_reply, null);
+            holder.pictureMGV= (MyGridView) convertView.findViewById(R.id.pictureMGV);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentAdapter adapter=new MyThemeContentAdapter((BaseListViewActivity)context,null);
-        holder.myThemeLV.setAdapter(adapter);
+        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MessageReplyActivity)context,null);
+        holder.pictureMGV.setAdapter(adapter);
         return convertView;
     }
 
     public final class ViewHolder {
-      private MyListView myThemeLV;
+        private MyGridView pictureMGV;
     }
 
 }

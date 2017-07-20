@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
+import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.fragment.SignupFragment;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
@@ -39,8 +40,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView(){
-        int aa=DensityUtil.px2dip(MainActivity.this,276);
-        Toast.makeText(MainActivity.this,aa+"",Toast.LENGTH_SHORT).show();
 //        //打开数据库输出流
 //        DbCreateHelper s = new DbCreateHelper();
 //        SQLiteDatabase db =s.openDatabase(getApplicationContext());
@@ -128,7 +127,7 @@ public class MainActivity extends BaseActivity {
             } else if (position == 1) {
                 return new Fragment();
             } else if (position == 2) {
-                return new Fragment();
+                return new CircleFragment();
             } else if (position == 3) {
                 return new Fragment();
             }

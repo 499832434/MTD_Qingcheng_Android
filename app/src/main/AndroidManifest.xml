@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
     package="com.qcjkjg.trafficrules" >
 
     <uses-permission android:name="android.permission.READ_LOGS"/>
@@ -33,7 +34,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+            tools:replace="android:label"
+            android:theme="@style/AppTheme" >
         <activity
                 android:name=".activity.MainActivity"
                 android:screenOrientation="portrait"
@@ -55,7 +57,7 @@
                   android:screenOrientation="portrait"
                   >
         </activity>
-        <activity android:name=".activity.signup.SystemMessageActivity"
+        <activity android:name=".activity.signup.BaseListViewActivity"
                   android:screenOrientation="portrait"
                   >
         </activity>
@@ -63,6 +65,11 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
+        <activity android:name=".activity.signup.MessageReplyActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
+
     </application>
 
 </manifest>

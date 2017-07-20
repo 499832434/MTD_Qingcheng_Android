@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.MyGridView;
@@ -30,7 +31,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
-        this.width=(DensityUtil.getResolution((MyThemeActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
+        this.width=(DensityUtil.getResolution((FragmentActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
     }
 
     @Override
@@ -62,7 +63,6 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
         if(0==width){
             width=DensityUtil.dip2px(context,80);
         }
-        Log.e("ppp", width+"");
         DensityUtil.setWidth(holder.pictureIV,width);
         Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(holder.pictureIV);
         return convertView;

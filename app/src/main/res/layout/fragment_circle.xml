@@ -8,12 +8,11 @@
             android:id="@+id/customTitleBar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            custom:text="系统消息"
+            custom:text="考友圈"
+            custom:imageRight="@drawable/ic_message"
             />
-    <ListView android:layout_width="match_parent"
-              android:id="@+id/messageLV"
-              android:dividerHeight="0.3dp"
-              android:divider="#e1e1e1"
-              android:layout_height="match_parent">
-    </ListView>
+    <me.codeboy.android.cycleviewpager.CycleViewPager
+            android:id="@+id/cycleViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
 </LinearLayout>

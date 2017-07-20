@@ -36,13 +36,31 @@ public class MessageMainActivity extends BaseActivity{
         findViewById(R.id.systemRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MessageMainActivity.this, SystemMessageActivity.class));
+                Intent intent = new Intent(MessageMainActivity.this, BaseListViewActivity.class);
+                intent.putExtra("flag", 0);
+                startActivity(intent);
             }
         });
         findViewById(R.id.themeRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MessageMainActivity.this,MyThemeActivity.class));
+                Intent intent=new Intent(MessageMainActivity.this, BaseListViewActivity.class);
+                intent.putExtra("flag",1);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.replyRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MessageMainActivity.this,MessageReplyActivity.class));
+            }
+        });
+        findViewById(R.id.praiseRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MessageMainActivity.this, BaseListViewActivity.class);
+                intent.putExtra("flag", 2);
+                startActivity(intent);
             }
         });
     }

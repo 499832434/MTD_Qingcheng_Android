@@ -65,7 +65,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:background="#ffffff"
-            android:id="@+id/backRL"
+            android:id="@+id/replyRL"
             android:layout_height="50dp">
         <ImageView android:layout_width="50dp"
                    android:src="@drawable/ic_huifu"

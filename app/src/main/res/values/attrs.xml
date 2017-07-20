@@ -56,4 +56,9 @@
         <attr name="textColor1" format="color" />
         <attr name="searchText" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="CircularImage">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
 </resources>

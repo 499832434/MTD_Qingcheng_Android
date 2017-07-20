@@ -1,27 +1,16 @@
 package com.qcjkjg.trafficrules.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
-import com.qcjkjg.trafficrules.utils.DensityUtil;
-import com.qcjkjg.trafficrules.view.MyGridLayout;
 import com.qcjkjg.trafficrules.view.MyGridView;
-import com.qcjkjg.trafficrules.view.MyListView;
-import com.qcjkjg.trafficrules.vo.Message;
-import com.qcjkjg.trafficrules.vo.MessageTheme;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -67,7 +56,7 @@ public class MyThemeContentAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MyThemeActivity)context,null);
+        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((BaseListViewActivity)context,null);
         holder.pictureMGV.setAdapter(adapter);
         return convertView;
     }

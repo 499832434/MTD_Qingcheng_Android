@@ -9,8 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
-import com.qcjkjg.trafficrules.vo.Message;
-import com.qcjkjg.trafficrules.vo.Signup;
+import com.qcjkjg.trafficrules.vo.MessageSystem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,10 +20,10 @@ import java.util.List;
 public class SystemMessageAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<Message> mData;
+    private List<MessageSystem> mData;
     private Context context;
 
-    public SystemMessageAdapter(FragmentActivity context, List<Message> data) {
+    public SystemMessageAdapter(FragmentActivity context, List<MessageSystem> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;

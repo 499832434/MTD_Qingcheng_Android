@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.qcjkjg.trafficrules.view.CustomTitleBar
+            android:id="@+id/customTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            custom:text="信息回复"
+            />
+    <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_below="@+id/lineV"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:background="#FFFFFF">
+
+        <TextView
+                android:id="@+id/myReplyTV"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="我的回复"
+                android:textColor="#3eb7f3"
+                android:textSize="16dip"/>
+        <View android:layout_width="0.5dp"
+              android:layout_height="20dp"
+              android:background="#e1e1e1"
+              android:layout_gravity="center_vertical"/>
+
+        <TextView
+                android:id="@+id/replyMeTV"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="回复我的"
+                android:textColor="#333333"
+                android:textSize="16dip"/>
+
+    </LinearLayout>
+    <ImageView
+            android:id="@+id/cursorIV"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="matrix"
+            android:layout_below="@+id/linearLayout1"
+            android:background="#ffffff"
+            android:src="@drawable/ic_cursor_line"/>
+    <View android:layout_width="match_parent"
+          android:layout_height="0.6dp"
+          android:background="#e1e1e1"/>
+    <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+</LinearLayout>
