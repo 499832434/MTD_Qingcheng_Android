@@ -60,7 +60,7 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MessageReplyActivity)context,null);
+        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((FragmentActivity)context,null);
         holder.pictureMGV.setAdapter(adapter);
         Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(holder.pictureIV);
         return convertView;

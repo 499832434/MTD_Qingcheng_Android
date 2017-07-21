@@ -32,6 +32,8 @@ public class MainActivity extends BaseActivity {
     public MyFragAdapter mAdapter;
     private FragmentManager mFragmentManager;
     public CustomViewPager masterViewPager;
+    public static String SINGUPTAG = "singup";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

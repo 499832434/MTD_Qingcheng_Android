@@ -31,7 +31,7 @@ public class SignupAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 9;
+        return mData.size();
     }
 
     @Override
@@ -56,6 +56,7 @@ public class SignupAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.titleTV.setText(mData.get(position).getTitle());
         if(position%4==0){
             holder.showIV.setImageResource(R.drawable.item_blue);
         }else if(position%4==1){

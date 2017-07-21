@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="#ffffff"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.qcjkjg.trafficrules.view.CustomTitleBar
+            android:id="@+id/customTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            custom:text="详情"
+            />
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/webProgressbar"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            app:spb_colors="@array/gplus_colors"
+            app:spb_speed="1.0"
+            app:spb_stroke_separator_length="0dp"
+            app:spb_interpolator="spb_interpolator_linear"
+            app:spb_sections_count="4"
+            android:indeterminateOnly="false"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+
+        <WebView
+                android:id="@+id/webView"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        </WebView>
+
+
+    </RelativeLayout>
+</LinearLayout>

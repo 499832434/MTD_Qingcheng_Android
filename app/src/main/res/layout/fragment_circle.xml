@@ -11,8 +11,11 @@
             custom:text="考友圈"
             custom:imageRight="@drawable/ic_message"
             />
-    <me.codeboy.android.cycleviewpager.CycleViewPager
-            android:id="@+id/cycleViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+   <ListView android:layout_width="match_parent"
+             android:id="@+id/circleLV"
+             android:divider="#e1e1e1"
+             android:dividerHeight="0.3dp"
+             android:layout_height="match_parent">
+
+   </ListView>
 </LinearLayout>
