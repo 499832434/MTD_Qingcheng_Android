@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 /**
  * Created by Administrator on 2017/7/18 0018.
@@ -39,5 +40,9 @@ public class BaseActivity extends AppCompatActivity {
         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+
+    public void toast(Context context,String str){
+        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+    }
 
 }

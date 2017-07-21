@@ -9,6 +9,10 @@ buildscript {
 apply plugin: 'com.android.application'
 
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    maven { url "https://jitpack.io" }
     jcenter()
 }
 
@@ -34,13 +38,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(name: 'swipetoloadLayout', ext: 'aar')
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'me.codeboy.android:cycle-view-pager:2.0.0'
     compile 'com.mcxiaoke.volley:library:1.0.18'
     compile 'com.github.castorflex.smoothprogressbar:library:1.1.0@aar'
+    compile 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
+    compile name:'SMSSDK-3.0.0',ext:'aar'
+    compile name:'SMSSDKGUI-3.0.0',ext:'aar'
+
 }

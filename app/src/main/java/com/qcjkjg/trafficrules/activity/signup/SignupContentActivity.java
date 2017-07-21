@@ -148,7 +148,6 @@ public class SignupContentActivity extends BaseActivity{
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("news_id", signup.getNewsId()+"");
-                Log.e("news_id", signup.getNewsId()+"");
                 params.put("sign", InitApp.initApp.getSig(params));
                 return params;
             }

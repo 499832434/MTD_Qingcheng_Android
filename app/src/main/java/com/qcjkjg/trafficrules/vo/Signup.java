@@ -68,10 +68,10 @@ public class Signup implements Parcelable {
             // TODO Auto-generated method stub
             // 必须按成员变量声明的顺序读取数据，不然会出现获取数据出错
             Signup signup = new Signup();
-            signup.setNewsId(source.readInt());
             signup.setTitle(source.readString());
             signup.setContent(source.readString());
             signup.setPubtime(source.readString());
+            signup.setNewsId(source.readInt());
             return signup;
         }
 

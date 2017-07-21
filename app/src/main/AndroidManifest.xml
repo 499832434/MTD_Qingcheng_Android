@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-    package="com.qcjkjg.trafficrules" >
+          package="com.qcjkjg.trafficrules">
 
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -20,6 +20,7 @@
     <uses-permission android:name="ANDROID.PERMISSION.BROADCAST_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="ANDROID.PERMISSION.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
     <!--begin baidu share-->
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -31,11 +32,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
             android:name=".InitApp"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
             tools:replace="android:label"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
         <activity
                 android:name=".activity.MainActivity"
                 android:screenOrientation="portrait"
@@ -55,11 +56,11 @@
         </activity>
         <activity android:name=".activity.signup.MessageMainActivity"
                   android:screenOrientation="portrait"
-                  >
+                >
         </activity>
         <activity android:name=".activity.signup.BaseListViewActivity"
                   android:screenOrientation="portrait"
-                  >
+                >
         </activity>
         <activity android:name=".activity.signup.MyThemeActivity"
                   android:screenOrientation="portrait"
@@ -91,6 +92,11 @@
                 <data android:scheme="mtd"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name="com.mob.tools.MobUIShell"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="stateHidden|adjustResize"/>
 
     </application>
 

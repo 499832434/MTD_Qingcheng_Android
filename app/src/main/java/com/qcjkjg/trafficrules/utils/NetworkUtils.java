@@ -11,14 +11,7 @@ import android.provider.Settings;
 
 
 public class NetworkUtils {
-//	private static final String TAG = "NetworkUtils";
 
-	/**
-	 * @description: 用来判断手机是否联网
-	 * @param context
-	 * @return boolean
-	 * @author mengguoqiang
-	 */
 	public static boolean isNetworkAvailable(final Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
