@@ -1,5 +1,6 @@
 package com.qcjkjg.trafficrules.activity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.qcjkjg.trafficrules.fragment.SignupFragment;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.CustomViewPager;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,6 +171,12 @@ public class MainActivity extends BaseActivity {
         public Fragment getRegisteredFragment(int position) {
             return registeredFragments.get(position);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(MainActivity.this).onActivityResult(requestCode,resultCode,data);
     }
 
 }
