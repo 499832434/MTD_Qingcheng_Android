@@ -93,4 +93,6 @@
     <color name="google_red">#EA4335</color>
     <color name="google_green">#34A853</color>
     <color name="google_yellow">#FBBC05</color>
+    <color name="color_f6">#f6f6f6</color>
+    <color name="color_c51">#f94c51</color>
 </resources>

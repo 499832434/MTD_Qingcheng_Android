@@ -17,6 +17,7 @@ import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.activity.circle.DemoActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
 import com.qcjkjg.trafficrules.adapter.SignupAdapter;
@@ -52,7 +53,8 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(mActivity, MessageMainActivity.class));
+//                        startActivity(new Intent(mActivity, MessageMainActivity.class));
+                        startActivity(new Intent(mActivity, DemoActivity.class));
                     }
                 });
         View view=LayoutInflater.from(mActivity).inflate(R.layout.headview_circle,null);

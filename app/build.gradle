@@ -2,9 +2,6 @@ buildscript {
     repositories {
         jcenter()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.1'
-    }
 }
 apply plugin: 'com.android.application'
 
@@ -63,5 +60,5 @@ dependencies {
     compile 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
     compile name:'SMSSDK-3.0.0',ext:'aar'
     compile name:'SMSSDKGUI-3.0.0',ext:'aar'
-
+    compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.0'
 }
