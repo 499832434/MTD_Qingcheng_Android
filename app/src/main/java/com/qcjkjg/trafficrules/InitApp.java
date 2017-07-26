@@ -14,9 +14,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.Volley;
 import com.mob.MobSDK;
+import com.qcjkjg.trafficrules.service.LocationService;
 import com.qcjkjg.trafficrules.utils.Md5;
 import com.qcjkjg.trafficrules.utils.PackageUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -30,6 +34,7 @@ import java.util.*;
  */
 public class InitApp extends Application{
     public static String VERSION = "4.1";
+    public static String DEVICE_TYPE = "0";
     public static String DB_NAME = "sci99_mobile_news2.db";
     private String appPkgName = null;
     public static String PUBLIC_KEY = "56CD79BAB508342D8B2BAEEABD70021B";
@@ -48,6 +53,7 @@ public class InitApp extends Application{
      * Global request queue for Volley
      */
     private RequestQueue mRequestQueue;
+    public static LocationService locationService;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,8 +63,27 @@ public class InitApp extends Application{
     private void initApp() {
         initApp=this;
         VERSION = PackageUtils.getAppVersionName(this);
+        initUmeng();
         initSignatureTools();
         initUserPref();
+        /***
+         * 初始化定位sdk，建议在Application中创建
+         */
+        locationService = new LocationService(getApplicationContext());
+    }
+
+    private void initUmeng(){
+        Config.DEBUG=true;
+        UMShareAPI.get(this);
+//        PlatformConfig.setWeixin("", "");
+//        PlatformConfig.setQQZone("1106277938","FVCOAjS49n9P53UN");
+//        PlatformConfig.setSinaWeibo("3566099207", "6960dfc3805f1967b773ed812bc43b14", "");
+        //微信
+        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+        //新浪微博(第三个参数为回调地址)
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
+        //QQ
+        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
     }
 
 

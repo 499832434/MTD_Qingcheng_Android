@@ -1,5 +1,6 @@
 package com.qcjkjg.trafficrules.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,12 @@ import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.Signup;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.ShareContent;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +64,7 @@ public class SignupFragment extends Fragment{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(mActivity, MessageMainActivity.class));
+                        startActivity(new Intent(mActivity, LoginActivity.class));
                     }
                 });
         signupLV= (ListView) currentView.findViewById(R.id.signupLV);
@@ -135,4 +142,5 @@ public class SignupFragment extends Fragment{
         super.onAttach(context);
         this.mActivity= (MainActivity)context;
     }
+
 }

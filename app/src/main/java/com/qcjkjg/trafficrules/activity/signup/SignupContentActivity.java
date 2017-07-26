@@ -60,7 +60,10 @@ public class SignupContentActivity extends BaseActivity{
         wv = ((WebView) findViewById(R.id.webView));
         WebSettings setting = wv.getSettings();
         setting.setJavaScriptEnabled(true);
-        setting.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        setting.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        setting.setUseWideViewPort(true);
+//        setting.setLoadWithOverviewMode(true);
+//        setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         mProgressBar = findViewById(R.id.webProgressbar);
         mProgressBar.setVisibility(View.VISIBLE);
         wv.setWebChromeClient(new WebChromeClient() {
@@ -100,6 +103,7 @@ public class SignupContentActivity extends BaseActivity{
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                imgReset();//重置webview中img标签的图片大小
             }
         });
     }
@@ -123,6 +127,7 @@ public class SignupContentActivity extends BaseActivity{
                                 JSONArray array=jsonObject.getJSONArray("info");
                                 JSONObject obj=array.getJSONObject(0);
                                 String content=obj.getString("content");
+                                Log.e("content",content);
                                 String contentStr = reformatContent1(content);
                                 ((TextView)findViewById(R.id.titleTV)).setText(obj.getString("title"));
                                 ((TextView)findViewById(R.id.timeTV)).setText(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
@@ -197,4 +202,19 @@ public class SignupContentActivity extends BaseActivity{
 
         return titleStr.toString();
     }
+
+    /**
+     * 对图片进行重置大小，宽度就是手机屏幕宽度，高度根据宽度比便自动缩放
+     **/
+    private void imgReset() {
+        wv.loadUrl("javascript:(function(){" +
+                "var objs = document.getElementsByTagName('img'); " +
+                "for(var i=0;i<objs.length;i++)  " +
+                "{"
+                + "var img = objs[i];   " +
+                "    img.style.maxWidth = '100%'; img.style.height = 'auto';  " +
+                "}" +
+                "})()");
+    }
+
 }
