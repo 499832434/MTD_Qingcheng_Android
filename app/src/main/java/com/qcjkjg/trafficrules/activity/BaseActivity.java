@@ -38,7 +38,6 @@ public class BaseActivity extends AppCompatActivity {
         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-
     public void toast(Context context,String str){
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
