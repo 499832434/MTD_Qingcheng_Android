@@ -64,7 +64,7 @@ public class SignupFragment extends Fragment{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(mActivity, MessageMainActivity.class));
+                        startActivity(new Intent(mActivity, LoginActivity.class));
                     }
                 });
         signupLV= (ListView) currentView.findViewById(R.id.signupLV);

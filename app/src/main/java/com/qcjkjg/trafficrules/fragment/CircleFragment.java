@@ -17,10 +17,8 @@ import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
-import com.qcjkjg.trafficrules.activity.circle.DemoActivity;
-import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
+import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
-import com.qcjkjg.trafficrules.adapter.SignupAdapter;
 import com.qcjkjg.trafficrules.utils.ViewFactory;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.squareup.picasso.Picasso;
@@ -54,7 +52,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                     @Override
                     public void onClick(View view) {
 //                        startActivity(new Intent(mActivity, MessageMainActivity.class));
-                        startActivity(new Intent(mActivity, DemoActivity.class));
+                        startActivity(new Intent(mActivity, PublishCircleInfoActivity.class));
                     }
                 });
         View view=LayoutInflater.from(mActivity).inflate(R.layout.headview_circle,null);
@@ -143,14 +141,14 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (swipeToLoadLayout.isRefreshing()) {
-            swipeToLoadLayout.setRefreshing(false);
-        }
-        if (swipeToLoadLayout.isLoadingMore()) {
-            swipeToLoadLayout.setLoadingMore(false);
-        }
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (swipeToLoadLayout.isRefreshing()) {
+//            swipeToLoadLayout.setRefreshing(false);
+//        }
+//        if (swipeToLoadLayout.isLoadingMore()) {
+//            swipeToLoadLayout.setLoadingMore(false);
+//        }
+//    }
 }

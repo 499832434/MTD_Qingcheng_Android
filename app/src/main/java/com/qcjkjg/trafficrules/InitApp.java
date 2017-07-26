@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.Volley;
 import com.mob.MobSDK;
+import com.qcjkjg.trafficrules.service.LocationService;
 import com.qcjkjg.trafficrules.utils.Md5;
 import com.qcjkjg.trafficrules.utils.PackageUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
@@ -33,6 +34,7 @@ import java.util.*;
  */
 public class InitApp extends Application{
     public static String VERSION = "4.1";
+    public static String DEVICE_TYPE = "0";
     public static String DB_NAME = "sci99_mobile_news2.db";
     private String appPkgName = null;
     public static String PUBLIC_KEY = "56CD79BAB508342D8B2BAEEABD70021B";
@@ -51,6 +53,7 @@ public class InitApp extends Application{
      * Global request queue for Volley
      */
     private RequestQueue mRequestQueue;
+    public static LocationService locationService;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -63,6 +66,10 @@ public class InitApp extends Application{
         initUmeng();
         initSignatureTools();
         initUserPref();
+        /***
+         * 初始化定位sdk，建议在Application中创建
+         */
+        locationService = new LocationService(getApplicationContext());
     }
 
     private void initUmeng(){

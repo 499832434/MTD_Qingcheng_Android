@@ -3,19 +3,35 @@ package com.qcjkjg.trafficrules.activity.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.mob.MobSDK;
+import com.qcjkjg.trafficrules.ApiConstants;
+import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.net.HighRequest;
+import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.TimesUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
+import com.qcjkjg.trafficrules.vo.Signup;
+import com.qcjkjg.trafficrules.vo.User;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,13 +44,18 @@ public class BindPhoneActivity extends BaseActivity{
     private String flag="";
     private EventHandler eventHandler;
     private String phone="";
+    private User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_phone);
 
-        MobSDK.init(BindPhoneActivity.this, "1f97ad5a0c9d0", "df1eb1c4ae7b059cad5595777c341b27");
+        MobSDK.init(BindPhoneActivity.this, "1fb79eff89450", "b724cc5addb70159fe06b2ae0555838a");
         flag=getIntent().getStringExtra("flag");
+        if("0".equals(flag)){
+            user=getIntent().getParcelableExtra(LoginActivity.LOGINFLAG);
+            Log.e("eeee", user.getAvatar() + "==" + user.getNickName() + "==" + user.getOpenid());
+        }
         initView();
     }
     private void initView(){
@@ -58,21 +79,23 @@ public class BindPhoneActivity extends BaseActivity{
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(BindPhoneActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-                    //定义需要匹配的正则表达式的规则
-                    String REGEX_MOBILE_SIMPLE = "[1][358]\\d{9}";
-                    //把正则表达式的规则编译成模板
-                    Pattern pattern = Pattern.compile(REGEX_MOBILE_SIMPLE);
-                    //把需要匹配的字符给模板匹配，获得匹配器
-                    Matcher matcher = pattern.matcher(phone);
-                    // 通过匹配器查找是否有该字符，不可重复调用重复调用matcher.find()
-                    if (matcher.find()) {//匹配手机号是否存在
-                        timesUtils = new TimesUtils(60000, 1000, verificationCodeTV, BindPhoneActivity.this);
-                        timesUtils.start();
-                        SMSSDK.getVerificationCode("86", phone);
-                    } else {
-                        Toast.makeText(BindPhoneActivity.this, "手机号格式错误", Toast.LENGTH_SHORT).show();
-                    }
-
+//                    //定义需要匹配的正则表达式的规则
+//                    String REGEX_MOBILE_SIMPLE = "[1][358]\\d{9}";
+//                    //把正则表达式的规则编译成模板
+//                    Pattern pattern = Pattern.compile(REGEX_MOBILE_SIMPLE);
+//                    //把需要匹配的字符给模板匹配，获得匹配器
+//                    Matcher matcher = pattern.matcher(phone);
+//                    // 通过匹配器查找是否有该字符，不可重复调用重复调用matcher.find()
+//                    if (matcher.find()) {//匹配手机号是否存在
+//                        timesUtils = new TimesUtils(60000, 1000, verificationCodeTV, BindPhoneActivity.this);
+//                        timesUtils.start();
+//                        SMSSDK.getVerificationCode("86", phone);
+//                    } else {
+//                        Toast.makeText(BindPhoneActivity.this, "手机号格式错误", Toast.LENGTH_SHORT).show();
+//                    }
+                    timesUtils = new TimesUtils(60000, 1000, verificationCodeTV, BindPhoneActivity.this);
+                    timesUtils.start();
+                    SMSSDK.getVerificationCode("86", phone);
                 }
 
             }
@@ -89,6 +112,11 @@ public class BindPhoneActivity extends BaseActivity{
                 if (TextUtils.isEmpty(code)) {
                     Toast.makeText(BindPhoneActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
                 } else {
+                    if("1".equals(flag)){
+                        request1();
+                    }else{
+                        request0();
+                    }
                     SMSSDK.submitVerificationCode("86", phone, code);//提交验证码  在eventHandler里面查看验证结果
                 }
             }
@@ -107,18 +135,22 @@ public class BindPhoneActivity extends BaseActivity{
                     if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         if (result == SMSSDK.RESULT_COMPLETE) {
                             toast("验证码发送成功");
+//                            if("1".equals(flag)){
+//                                request1();
+//                            }else{
+//                                request0();
+//                            }
                         } else {
                             toast("验证码发送失败");
                         }
                     }else if(event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE){
                         if (result == SMSSDK.RESULT_COMPLETE) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
-                                    finish();
-                                }
-                            });
+                            toast("验证码验证成功");
+                            if("1".equals(flag)){
+                                request1();
+                            }else{
+                                request0();
+                            }
                         } else {
                             toast("验证码验证失败");
                         }
@@ -145,5 +177,97 @@ public class BindPhoneActivity extends BaseActivity{
                 Toast.makeText(BindPhoneActivity.this, str, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 网络请求
+     */
+    private void request1() {
+        if (!NetworkUtils.isNetworkAvailable(BindPhoneActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.PHONE_LOGIN_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("phoneLoginRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
+                                finish();
+                            }else{
+                                Toast.makeText(BindPhoneActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("phone", "10");
+                params.put("client_id", "10");
+                params.put("device_type", InitApp.DEVICE_TYPE);
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 网络请求
+     */
+    private void request0() {
+        if (!NetworkUtils.isNetworkAvailable(BindPhoneActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.BIND_PHONE_LOGIN_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("bindPhoneRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
+                                finish();
+                            }else{
+                                Toast.makeText(BindPhoneActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("openid", user.getOpenid());
+                params.put("nick_name", user.getNickName());
+                params.put("avatar", user.getAvatar());
+                params.put("platform_type", user.getPlatformType());
+                params.put("client_id", "");
+                params.put("phone", phone);
+                params.put("device_type", InitApp.DEVICE_TYPE);
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
     }
 }

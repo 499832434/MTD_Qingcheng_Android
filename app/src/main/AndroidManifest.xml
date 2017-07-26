@@ -47,6 +47,8 @@
                     android:resource="@xml/file_paths" />
         </provider>
 
+
+
         <activity
                 android:name=".activity.MainActivity"
                 android:screenOrientation="portrait"
@@ -76,11 +78,7 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
-        <activity android:name=".activity.circle.DemoActivity"
-                  android:screenOrientation="portrait"
-        >
-        </activity>
-        <activity android:name=".activity.circle.PublishCircleActivity"
+        <activity android:name=".activity.circle.PublishCircleInfoActivity"
                   android:screenOrientation="portrait"
         >
         </activity>
@@ -169,6 +167,14 @@
                 android:value="561cae6ae0f55abd990035bf">
         </meta-data>
         <!--友盟-->
+
+        <!--百度统计-->
+        <meta-data
+                android:name="com.baidu.lbsapi.API_KEY"
+                android:value="PGlSIaENlrgVohguvXOlqMSjqo1f4ipa" />
+
+        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
+        </service>
     </application>
 
 </manifest>
