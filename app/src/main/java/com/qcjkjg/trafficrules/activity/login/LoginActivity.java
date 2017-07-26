@@ -115,5 +115,4 @@ public class LoginActivity extends BaseActivity{
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
-
 }
