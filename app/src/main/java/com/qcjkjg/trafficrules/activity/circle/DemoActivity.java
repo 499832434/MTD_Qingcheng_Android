@@ -236,6 +236,4 @@ public class DemoActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    private int x = 0, y = 0;
-
 }
