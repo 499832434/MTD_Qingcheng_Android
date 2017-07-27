@@ -55,7 +55,6 @@ public class QingChenIntentService extends GTIntentService {
 
 
 
-
     }
 
     @Override
