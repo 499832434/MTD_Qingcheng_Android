@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import com.qcjkjg.trafficrules.InitApp;
@@ -14,13 +15,16 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.util.EntityUtils;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,13 +81,14 @@ public class BaseActivity extends AppCompatActivity {
      */
     public HttpPost iniHttpPost(List<BasicNameValuePair> texts,
                                  HashMap<File, String> files,String url) {
+        ContentType contentType = ContentType.create("text/plain", Charset.forName("UTF-8"));
         HttpPost httpPost = new HttpPost(url);
         MultipartEntityBuilder create = MultipartEntityBuilder.create();
         // 普通文本的发送，用户名&密码等
         if (texts != null && texts.size() > 0) {
             for (BasicNameValuePair iterable_element : texts) {
                 create.addTextBody(iterable_element.getName(),
-                        iterable_element.getValue());
+                        iterable_element.getValue(),contentType);
             }
         }
         // 二进制的发送，文件
