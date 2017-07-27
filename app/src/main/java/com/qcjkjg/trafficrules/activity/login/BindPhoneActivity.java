@@ -54,7 +54,6 @@ public class BindPhoneActivity extends BaseActivity{
         flag=getIntent().getStringExtra("flag");
         if("0".equals(flag)){
             user=getIntent().getParcelableExtra(LoginActivity.LOGINFLAG);
-            Log.e("eeee", user.getAvatar() + "==" + user.getNickName() + "==" + user.getOpenid());
         }
         initView();
     }
@@ -104,6 +103,7 @@ public class BindPhoneActivity extends BaseActivity{
         findViewById(R.id.commitB).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                phone = ((EditText) findViewById(R.id.phoneET)).getText().toString().trim();
                 String code = ((EditText) findViewById(R.id.codeET)).getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(BindPhoneActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
