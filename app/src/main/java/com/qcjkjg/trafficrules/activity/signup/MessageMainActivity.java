@@ -2,17 +2,22 @@ package com.qcjkjg.trafficrules.activity.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.Defaultcontent;
 import com.umeng.ShareUtils;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+
+import java.util.Map;
 
 /**
  * Created by zongshuo on 2017/7/19.
@@ -75,9 +80,37 @@ public class MessageMainActivity extends BaseActivity{
 //                intent.putExtra("flag", 2);
 //                startActivity(intent);
 //                shareGetIntegral("11111", R.drawable.ic_qq, null);
-                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
-                        , Defaultcontent.text, Defaultcontent.imageurl, R.drawable.ic_qq, null
-                );
+//                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
+//                        , Defaultcontent.text, Defaultcontent.imageurl, R.drawable.ic_qq, null
+//                );
+                UMShareAPI.get(MessageMainActivity.this).deleteOauth(MessageMainActivity.this, SHARE_MEDIA.QQ, new UMAuthListener() {
+
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+
+                        Toast.makeText(MessageMainActivity.this, "删除成功.", Toast.LENGTH_SHORT).show();
+//                        if (i == 200) {
+//                            Toast.makeText(MessageMainActivity.this, "删除成功.", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(MessageMainActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+//                        }
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media, int i) {
+
+                    }
+                });
 
             }
         });

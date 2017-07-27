@@ -2,9 +2,12 @@ package com.qcjkjg.trafficrules.activity.circle;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.EditText;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.bumptech.glide.load.Encoder;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
@@ -25,6 +28,7 @@ import com.luck.picture.lib.tools.DebugUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +56,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
     private int compressMode = PictureConfig.SYSTEM_COMPRESS_MODE;
     private LocationService locationService;
     private TextView positionTV;
+    private BDLocation locationInfo;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +68,12 @@ public class PublishCircleInfoActivity extends BaseActivity {
     }
 
     private void initView(){
+        findViewById(R.id.closeIV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         positionTV= (TextView) findViewById(R.id.positionTV);
         positionTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,17 +113,43 @@ public class PublishCircleInfoActivity extends BaseActivity {
             }
         });
 
+
         findViewById(R.id.publishTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<BasicNameValuePair> texts = new ArrayList<BasicNameValuePair>();
-                texts.add(new BasicNameValuePair("content", "wuxifu"));
+                String content = ((EditText) findViewById(R.id.contentET)).getText().toString();
+                if (!TextUtils.isEmpty(content)) {
+                    texts.add(new BasicNameValuePair("content", content));
+                }
+//                try {
+//                    if (locationInfo != null) {
+//                        texts.add(new BasicNameValuePair("longitude", locationInfo.getLongitude() + ""));
+//                        texts.add(new BasicNameValuePair("latitude", locationInfo.getLatitude() + ""));
+//                        texts.add(new BasicNameValuePair("provice", URLEncoder.encode(locationInfo.getProvince(), "utf-8")));
+//                        texts.add(new BasicNameValuePair("city", URLEncoder.encode(locationInfo.getCity(), "utf-8")));
+//                        texts.add(new BasicNameValuePair("area", URLEncoder.encode(locationInfo.getDistrict(), "utf-8")));
+//                        texts.add(new BasicNameValuePair("address", URLEncoder.encode(locationInfo.getAddrStr(), "utf-8")));
+//                    }
+//                } catch (Exception e) {
+//
+//                }
+
+                if (locationInfo != null) {
+                    texts.add(new BasicNameValuePair("longitude", locationInfo.getLongitude() + ""));
+                    texts.add(new BasicNameValuePair("latitude", locationInfo.getLatitude() + ""));
+                    texts.add(new BasicNameValuePair("provice",locationInfo.getProvince()));
+                    texts.add(new BasicNameValuePair("city", locationInfo.getCity()));
+                    texts.add(new BasicNameValuePair("area", locationInfo.getDistrict()));
+                    texts.add(new BasicNameValuePair("address", locationInfo.getAddrStr()));
+                }
+                Log.e("aaaa", locationInfo.getProvince() + "===" + locationInfo.getCity() + "===" + locationInfo.getDistrict() + "===" + locationInfo.getAddrStr());
                 HashMap<File, String> files = new HashMap<File, String>();
-                for (int i = 0; i < selectList.size();i++) {
-                    LocalMedia media=selectList.get(i);
+                for (int i = 0; i < selectList.size(); i++) {
+                    LocalMedia media = selectList.get(i);
                     files.put(new File(media.getPath()), "file");
                 }
-                upload(texts,files,ApiConstants.PUBLISH_CIRCLE_INFO_API);
+                upload(texts, files, ApiConstants.PUBLISH_CIRCLE_INFO_API);
             }
         });
     }
@@ -218,7 +255,8 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
                     Toast.makeText(PublishCircleInfoActivity.this,"无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机",Toast.LENGTH_SHORT).show();
                 }
-                logMsg(location.getProvince()+"=="+location.getCity()+"=="+location.getDistrict()+"=="+location.getAddrStr());
+                locationInfo=location;
+                logMsg(location.getAddrStr());
             }else{
                 Toast.makeText(PublishCircleInfoActivity.this,"11111",Toast.LENGTH_SHORT).show();
             }
@@ -283,12 +321,15 @@ public class PublishCircleInfoActivity extends BaseActivity {
                         closeConnect();
                         //由于我这边服务器编码为gbk，所以编码设置gbk，如果乱码就改为utf-8
                         String result = EntityUtils.toString(
-                                httpResponse.getEntity(), "gbk");
+                                httpResponse.getEntity(), "utf-8");
+//                        String result = EntityUtils.toString(
+//                                httpResponse.getEntity());
                         Log.e("上传成功........", result);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(PublishCircleInfoActivity.this, "成功", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         });
                     }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.android.volley.*;
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
@@ -44,13 +48,14 @@ import java.util.*;
 /**
  * Created by zongshuo on 2017/7/19.
  */
-public class SignupFragment extends Fragment{
+public class SignupFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
     private View currentView = null;
     protected MainActivity mActivity;
     private ListView signupLV;
     private SignupAdapter adapter;
     private List<Signup> signList=new ArrayList<Signup>();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private SwipeToLoadLayout swipeToLoadLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,29 +69,37 @@ public class SignupFragment extends Fragment{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(mActivity, LoginActivity.class));
+                        startActivity(new Intent(mActivity, MessageMainActivity.class));
                     }
                 });
-        signupLV= (ListView) currentView.findViewById(R.id.signupLV);
+        signupLV= (ListView) currentView.findViewById(R.id.swipe_target);
         adapter=new SignupAdapter(mActivity,signList);
         signupLV.setAdapter(adapter);
         signupLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent=new Intent(mActivity, SignupContentActivity.class);
+                Intent intent = new Intent(mActivity, SignupContentActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(MainActivity.SINGUPTAG,signList.get(i));
+                bundle.putParcelable(MainActivity.SINGUPTAG, signList.get(i));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-        request();
+        swipeToLoadLayout = (SwipeToLoadLayout) currentView.findViewById(R.id.swipeToLoadLayout);
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
+        swipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(true);
+            }
+        });
     }
 
     /**
      * 网络请求
      */
-    private void request() {
+    private void request(final String newsid) {
         if (!NetworkUtils.isNetworkAvailable(mActivity)) {
             return;
         }
@@ -99,13 +112,16 @@ public class SignupFragment extends Fragment{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                signList.clear();
+                                if(TextUtils.isEmpty(newsid)){
+                                    signList.clear();
+                                }
                                 JSONArray infoArr=jsonObject.getJSONArray("info");
                                 for(int i=0;i<infoArr.length();i++){
                                     JSONObject obj=infoArr.getJSONObject(i);
                                     Signup signup=new Signup();
                                     signup.setNewsId(obj.getInt("news_id"));
                                     signup.setTitle(obj.getString("title"));
+                                    signup.setPictureUrl(obj.getString("img_url"));
                                     signup.setPubtime(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
                                     signList.add(signup);
                                 }
@@ -117,6 +133,8 @@ public class SignupFragment extends Fragment{
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -129,7 +147,11 @@ public class SignupFragment extends Fragment{
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("page_count", "10");
+                if(!TextUtils.isEmpty(newsid)){
+                    params.put("news_id", newsid);
+                }
+                params.put("page_count", "2");
+                params.put("type", "0");
                 params.put("sign", InitApp.initApp.getSig(params));
                 return params;
             }
@@ -143,4 +165,16 @@ public class SignupFragment extends Fragment{
         this.mActivity= (MainActivity)context;
     }
 
+    @Override
+    public void onLoadMore() {
+        swipeToLoadLayout.setLoadingMore(false);
+        if(signList.size()>0){
+            request(signList.get(signList.size()-1).getNewsId()+"");
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        request("");
+    }
 }

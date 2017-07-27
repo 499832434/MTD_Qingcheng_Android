@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import com.qcjkjg.trafficrules.InitApp;
+import com.qcjkjg.trafficrules.utils.PrefUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
@@ -127,4 +129,17 @@ public class BaseActivity extends AppCompatActivity {
             defaultHttpClient=null;
         }
     }
+
+    /**
+     * 记录用户的登录信息
+     */
+
+    public void loginInfo(String name,String phone,String avatar,String isvip,String platform){
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_NAME_KEY, name);
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, phone);
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, avatar);
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, isvip);
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, platform);
+    }
+
 }
