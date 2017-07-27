@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 public class BindPhoneActivity extends BaseActivity{
     private TextView verificationCodeTV;
     private TimesUtils timesUtils=null;
-    private String flag="";
+    private String flag="";//1:手机号登录 0:第三方登录
     private EventHandler eventHandler;
     private String phone="";
     private User user;
@@ -64,7 +64,7 @@ public class BindPhoneActivity extends BaseActivity{
                 finish();
             }
         });
-        if("1".equals(flag)){
+        if("0".equals(flag)){
             ((CustomTitleBar)findViewById(R.id.customTitleBar)).setTitleTextView("绑定手机");
         }else{
             ((CustomTitleBar)findViewById(R.id.customTitleBar)).setTitleTextView("手机验证码登录");
@@ -112,11 +112,11 @@ public class BindPhoneActivity extends BaseActivity{
                 if (TextUtils.isEmpty(code)) {
                     Toast.makeText(BindPhoneActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-                    if("1".equals(flag)){
-                        request1();
-                    }else{
-                        request0();
-                    }
+//                    if("1".equals(flag)){
+//                        request1();
+//                    }else{
+//                        request0();
+//                    }
                     SMSSDK.submitVerificationCode("86", phone, code);//提交验证码  在eventHandler里面查看验证结果
                 }
             }
@@ -135,11 +135,6 @@ public class BindPhoneActivity extends BaseActivity{
                     if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         if (result == SMSSDK.RESULT_COMPLETE) {
                             toast("验证码发送成功");
-//                            if("1".equals(flag)){
-//                                request1();
-//                            }else{
-//                                request0();
-//                            }
                         } else {
                             toast("验证码发送失败");
                         }
@@ -195,7 +190,12 @@ public class BindPhoneActivity extends BaseActivity{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
+                                JSONObject info=jsonObject.getJSONObject("info");
+                                String name=info.getString("nick_name");
+                                String phone=info.getString("phone");
+                                String avatar=info.getString("avatar");
+                                String isvip=info.getString("is_vip");
+                                loginInfo(name,phone,avatar,isvip,"");
                                 finish();
                             }else{
                                 Toast.makeText(BindPhoneActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -239,7 +239,12 @@ public class BindPhoneActivity extends BaseActivity{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
+                                JSONObject info=jsonObject.getJSONObject("info");
+                                String name=info.getString("nick_name");
+                                String phone=info.getString("phone");
+                                String avatar=info.getString("avatar");
+                                String isvip=info.getString("is_vip");
+                                loginInfo(name,phone,avatar,isvip, user.getPlatformType());
                                 finish();
                             }else{
                                 Toast.makeText(BindPhoneActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();

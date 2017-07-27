@@ -14,7 +14,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/left_back"
+            android:id="@+id/closeIV"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -59,6 +59,7 @@
             <EditText android:layout_width="match_parent"
                       android:hint="请输入您想说的..."
                       android:textSize="16sp"
+                      android:id="@+id/contentET"
                       android:padding="10dp"
                       android:textColorHint="#999999"
                       android:lineSpacingExtra="3dp"

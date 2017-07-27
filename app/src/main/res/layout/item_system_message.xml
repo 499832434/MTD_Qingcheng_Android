@@ -7,6 +7,7 @@
               android:layout_height="48dp"
               android:textColor="#b0afaf"
               android:textSize="14sp"
+              android:id="@+id/timeTV"
               android:text="2017-07-14 12:30"
               android:gravity="center"
             />
@@ -21,6 +22,7 @@
                   android:textColor="#333333"
                   android:lineSpacingExtra="5dp"
                   android:textSize="18sp"
+                  android:id="@+id/titleTV"
                   android:text="听说撩妹都靠这个!听说撩妹都靠这个!听说撩妹都靠这个!听说撩妹都靠这个!听说撩妹都靠这个!"
                   android:layout_height="wrap_content"/>
         <TextView android:layout_width="match_parent"
@@ -29,11 +31,13 @@
                   android:layout_marginBottom="10dp"
                   android:lineSpacingExtra="5dp"
                   android:textSize="16sp"
+                  android:id="@+id/abstractTV"
                   android:text="就在这里,任意挑选,考车必备>>"
                   android:layout_height="wrap_content"/>
         <ImageView android:layout_width="match_parent"
                    android:scaleType="fitXY"
                    android:id="@+id/pictureIV"
+                   android:visibility="gone"
                    android:layout_height="150dp"/>
 
         <View android:layout_width="match_parent"

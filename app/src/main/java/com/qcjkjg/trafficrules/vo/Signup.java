@@ -13,7 +13,25 @@ public class Signup implements Parcelable {
     private String content;
     private int newsId;
     private String pubtime;
+    private String pictureUrl;
+    private String abstractStr;
 
+
+    public String getAbstractStr() {
+        return abstractStr;
+    }
+
+    public void setAbstractStr(String abstractStr) {
+        this.abstractStr = abstractStr;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 
     public int getNewsId() {
         return newsId;
@@ -58,6 +76,8 @@ public class Signup implements Parcelable {
         parcel.writeString(content);
         parcel.writeString(pubtime);
         parcel.writeInt(newsId);
+        parcel.writeString(pictureUrl);
+        parcel.writeString(abstractStr);
     }
 
 
@@ -72,6 +92,8 @@ public class Signup implements Parcelable {
             signup.setContent(source.readString());
             signup.setPubtime(source.readString());
             signup.setNewsId(source.readInt());
+            signup.setPictureUrl(source.readString());
+            signup.setAbstractStr(source.readString());
             return signup;
         }
 

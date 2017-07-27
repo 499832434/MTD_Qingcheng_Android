@@ -3,6 +3,7 @@ package com.qcjkjg.trafficrules.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.vo.Signup;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -57,14 +59,8 @@ public class SignupAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.titleTV.setText(mData.get(position).getTitle());
-        if(position%4==0){
-            holder.showIV.setImageResource(R.drawable.item_blue);
-        }else if(position%4==1){
-            holder.showIV.setImageResource(R.drawable.item_red);
-        }else if(position%4==2){
-            holder.showIV.setImageResource(R.drawable.item_yellow);
-        }else{
-            holder.showIV.setImageResource(R.drawable.item_purple);
+        if(!TextUtils.isEmpty(mData.get(position).getPictureUrl())){
+            Picasso.with(context).load(mData.get(position).getPictureUrl()).into(holder.showIV);
         }
         return convertView;
     }

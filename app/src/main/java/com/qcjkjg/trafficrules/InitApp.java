@@ -33,6 +33,15 @@ import java.util.*;
  * Created by zongshuo on 2017/7/18 0018.
  */
 public class InitApp extends Application{
+
+
+    public static final String USER_PRIVATE_DATA = "USER_PRIVATE_DATA";
+    public static final String USER_NAME_KEY = "USER_NAME_KEY";
+    public static final String USER_PHONE_KEY = "USER_PHONE_KEY";
+    public static final String USER_AVATAR_KEY = "USER_AVATAR_KEY";
+    public static final String USER_IS_VIP_KEY = "USER_IS_VIP_KEY";
+    public static final String USER_PLATFORM_KEY = "USER_PLATFORM_KEY";//0:QQ 1:WEIXIN
+
     public static String VERSION = "4.1";
     public static String DEVICE_TYPE = "0";
     public static String DB_NAME = "sci99_mobile_news2.db";

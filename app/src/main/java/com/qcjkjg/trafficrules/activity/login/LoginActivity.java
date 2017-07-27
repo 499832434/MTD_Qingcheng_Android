@@ -110,10 +110,10 @@ public class LoginActivity extends BaseActivity{
 
                 //拿到信息去请求登录接口。。。
                 String platformType = "1";
-                if (share_media==SHARE_MEDIA.QQ) {
-                    platformType="0";
+                if (share_media == SHARE_MEDIA.QQ) {
+                    platformType = "0";
                 }
-                request(openid, name, iconurl,platformType);
+                request(openid, name, iconurl, platformType);
             }
 
             @Override
@@ -126,6 +126,7 @@ public class LoginActivity extends BaseActivity{
                 Log.d(TAG, "onCancel " + "授权取消");
             }
         });
+
     }
 
     @Override
@@ -151,7 +152,12 @@ public class LoginActivity extends BaseActivity{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                JSONObject info=jsonObject.getJSONObject("info");
+                                String name=info.getString("nick_name");
+                                String phone=info.getString("phone");
+                                String avatar=info.getString("avatar");
+                                String isvip=info.getString("is_vip");
+                                loginInfo(name,phone,avatar,isvip,platformType);
                                 finish();
                             }else{
                                 Toast.makeText(LoginActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
