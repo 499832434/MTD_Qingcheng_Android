@@ -113,6 +113,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
             }
         });
 
+
         findViewById(R.id.publishTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
