@@ -10,4 +10,6 @@ public interface ApiConstants {
     String PHONE_LOGIN_API="http://47.92.112.59:2017/phonelogin";//手机号登录
     String CHECK_BIND_PHONE_API="http://47.92.112.59:2017/otherlogin";//验证手机号是否绑定
     String BIND_PHONE_LOGIN_API="http://47.92.112.59:2017/bindphone";//绑定手机号
+    String SIGN_API="http://47.92.112.59:2017/sign";//签到
+    String CIRCLE_LIST_API="http://47.92.112.59:2017/circlelist";//考友圈列表（全部）
 }

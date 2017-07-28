@@ -7,11 +7,11 @@ import android.os.Parcelable;
  * Created by zongshuo on 2017/7/26.
  */
 public class User implements Parcelable {
-    private String openid;
-    private String phone;
-    private String platformType;
-    private String avatar;
-    private String nickName;
+    private String openid;//三方登录id
+    private String phone;//电话
+    private String platformType;//登录类型
+    private String avatar;//头像
+    private String nickName;//昵称
 
     public String getOpenid() {
         return openid;

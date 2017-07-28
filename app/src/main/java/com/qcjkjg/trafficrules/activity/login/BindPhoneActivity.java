@@ -21,6 +21,7 @@ import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
+import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.utils.TimesUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.Signup;
@@ -114,11 +115,6 @@ public class BindPhoneActivity extends BaseActivity{
                 if (TextUtils.isEmpty(code)) {
                     Toast.makeText(BindPhoneActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-//                    if("1".equals(flag)){
-//                        request1();
-//                    }else{
-//                        request0();
-//                    }
                     SMSSDK.submitVerificationCode("86", phone, code);//提交验证码  在eventHandler里面查看验证结果
                 }
             }
@@ -216,7 +212,7 @@ public class BindPhoneActivity extends BaseActivity{
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("phone", "10");
-                params.put("client_id", "10");
+                params.put("client_id", PrefUtils.getString(BindPhoneActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, ""));
                 params.put("device_type", InitApp.DEVICE_TYPE);
                 return params;
             }
@@ -268,7 +264,7 @@ public class BindPhoneActivity extends BaseActivity{
                 params.put("nick_name", user.getNickName());
                 params.put("avatar", user.getAvatar());
                 params.put("platform_type", user.getPlatformType());
-                params.put("client_id", "");
+                params.put("client_id", PrefUtils.getString(BindPhoneActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, ""));
                 params.put("phone", phone);
                 params.put("device_type", InitApp.DEVICE_TYPE);
                 return params;

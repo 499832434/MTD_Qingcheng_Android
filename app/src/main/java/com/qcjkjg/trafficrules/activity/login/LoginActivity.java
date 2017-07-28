@@ -17,6 +17,7 @@ import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
+import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.User;
 import com.umeng.socialize.UMAuthListener;
@@ -158,6 +159,7 @@ public class LoginActivity extends BaseActivity{
                                 String avatar=info.getString("avatar");
                                 String isvip=info.getString("is_vip");
                                 loginInfo(name,phone,avatar,isvip,platformType);
+                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                 finish();
                             }else{
                                 Toast.makeText(LoginActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -192,7 +194,7 @@ public class LoginActivity extends BaseActivity{
                 params.put("nick_name", name);
                 params.put("avatar", iconurl);
                 params.put("platform_type", platformType);
-                params.put("client_id", "");
+                params.put("client_id", PrefUtils.getString(LoginActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, ""));
                 params.put("device_type", InitApp.DEVICE_TYPE);
                 return params;
             }

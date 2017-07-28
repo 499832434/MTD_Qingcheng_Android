@@ -139,8 +139,10 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 request0("");
                 break;
             case 1:
+                swipeToLoadLayout.setRefreshing(false);
                 break;
             case 2:
+                swipeToLoadLayout.setRefreshing(false);
                 break;
         }
     }

@@ -36,7 +36,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 9;
+        return mData.size();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
             width=DensityUtil.dip2px(context,80);
         }
         DensityUtil.setWidth(holder.pictureIV,width);
-        Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(holder.pictureIV);
+        Picasso.with(context).load(mData.get(position)).into(holder.pictureIV);
         return convertView;
     }
 

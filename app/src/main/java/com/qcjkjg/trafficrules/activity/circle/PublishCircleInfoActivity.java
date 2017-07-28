@@ -1,6 +1,7 @@
 package com.qcjkjg.trafficrules.activity.circle;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.bumptech.glide.load.Encoder;
+import com.luck.picture.lib.tools.PictureFileUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
@@ -53,17 +55,17 @@ public class PublishCircleInfoActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private GridImageAdapter adapter;
     private int maxSelectNum = 9;
-    private int compressMode = PictureConfig.SYSTEM_COMPRESS_MODE;
+    private int compressMode = PictureConfig.LUBAN_COMPRESS_MODE;
     private LocationService locationService;
     private TextView positionTV;
     private BDLocation locationInfo;
+    private ProgressDialog pd;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_circle_info);
 
         initView();
-
     }
 
     private void initView(){
@@ -73,6 +75,14 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 finish();
             }
         });
+
+        pd = new ProgressDialog(PublishCircleInfoActivity.this);
+        pd.setMessage("请稍候...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.setCancelable(true);
+        pd.setIndeterminate(false);
+
+
         positionTV= (TextView) findViewById(R.id.positionTV);
         positionTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +130,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 String content = ((EditText) findViewById(R.id.contentET)).getText().toString();
                 if (!TextUtils.isEmpty(content)) {
                     texts.add(new BasicNameValuePair("content", content));
+                    texts.add(new BasicNameValuePair("phone", "18753319519"));
                 }
 //                try {
 //                    if (locationInfo != null) {
@@ -145,7 +156,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 HashMap<File, String> files = new HashMap<File, String>();
                 for (int i = 0; i < selectList.size(); i++) {
                     LocalMedia media = selectList.get(i);
-                    files.put(new File(media.getPath()), "file");
+                    files.put(new File(media.getCompressPath()), "file");
                 }
                 upload(texts, files, ApiConstants.PUBLISH_CIRCLE_INFO_API);
             }
@@ -164,12 +175,12 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     .previewImage(true)// 是否可预览图片
                     .previewVideo(false)// 是否可预览视频
                     .enablePreviewAudio(false) // 是否可播放音频
-                    .compressGrade(Luban.THIRD_GEAR)// luban压缩档次，默认3档 Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
+                    .compressGrade(Luban.CUSTOM_GEAR)// luban压缩档次，默认3档 Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
                     .isCamera(true)// 是否显示拍照按钮
                     .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                     //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径
                     .enableCrop(false)// 是否裁剪
-                    .compress(false)// 是否压缩
+                    .compress(true)// 是否压缩
                     .compressMode(compressMode)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
                     //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                     .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
@@ -182,8 +193,8 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     .openClickSound(false)// 是否开启点击声音
                     .selectionMedia(selectList)// 是否传入已选图片
                     //.previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
-                    //.cropCompressQuality(90)// 裁剪压缩质量 默认100
-                    //.compressMaxKB()//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效
+                    .cropCompressQuality(100)// 裁剪压缩质量 默认100
+                    .compressMaxKB(300)//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效
                     //.compressWH() // 压缩宽高比 compressGrade()为Luban.CUSTOM_GEAR有效
                     //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                     //.rotateEnabled() // 裁剪是否可旋转图片
@@ -309,6 +320,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
 
     public void upload(final List<BasicNameValuePair> texts,
                        final HashMap<File, String> files,final String url) {
+        pd.show();
         new Thread(){
             @Override
             public void run()
@@ -316,6 +328,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 DefaultHttpClient defaultHttpClient=iniClient();
                 HttpPost httpPost = iniHttpPost(texts, files, url);
                 try {
+                    Log.e("hhhh","zzzz");
                     HttpResponse httpResponse = defaultHttpClient
                             .execute(httpPost);
                     if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -327,9 +340,11 @@ public class PublishCircleInfoActivity extends BaseActivity {
 //                        String result = EntityUtils.toString(
 //                                httpResponse.getEntity());
                         Log.e("上传成功........", result);
+                        PictureFileUtils.deleteCacheDirFile(PublishCircleInfoActivity.this);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                pd.dismiss();
                                 Toast.makeText(PublishCircleInfoActivity.this, "成功", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
@@ -339,6 +354,8 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     // e.printStackTrace();
                 } catch (IOException e) {
                     // e.printStackTrace();
+                } finally {
+
                 }
             }
         }.start();

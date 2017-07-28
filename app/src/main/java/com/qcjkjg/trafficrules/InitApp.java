@@ -41,6 +41,11 @@ public class InitApp extends Application{
     public static final String USER_AVATAR_KEY = "USER_AVATAR_KEY";
     public static final String USER_IS_VIP_KEY = "USER_IS_VIP_KEY";
     public static final String USER_PLATFORM_KEY = "USER_PLATFORM_KEY";//0:QQ 1:WEIXIN
+    public static final String USER_CLIENT_ID_KEY = "USER_CLIENT_ID_KEY";
+    public static final String USER_CLIENT_ID_KEY_FLAG = "USER_CLIENT_ID_KEY_FLAG";
+
+
+
 
     public static String VERSION = "4.1";
     public static String DEVICE_TYPE = "0";
@@ -54,7 +59,6 @@ public class InitApp extends Application{
     private static UUID uuid;
     public static String DEVICE_TOKEN = "";
     //推送相关
-    public static final String APP_STATIC_PREF = "APP_STATIC_PREF";
     public static final String PREF_DEVICE_TOKEN_KEY = "PREF_DEVICE_TOKEN_KEY";
     public static final String PREFS_FILE = "device_id.xml";
     public static final String PREFS_DEVICE_ID = "device_id";
@@ -82,7 +86,7 @@ public class InitApp extends Application{
     }
 
     private void initUmeng(){
-        Config.DEBUG=true;
+        Config.DEBUG=false;
         UMShareAPI.get(this);
 //        PlatformConfig.setWeixin("", "");
 //        PlatformConfig.setQQZone("1106277938","FVCOAjS49n9P53UN");
@@ -99,7 +103,6 @@ public class InitApp extends Application{
     public void initUserPref() {
         initDeviceId(getApplicationContext());
         DEVICE_TOKEN = new Md5(uuid == null ? "null" : uuid.toString()).compute();
-        PrefUtils.putString(this, APP_STATIC_PREF, PREF_DEVICE_TOKEN_KEY, DEVICE_TOKEN);
     }
 
     public void initDeviceId(Context context) {
