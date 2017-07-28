@@ -123,7 +123,6 @@ public class BindPhoneActivity extends BaseActivity{
         });
 
 
-
         // 创建EventHandler对象
         eventHandler = new EventHandler() {
             public void afterEvent(int event, int result, Object data) {
