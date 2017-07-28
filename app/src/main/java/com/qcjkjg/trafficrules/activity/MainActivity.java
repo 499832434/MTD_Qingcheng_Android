@@ -13,10 +13,13 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.igexin.sdk.PushManager;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.fragment.SignupFragment;
+import com.qcjkjg.trafficrules.service.QingChenIntentService;
+import com.qcjkjg.trafficrules.service.QingChenPushService;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.CustomViewPager;
@@ -40,6 +43,9 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PushManager.getInstance().initialize(this.getApplicationContext(), QingChenPushService.class);
+        PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();
     }
 

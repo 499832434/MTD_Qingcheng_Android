@@ -64,7 +64,6 @@ public class PublishCircleInfoActivity extends BaseActivity {
 
         initView();
 
-
     }
 
     private void initView(){
@@ -143,7 +142,6 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     texts.add(new BasicNameValuePair("area", locationInfo.getDistrict()));
                     texts.add(new BasicNameValuePair("address", locationInfo.getAddrStr()));
                 }
-                Log.e("aaaa", locationInfo.getProvince() + "===" + locationInfo.getCity() + "===" + locationInfo.getDistrict() + "===" + locationInfo.getAddrStr());
                 HashMap<File, String> files = new HashMap<File, String>();
                 for (int i = 0; i < selectList.size(); i++) {
                     LocalMedia media = selectList.get(i);
@@ -222,7 +220,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
 
     private void getPositon(){
         // -----------location config ------------
-        locationService = InitApp.initApp.locationService;
+        locationService = new LocationService(getApplicationContext());
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(mListener);
         //注册监听
@@ -257,6 +255,10 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 }
                 locationInfo=location;
                 logMsg(location.getAddrStr());
+                if(locationService!=null){
+                    locationService.unregisterListener(mListener); //注销掉监听
+                    locationService.stop(); //停止定位服务
+                }
             }else{
                 Toast.makeText(PublishCircleInfoActivity.this,"11111",Toast.LENGTH_SHORT).show();
             }
