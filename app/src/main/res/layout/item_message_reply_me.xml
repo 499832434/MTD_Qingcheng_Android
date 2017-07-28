@@ -32,6 +32,7 @@
                   android:text="话题:全新视觉，简约界面乐享沟通.消息列表支持自由调整，简约体验轻松聊天"
                   android:textSize="16sp"
                   android:id="@+id/contentTV"
+                  android:visibility="gone"
                   android:layout_marginTop="10dp"
                   android:layout_marginBottom="5dp"
                   android:lineSpacingExtra="5dp"

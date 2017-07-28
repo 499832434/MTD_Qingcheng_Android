@@ -75,7 +75,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
         circleLV= (ListView) currentView.findViewById(R.id.swipe_target);
-        circleLV.addHeaderView(view);
+//        circleLV.addHeaderView(view);
         messageAdapter=new MessageReplyMeAdapter(mActivity, messageList);
         circleLV.setAdapter(messageAdapter);
         cycleViewPager= (CycleViewPager) view.findViewById(R.id.cycleViewPager);
@@ -84,12 +84,12 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
 
 
-        swipeToLoadLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(true);
-            }
-        });
+//        swipeToLoadLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                swipeToLoadLayout.setRefreshing(true);
+//            }
+//        });
     }
 
     @Override
@@ -246,4 +246,14 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        swipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(true);
+            }
+        });
+    }
 }

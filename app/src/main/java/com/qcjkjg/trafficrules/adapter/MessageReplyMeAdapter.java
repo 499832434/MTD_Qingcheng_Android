@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
@@ -19,6 +22,7 @@ import com.qcjkjg.trafficrules.vo.MessageMyReply;
 import com.qcjkjg.trafficrules.vo.MessageReplyMe;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,8 +76,13 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         if(!TextUtils.isEmpty(info.getAvatar())){
             Picasso.with(context).load(info.getAvatar()).into(holder.pictureIV);
         }
+        if(!TextUtils.isEmpty(info.getContent())){
+            holder.contentTV.setText(info.getContent());
+            holder.contentTV.setVisibility(View.VISIBLE);
+        }else{
+            holder.contentTV.setVisibility(View.GONE);
+        }
         holder.nameTV.setText(info.getNickName());
-        holder.contentTV.setText(info.getContent());
         holder.timeTV.setText(info.getCreateTime());
         holder.leaveTV.setText(info.getReplyCnt()+"");
         holder.fabulousTV.setText(info.getZanCnt()+"");
@@ -82,6 +91,30 @@ public class MessageReplyMeAdapter extends BaseAdapter {
             holder.pictureMGV.setVisibility(View.VISIBLE);
             MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((FragmentActivity)context,list);
             holder.pictureMGV.setAdapter(adapter);
+//            holder.pictureMGV.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(int position, View v) {
+//                    if (selectList.size() > 0) {
+//                        LocalMedia media = selectList.get(position);
+//                        String pictureType = media.getPictureType();
+//                        int mediaType = PictureMimeType.pictureToVideo(pictureType);
+//                        switch (mediaType) {
+//                            case 1:
+//                                // 预览图片 可自定长按保存路径
+//                                PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
+//                                break;
+//                            case 2:
+//                                // 预览视频
+//                                PictureSelector.create(PublishCircleInfoActivity.this).externalPictureVideo(media.getPath());
+//                                break;
+//                            case 3:
+//                                // 预览音频
+//                                PictureSelector.create(PublishCircleInfoActivity.this).externalPictureAudio(media.getPath());
+//                                break;
+//                        }
+//                    }
+//                }
+//            });
         }else{
             holder.pictureMGV.setVisibility(View.GONE);
         }

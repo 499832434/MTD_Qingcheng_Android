@@ -130,8 +130,9 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 String content = ((EditText) findViewById(R.id.contentET)).getText().toString();
                 if (!TextUtils.isEmpty(content)) {
                     texts.add(new BasicNameValuePair("content", content));
-                    texts.add(new BasicNameValuePair("phone", "18753319519"));
                 }
+                texts.add(new BasicNameValuePair("phone", "18753319519"));
+                texts.add(new BasicNameValuePair("belong_area", "120"));
 //                try {
 //                    if (locationInfo != null) {
 //                        texts.add(new BasicNameValuePair("longitude", locationInfo.getLongitude() + ""));
