@@ -15,6 +15,7 @@ import com.qcjkjg.trafficrules.view.MyListView;
 import com.qcjkjg.trafficrules.vo.MessageMyReply;
 import com.qcjkjg.trafficrules.vo.MessageTheme;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ import java.util.List;
 public class MessageMyReplyAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<MessageMyReply> mData;
+    private List<MessageMyReply> mData ;
     private Context context;
 
     public MessageMyReplyAdapter(FragmentActivity context, List<MessageMyReply> data) {
@@ -58,7 +59,7 @@ public class MessageMyReplyAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MessageReplyActivity)context,null);
+        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MessageReplyActivity)context,new ArrayList<String>());
         holder.pictureMGV.setAdapter(adapter);
         return convertView;
     }

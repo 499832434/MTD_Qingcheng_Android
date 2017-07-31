@@ -84,12 +84,14 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
 
 
-//        swipeToLoadLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeToLoadLayout.setRefreshing(true);
-//            }
-//        });
+
+        swipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(true);
+            }
+        });
+
     }
 
     @Override
@@ -213,6 +215,9 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                                 }
                                 if(messageList.size()>0){
                                     messageAdapter.notifyDataSetChanged();
+                                    if(TextUtils.isEmpty(cid)){
+                                        circleLV.setSelection(0);
+                                    }
                                 }
                             }else{
                                 Toast.makeText(mActivity, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -249,11 +254,5 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     @Override
     public void onResume() {
         super.onResume();
-        swipeToLoadLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(true);
-            }
-        });
     }
 }

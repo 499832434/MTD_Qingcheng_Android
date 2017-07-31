@@ -16,6 +16,7 @@ import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
 public class MyThemeContentPictureAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<String> mData;
+    private List<String> mData=new ArrayList<String>();
     private Context context;
     private int width;
     public MyThemeContentPictureAdapter(FragmentActivity context, List<String> data) {

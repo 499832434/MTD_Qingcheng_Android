@@ -24,6 +24,7 @@ import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
+import com.qcjkjg.trafficrules.fragment.AccountFragment;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.fragment.SignupFragment;
 import com.qcjkjg.trafficrules.service.QingChenIntentService;
@@ -52,8 +53,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_main);
         PushManager.getInstance().initialize(this.getApplicationContext(), QingChenPushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();
@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity {
             } else if (position == 2) {
                 return new CircleFragment();
             } else if (position == 3) {
-                return new Fragment();
+                return new AccountFragment();
             }
             return null;
         }

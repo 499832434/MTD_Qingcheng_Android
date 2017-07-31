@@ -63,7 +63,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish_circle_info);
+        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_publish_circle_info);
 
         initView();
     }
@@ -101,23 +101,24 @@ public class PublishCircleInfoActivity extends BaseActivity {
             @Override
             public void onItemClick(int position, View v) {
                 if (selectList.size() > 0) {
-                    LocalMedia media = selectList.get(position);
-                    String pictureType = media.getPictureType();
-                    int mediaType = PictureMimeType.pictureToVideo(pictureType);
-                    switch (mediaType) {
-                        case 1:
-                            // 预览图片 可自定长按保存路径
-                            PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
-                            break;
-                        case 2:
-                            // 预览视频
-                            PictureSelector.create(PublishCircleInfoActivity.this).externalPictureVideo(media.getPath());
-                            break;
-                        case 3:
-                            // 预览音频
-                            PictureSelector.create(PublishCircleInfoActivity.this).externalPictureAudio(media.getPath());
-                            break;
-                    }
+                    PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
+//                    LocalMedia media = selectList.get(position);
+//                    String pictureType = media.getPictureType();
+//                    int mediaType = PictureMimeType.pictureToVideo(pictureType);
+//                    switch (mediaType) {
+//                        case 1:
+//                            // 预览图片 可自定长按保存路径
+//                            PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
+//                            break;
+//                        case 2:
+//                            // 预览视频
+//                            PictureSelector.create(PublishCircleInfoActivity.this).externalPictureVideo(media.getPath());
+//                            break;
+//                        case 3:
+//                            // 预览音频
+//                            PictureSelector.create(PublishCircleInfoActivity.this).externalPictureAudio(media.getPath());
+//                            break;
+//                    }
                 }
             }
         });

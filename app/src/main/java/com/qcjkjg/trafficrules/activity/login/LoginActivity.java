@@ -18,6 +18,7 @@ import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
+import com.qcjkjg.trafficrules.utils.StatusBarColorCompat;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.User;
 import com.umeng.socialize.UMAuthListener;
@@ -39,8 +40,8 @@ public class LoginActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
+        //setContentView(R.layout.activity_login);
+        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_login);
         initView();
     }
 

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import java.util.List;
 public class MessageReplyMeAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<MessageInfo> mData;
+    private List<MessageInfo> mData =new ArrayList<MessageInfo>();
     private Context context;
 
     public MessageReplyMeAdapter(FragmentActivity context, List<MessageInfo> data) {
@@ -86,35 +87,25 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         holder.timeTV.setText(info.getCreateTime());
         holder.leaveTV.setText(info.getReplyCnt()+"");
         holder.fabulousTV.setText(info.getZanCnt()+"");
-        List<String> list=info.getPricturlList();
+        final List<String> list=info.getPricturlList();
         if(list.size()>0){
             holder.pictureMGV.setVisibility(View.VISIBLE);
             MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((FragmentActivity)context,list);
             holder.pictureMGV.setAdapter(adapter);
-//            holder.pictureMGV.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(int position, View v) {
-//                    if (selectList.size() > 0) {
-//                        LocalMedia media = selectList.get(position);
-//                        String pictureType = media.getPictureType();
-//                        int mediaType = PictureMimeType.pictureToVideo(pictureType);
-//                        switch (mediaType) {
-//                            case 1:
-//                                // 预览图片 可自定长按保存路径
-//                                PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
-//                                break;
-//                            case 2:
-//                                // 预览视频
-//                                PictureSelector.create(PublishCircleInfoActivity.this).externalPictureVideo(media.getPath());
-//                                break;
-//                            case 3:
-//                                // 预览音频
-//                                PictureSelector.create(PublishCircleInfoActivity.this).externalPictureAudio(media.getPath());
-//                                break;
-//                        }
-//                    }
-//                }
-//            });
+            holder.pictureMGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    if (list.size() > 0) {
+                        List<LocalMedia> selectList = new ArrayList<LocalMedia>();
+                        for(int i=0;i<list.size();i++){
+                            LocalMedia media=new LocalMedia();
+                            media.setPath(list.get(i));
+                            selectList.add(media);
+                        }
+                        PictureSelector.create((FragmentActivity)context).externalPicturePreview(position, selectList);
+                    }
+                }
+            });
         }else{
             holder.pictureMGV.setVisibility(View.GONE);
         }
