@@ -95,7 +95,6 @@ public class InitApp extends Application{
         PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
     }
 
-
     public void initUserPref() {
         initDeviceId(getApplicationContext());
         DEVICE_TOKEN = new Md5(uuid == null ? "null" : uuid.toString()).compute();
