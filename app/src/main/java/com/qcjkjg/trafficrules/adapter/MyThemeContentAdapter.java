@@ -12,6 +12,7 @@ import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
 import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class MyThemeContentAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((BaseListViewActivity)context,null);
+        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((BaseListViewActivity)context,new ArrayList<String>());
         holder.pictureMGV.setAdapter(adapter);
         return convertView;
     }

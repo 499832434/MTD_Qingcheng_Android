@@ -16,7 +16,7 @@
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
             android:id="@+id/swipeToLoadLayout"
-            custom:swipe_style="above"
+            custom:swipe_style="classic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff">

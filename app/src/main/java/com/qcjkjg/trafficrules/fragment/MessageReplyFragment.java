@@ -17,6 +17,9 @@ import com.qcjkjg.trafficrules.adapter.MessageMyReplyAdapter;
 import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
 import com.qcjkjg.trafficrules.adapter.SignupAdapter;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
+import com.qcjkjg.trafficrules.vo.MessageInfo;
+
+import java.util.ArrayList;
 
 /**
  * Created by zongshuo on 2017/7/19.
@@ -52,7 +55,7 @@ public class MessageReplyFragment extends Fragment{
             myReplyAdapter=new MessageMyReplyAdapter(mActivity,null);
             replyLV.setAdapter(myReplyAdapter);
         }else{
-            replyMeAdapter=new MessageReplyMeAdapter(mActivity,null);
+            replyMeAdapter=new MessageReplyMeAdapter(mActivity,new ArrayList<MessageInfo>());
             replyLV.setAdapter(replyMeAdapter);
         }
     }

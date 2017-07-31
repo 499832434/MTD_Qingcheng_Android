@@ -17,7 +17,7 @@ public class MyThemeActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_theme);
+        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_my_theme);
         initView();
     }
 

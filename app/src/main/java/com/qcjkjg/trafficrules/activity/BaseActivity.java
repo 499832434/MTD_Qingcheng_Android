@@ -6,11 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import com.qcjkjg.trafficrules.InitApp;
+import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
+import com.qcjkjg.trafficrules.utils.StatusBarColorCompat;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
@@ -50,7 +53,10 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-
+    public void setContentViewWithStatusBarColorByColorPrimaryDark(int layoutResID) {
+        StatusBarColorCompat.setContentViewWithStatusBarColorByColorPrimaryDark(this, layoutResID);
+        StatusBarColorCompat.setStatusBarColor(BaseActivity.this, getResources().getColor(R.color.white));
+    }
 
     /**
      * 拨打电话
@@ -145,6 +151,35 @@ public class BaseActivity extends AppCompatActivity {
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, avatar);
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, isvip);
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, platform);
+    }
+
+    /**
+     * 判断用户是否登录
+     */
+
+    public boolean getUserIsLogin(){
+        String phone=PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, "");
+        if(TextUtils.isEmpty(phone)){
+            return false;
+        }
+        return  true;
+    }
+
+    /**
+     * 获取用户的登录信息
+     */
+    public String getUserInfo(int flag){
+        switch (flag){
+            case 0:
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_NAME_KEY, "");
+            case 1:
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, "");
+            case 2:
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, "");
+            case 3:
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, "");
+        }
+        return  "";
     }
 
 }

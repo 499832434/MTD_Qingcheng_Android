@@ -7,11 +7,12 @@
                 android:layout_height="match_parent">
 
 
-    <com.qcjkjg.trafficrules.view.CircleImageView android:layout_width="50dp"
-                                                 android:scaleType="fitXY"
-                                                  android:layout_marginTop="5dp"
-                                                 android:id="@+id/pictureIV"
-                                                 android:layout_height="50dp"/>
+    <com.qcjkjg.trafficrules.view.CircleImageView
+            android:layout_width="50dp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="5dp"
+            android:id="@+id/pictureIV"
+            android:layout_height="50dp"/>
     <LinearLayout android:layout_width="match_parent"
                   android:orientation="vertical"
                   android:layout_marginTop="15dp"
@@ -21,6 +22,7 @@
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="彼岸花开"
+                  android:id="@+id/nameTV"
                   android:textSize="15sp"
                   android:textColor="#666666"
                 />
@@ -29,6 +31,8 @@
                   android:layout_height="wrap_content"
                   android:text="话题:全新视觉，简约界面乐享沟通.消息列表支持自由调整，简约体验轻松聊天"
                   android:textSize="16sp"
+                  android:id="@+id/contentTV"
+                  android:visibility="gone"
                   android:layout_marginTop="10dp"
                   android:layout_marginBottom="5dp"
                   android:lineSpacingExtra="5dp"
@@ -37,6 +41,8 @@
         <com.qcjkjg.trafficrules.view.MyGridView
                 android:layout_marginBottom="5dp"
                 android:numColumns="3"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:id="@+id/pictureMGV"
                 android:layout_gravity="center"
                 android:horizontalSpacing="5dp"
@@ -48,6 +54,7 @@
                   android:layout_height="wrap_content"
                   android:text="话题:全新视觉，简约界面乐享沟通.消息列表支持自由调整，简约体验轻松聊天"
                   android:textSize="14sp"
+                  android:visibility="gone"
                   android:padding="5dp"
                   android:lineSpacingExtra="5dp"
                   android:background="#f2f2f2"
@@ -61,6 +68,7 @@
                       android:layout_height="wrap_content"
                       android:textColor="#999999"
                       android:text="20分钟前"
+                      android:id="@+id/timeTV"
                       android:textSize="16sp"/>
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
@@ -80,7 +88,7 @@
                       android:textSize="16sp"/>
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:src="@drawable/ic_comments"
+                       android:src="@drawable/ic_praise_n"
                        android:layout_toLeftOf="@+id/fabulousTV"
                        android:id="@+id/fabulousIV"
                        android:scaleType="centerInside"

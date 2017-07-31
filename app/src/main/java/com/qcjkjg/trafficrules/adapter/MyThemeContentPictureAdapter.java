@@ -16,6 +16,7 @@ import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
 public class MyThemeContentPictureAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<String> mData;
+    private List<String> mData=new ArrayList<String>();
     private Context context;
     private int width;
     public MyThemeContentPictureAdapter(FragmentActivity context, List<String> data) {
@@ -36,7 +37,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 9;
+        return mData.size();
     }
 
     @Override
@@ -64,7 +65,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
             width=DensityUtil.dip2px(context,80);
         }
         DensityUtil.setWidth(holder.pictureIV,width);
-        Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(holder.pictureIV);
+        Picasso.with(context).load(mData.get(position)).into(holder.pictureIV);
         return convertView;
     }
 

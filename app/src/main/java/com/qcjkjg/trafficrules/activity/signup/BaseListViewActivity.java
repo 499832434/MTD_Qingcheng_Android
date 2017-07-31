@@ -50,7 +50,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_listview);
+        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_base_listview);
         initData();
         initView();
     }
@@ -139,8 +139,10 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 request0("");
                 break;
             case 1:
+                swipeToLoadLayout.setRefreshing(false);
                 break;
             case 2:
+                swipeToLoadLayout.setRefreshing(false);
                 break;
         }
     }

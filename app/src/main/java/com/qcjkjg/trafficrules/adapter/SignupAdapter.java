@@ -59,8 +59,14 @@ public class SignupAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.titleTV.setText(mData.get(position).getTitle());
-        if(!TextUtils.isEmpty(mData.get(position).getPictureUrl())){
-            Picasso.with(context).load(mData.get(position).getPictureUrl()).into(holder.showIV);
+        if(position%4==0){
+            holder.showIV.setImageResource(R.drawable.item_blue);
+        }else if(position%4==1){
+            holder.showIV.setImageResource(R.drawable.item_red);
+        }else if(position%4==2){
+            holder.showIV.setImageResource(R.drawable.item_yellow);
+        }else{
+            holder.showIV.setImageResource(R.drawable.item_purple);
         }
         return convertView;
     }
