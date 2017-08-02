@@ -15,7 +15,6 @@ import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
 import com.squareup.picasso.Picasso;
-import net.tsz.afinal.FinalBitmap;
 
 import java.util.ArrayList;
 import java.util.List;
