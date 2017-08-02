@@ -22,6 +22,7 @@ import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.DebugUtil;
 import com.luck.picture.lib.tools.StringUtils;
 import com.qcjkjg.trafficrules.R;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GridImageAdapter extends
     private List<LocalMedia> list = new ArrayList<LocalMedia>();
     private int selectMax = 9;
     private Context context;
+    private TextView num1TV=null,num2TV=null;
     /**
      * 点击添加图片跳转
      */
@@ -51,10 +53,12 @@ public class GridImageAdapter extends
         void onAddPicClick();
     }
 
-    public GridImageAdapter(Context context, onAddPicClickListener mOnAddPicClickListener) {
+    public GridImageAdapter(Context context, onAddPicClickListener mOnAddPicClickListener,TextView num1TV,TextView num2TV) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
         this.mOnAddPicClickListener = mOnAddPicClickListener;
+        this.num1TV=num1TV;
+        this.num2TV=num2TV;
     }
 
     public void setSelectMax(int selectMax) {
@@ -141,6 +145,23 @@ public class GridImageAdapter extends
                         notifyItemRemoved(index);
                         notifyItemRangeChanged(index, list.size());
                         DebugUtil.i("delete position:", index + "--->remove after:" + list.size());
+                        if(list.size()>0){
+                            if(num1TV!=null){
+                                num1TV.setVisibility(View.VISIBLE);
+                                num1TV.setText(list.size()+"");
+                            }
+                            if(num2TV!=null){
+                                num2TV.setVisibility(View.VISIBLE);
+                                num2TV.setText(list.size()+"/9");
+                            }
+                        }else{
+                            if(num1TV!=null){
+                                num1TV.setVisibility(View.GONE);
+                            }
+                            if(num2TV!=null){
+                                num2TV.setVisibility(View.GONE);
+                            }
+                        }
                     }
                 }
             });

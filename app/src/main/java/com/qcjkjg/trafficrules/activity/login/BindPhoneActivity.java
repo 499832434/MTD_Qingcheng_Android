@@ -193,6 +193,7 @@ public class BindPhoneActivity extends BaseActivity{
                                 String avatar=info.getString("avatar");
                                 String isvip=info.getString("is_vip");
                                 loginInfo(name,phone,avatar,isvip,"");
+                                sign();
                                 finish();
                             }else{
                                 Toast.makeText(BindPhoneActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -211,8 +212,8 @@ public class BindPhoneActivity extends BaseActivity{
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("phone", "10");
-                params.put("client_id", PrefUtils.getString(BindPhoneActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, ""));
+                params.put("phone", getUserInfo(1));
+                params.put("client_id", getUserInfo(4));
                 params.put("device_type", InitApp.DEVICE_TYPE);
                 return params;
             }
@@ -242,6 +243,7 @@ public class BindPhoneActivity extends BaseActivity{
                                 String avatar=info.getString("avatar");
                                 String isvip=info.getString("is_vip");
                                 loginInfo(name,phone,avatar,isvip, user.getPlatformType());
+                                sign();
                                 finish();
                             }else{
                                 Toast.makeText(BindPhoneActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();

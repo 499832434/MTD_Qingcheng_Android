@@ -57,38 +57,38 @@ public class MainActivity extends BaseActivity {
         PushManager.getInstance().initialize(this.getApplicationContext(), QingChenPushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();
-        initData();
+        sign();
 
     }
 
     private void initView(){
-//        //打开数据库输出流
-//        DbCreateHelper s = new DbCreateHelper();
-//        SQLiteDatabase db =s.openDatabase(getApplicationContext());
-//
-//
-//        Cursor cursor = db.rawQuery("select Name,ID from areacode4 where Dep=?", new String[]{"5"});
-//        while (cursor.moveToNext()) {
-//            String name = cursor.getString(cursor.getColumnIndex("Name"));
-//            int id=cursor.getInt(cursor.getColumnIndex("ID"));
-//            firstList.add(name);
-//            List<String> secondList=new ArrayList<String>();
-//            Cursor cursor1 = db.rawQuery("select Name,ID from areacode4 where Dep=? and ParentID=?", new String[]{"6",id+""});
-//            while (cursor1.moveToNext()) {
-//                String name1 = cursor1.getString(cursor.getColumnIndex("Name"));
-//                int id1=cursor1.getInt(cursor.getColumnIndex("ID"));
-//                secondList.add(name1);
-//                Log.e("aaa",name+"===="+name1+"===="+id1);
-//            }
-//            Log.e("ssss",secondList.size()+"");
-//            map.put(name,secondList);
-//        }
-//
-//        int numbe=0;
-//        for(String key:map.keySet()){
-//            numbe+=map.get(key).size();
-//            Log.e("ccc",key+"===="+map.get(key).size()+"===="+numbe);
-//        }
+        //打开数据库输出流
+        DbCreateHelper s = new DbCreateHelper();
+        SQLiteDatabase db =s.openDatabase(getApplicationContext());
+
+
+        Cursor cursor = db.rawQuery("select Name,ID from areacode4 where Dep=?", new String[]{"5"});
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex("Name"));
+            int id=cursor.getInt(cursor.getColumnIndex("ID"));
+            firstList.add(name);
+            List<String> secondList=new ArrayList<String>();
+            Cursor cursor1 = db.rawQuery("select Name,ID from areacode4 where Dep=? and ParentID=?", new String[]{"6",id+""});
+            while (cursor1.moveToNext()) {
+                String name1 = cursor1.getString(cursor.getColumnIndex("Name"));
+                int id1=cursor1.getInt(cursor.getColumnIndex("ID"));
+                secondList.add(name1);
+                Log.e("aaa",name+"===="+name1+"===="+id1);
+            }
+            Log.e("ssss",secondList.size()+"");
+            map.put(name,secondList);
+        }
+
+        int numbe=0;
+        for(String key:map.keySet()){
+            numbe+=map.get(key).size();
+            Log.e("ccc",key+"===="+map.get(key).size()+"===="+numbe);
+        }
 
         masterViewPager = (CustomViewPager) findViewById(R.id.masterViewPager);
         mFragmentManager = getSupportFragmentManager();
@@ -125,10 +125,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void initData(){
-        String clientid=PrefUtils.getString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, "");
-        sign(MainActivity.this,clientid);
-    }
 
     public class MyFragAdapter extends SmartFragmentStatePagerAdapter {
 
@@ -198,47 +194,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(MainActivity.this).onActivityResult(requestCode,resultCode,data);
+        UMShareAPI.get(MainActivity.this).onActivityResult(requestCode, resultCode, data);
     }
 
-
-    private void sign(final Context context, final String clientId) {
-        final String url = ApiConstants.SIGN_API;
-        StringRequest req = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e("signMain",response);
-                        try {
-                            JSONObject jo = new JSONObject(response);
-                            if (jo.has("code")) {
-                                if ("0".equalsIgnoreCase(jo.getString("code"))) {
-                                    Toast.makeText(context,"mainActivity签到",Toast.LENGTH_SHORT).show();
-                                    PrefUtils.putString(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, jo.getString("is_vip"));
-                                }
-                            }
-                        } catch (Exception e) {
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                //POST 参数
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("clientid", clientId);
-                params.put("phone", PrefUtils.getString(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, ""));
-                params.put("device_type", InitApp.DEVICE_TYPE);
-                params.put("device_token", InitApp.DEVICE_TOKEN);
-                return params;
-            }
-        };
-        Volley.newRequestQueue(context).add(req);
-    }
 
 }

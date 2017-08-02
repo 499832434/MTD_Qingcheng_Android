@@ -38,6 +38,7 @@ import java.util.List;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.service.LocationService;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
+import net.tsz.afinal.http.AjaxParams;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -55,7 +56,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private GridImageAdapter adapter;
     private int maxSelectNum = 9;
-    private int compressMode = PictureConfig.LUBAN_COMPRESS_MODE;
+    private int compressMode = PictureConfig.SYSTEM_COMPRESS_MODE;
     private LocationService locationService;
     private TextView positionTV;
     private BDLocation locationInfo;
@@ -93,7 +94,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         FullyGridLayoutManager manager = new FullyGridLayoutManager(PublishCircleInfoActivity.this, 4, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
-        adapter = new GridImageAdapter(PublishCircleInfoActivity.this, onAddPicClickListener);
+        adapter = new GridImageAdapter(PublishCircleInfoActivity.this, onAddPicClickListener,null,null);
         adapter.setList(selectList);
         adapter.setSelectMax(maxSelectNum);
         recyclerView.setAdapter(adapter);
@@ -102,23 +103,6 @@ public class PublishCircleInfoActivity extends BaseActivity {
             public void onItemClick(int position, View v) {
                 if (selectList.size() > 0) {
                     PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
-//                    LocalMedia media = selectList.get(position);
-//                    String pictureType = media.getPictureType();
-//                    int mediaType = PictureMimeType.pictureToVideo(pictureType);
-//                    switch (mediaType) {
-//                        case 1:
-//                            // 预览图片 可自定长按保存路径
-//                            PictureSelector.create(PublishCircleInfoActivity.this).externalPicturePreview(position, selectList);
-//                            break;
-//                        case 2:
-//                            // 预览视频
-//                            PictureSelector.create(PublishCircleInfoActivity.this).externalPictureVideo(media.getPath());
-//                            break;
-//                        case 3:
-//                            // 预览音频
-//                            PictureSelector.create(PublishCircleInfoActivity.this).externalPictureAudio(media.getPath());
-//                            break;
-//                    }
                 }
             }
         });
@@ -132,20 +116,8 @@ public class PublishCircleInfoActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(content)) {
                     texts.add(new BasicNameValuePair("content", content));
                 }
-                texts.add(new BasicNameValuePair("phone", "18753319519"));
-                texts.add(new BasicNameValuePair("belong_area", "120"));
-//                try {
-//                    if (locationInfo != null) {
-//                        texts.add(new BasicNameValuePair("longitude", locationInfo.getLongitude() + ""));
-//                        texts.add(new BasicNameValuePair("latitude", locationInfo.getLatitude() + ""));
-//                        texts.add(new BasicNameValuePair("provice", URLEncoder.encode(locationInfo.getProvince(), "utf-8")));
-//                        texts.add(new BasicNameValuePair("city", URLEncoder.encode(locationInfo.getCity(), "utf-8")));
-//                        texts.add(new BasicNameValuePair("area", URLEncoder.encode(locationInfo.getDistrict(), "utf-8")));
-//                        texts.add(new BasicNameValuePair("address", URLEncoder.encode(locationInfo.getAddrStr(), "utf-8")));
-//                    }
-//                } catch (Exception e) {
-//
-//                }
+                texts.add(new BasicNameValuePair("phone", getUserInfo(1)));
+                texts.add(new BasicNameValuePair("belong_area", "淄博市"));
 
                 if (locationInfo != null) {
                     texts.add(new BasicNameValuePair("longitude", locationInfo.getLongitude() + ""));
@@ -185,7 +157,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     .compress(true)// 是否压缩
                     .compressMode(compressMode)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
                     //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
-                    .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                    //.glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                     .hideBottomControls(false)// 是否显示uCrop工具栏，默认不显示
                     .isGif(false)// 是否显示gif图片
                     .freeStyleCropEnabled(false)// 裁剪框是否可拖拽
@@ -195,8 +167,8 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     .openClickSound(false)// 是否开启点击声音
                     .selectionMedia(selectList)// 是否传入已选图片
                     //.previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
-                    .cropCompressQuality(100)// 裁剪压缩质量 默认100
-                    .compressMaxKB(300)//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效
+                    //.cropCompressQuality(100)// 裁剪压缩质量 默认100
+                    //.compressMaxKB(300)//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效
                     //.compressWH() // 压缩宽高比 compressGrade()为Luban.CUSTOM_GEAR有效
                     //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                     //.rotateEnabled() // 裁剪是否可旋转图片
@@ -339,8 +311,6 @@ public class PublishCircleInfoActivity extends BaseActivity {
                         //由于我这边服务器编码为gbk，所以编码设置gbk，如果乱码就改为utf-8
                         String result = EntityUtils.toString(
                                 httpResponse.getEntity(), "utf-8");
-//                        String result = EntityUtils.toString(
-//                                httpResponse.getEntity());
                         Log.e("上传成功........", result);
                         PictureFileUtils.deleteCacheDirFile(PublishCircleInfoActivity.this);
                         runOnUiThread(new Runnable() {

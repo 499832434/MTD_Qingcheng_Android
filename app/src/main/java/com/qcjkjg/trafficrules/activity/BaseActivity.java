@@ -10,6 +10,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
@@ -25,6 +31,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -178,8 +185,48 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, "");
             case 3:
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, "");
+            case 4:
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, "");
         }
         return  "";
     }
 
+
+    public void sign() {
+        final String url = ApiConstants.SIGN_API;
+        StringRequest req = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("signMain",response);
+                        try {
+                            JSONObject jo = new JSONObject(response);
+                            if (jo.has("code")) {
+                                if ("0".equalsIgnoreCase(jo.getString("code"))) {
+                                    Toast.makeText(BaseActivity.this,"mainActivity签到",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                //POST 参数
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("client_id", getUserInfo(4));
+                params.put("phone", getUserInfo(1));
+                params.put("device_type", InitApp.DEVICE_TYPE);
+                params.put("device_token", InitApp.DEVICE_TOKEN);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(BaseActivity.this).add(req);
+    }
 }

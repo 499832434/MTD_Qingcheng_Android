@@ -15,6 +15,7 @@ import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
 import com.squareup.picasso.Picasso;
+import net.tsz.afinal.FinalBitmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
-        this.width=(DensityUtil.getResolution((FragmentActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
+        this.width=DensityUtil.dip2px(context,80);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class MyThemeContentPictureAdapter extends BaseAdapter {
         if(0==width){
             width=DensityUtil.dip2px(context,80);
         }
-        DensityUtil.setWidth(holder.pictureIV,width);
+        DensityUtil.setWidth(holder.pictureIV, width);
         Picasso.with(context).load(mData.get(position)).into(holder.pictureIV);
         return convertView;
     }

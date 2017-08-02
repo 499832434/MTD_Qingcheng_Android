@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity{
                                 String avatar=info.getString("avatar");
                                 String isvip=info.getString("is_vip");
                                 loginInfo(name,phone,avatar,isvip,platformType);
-                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                sign();
                                 finish();
                             }else{
                                 Toast.makeText(LoginActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();

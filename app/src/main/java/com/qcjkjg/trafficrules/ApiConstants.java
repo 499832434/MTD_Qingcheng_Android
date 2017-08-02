@@ -12,4 +12,6 @@ public interface ApiConstants {
     String BIND_PHONE_LOGIN_API="http://47.92.112.59:2017/bindphone";//绑定手机号
     String SIGN_API="http://47.92.112.59:2017/sign";//签到
     String CIRCLE_LIST_API="http://47.92.112.59:2017/circlelist";//考友圈列表（全部）
+    String CIRCLE_GET_REPLY_LIST_API="http://47.92.112.59:2017/replylist";//考友圈获取回复列表
+    String CIRCLE_GET_REPLY_CONTENT_API="http://47.92.112.59:2017/reply";//考友圈获取回复
 }

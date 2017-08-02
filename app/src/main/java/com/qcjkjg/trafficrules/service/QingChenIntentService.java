@@ -122,7 +122,7 @@ public class QingChenIntentService extends GTIntentService {
             protected Map<String, String> getParams() {
                 //POST 参数
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("clientid", clientId);
+                params.put("client_id", clientId);
                 params.put("phone", PrefUtils.getString(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, ""));
                 params.put("device_type", InitApp.DEVICE_TYPE);
                 params.put("device_token", InitApp.DEVICE_TOKEN);

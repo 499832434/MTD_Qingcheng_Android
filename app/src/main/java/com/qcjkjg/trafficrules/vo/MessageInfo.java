@@ -121,6 +121,7 @@ public class MessageInfo implements Parcelable {
             messageInfo.setCid(source.readInt());
             messageInfo.setReplyCnt(source.readInt());
             messageInfo.setNickName(source.readString());
+            messageInfo.setContent(source.readString());
             messageInfo.setPhone(source.readString());
             messageInfo.setCreateTime(source.readString());
             messageInfo.setZanCnt(source.readInt());
