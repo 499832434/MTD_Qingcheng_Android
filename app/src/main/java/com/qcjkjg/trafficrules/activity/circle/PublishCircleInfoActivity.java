@@ -68,6 +68,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
         initView();
     }
 
+
     private void initView(){
         findViewById(R.id.closeIV).setOnClickListener(new View.OnClickListener() {
             @Override
