@@ -1,6 +1,7 @@
 package com.qcjkjg.trafficrules.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.circle.CircleDetailActivity;
+import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.view.MyGridLayout;
@@ -76,7 +78,11 @@ public class CircleReplyMeAdapter extends BaseAdapter {
         holder.timeTV.setText(mData.get(position).getCreateTime());
         holder.numberTV.setText((mData.size()-position)+"楼");
         if(mData.get(position).getToReplyId()>0){
-            holder.replyContentTV.setText(mData.get(position).getContentReply());
+            if(TextUtils.isEmpty(mData.get(position).getContentReply())){
+                holder.replyContentTV.setText("回复"+mData.get(position).getToNickName()+":[图片]");
+            }else{
+                holder.replyContentTV.setText("回复"+mData.get(position).getToNickName()+":"+mData.get(position).getContentReply());
+            }
             holder.replyContentTV.setVisibility(View.VISIBLE);
         }else {
             holder.replyContentTV.setVisibility(View.GONE);
@@ -90,6 +96,10 @@ public class CircleReplyMeAdapter extends BaseAdapter {
         holder.replyTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!((CircleDetailActivity)context).getUserIsLogin()){
+                    context.startActivity(new Intent(context,LoginActivity.class));
+                    return;
+                }
                 ((CircleDetailActivity) context).showReplyDialog(position, mData.get(position));
             }
         });

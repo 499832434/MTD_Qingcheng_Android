@@ -17,6 +17,7 @@ public class MessageInfo implements Parcelable {
     private String phone;
     private String createTime;
     private int zanCnt;
+    private int isZan;//1：赞过  0：未赞过
     private String avatar;
     private List<String> pricturlList=new ArrayList<String>();
 
@@ -92,6 +93,14 @@ public class MessageInfo implements Parcelable {
         this.pricturlList = pricturlList;
     }
 
+    public int getIsZan() {
+        return isZan;
+    }
+
+    public void setIsZan(int isZan) {
+        this.isZan = isZan;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -108,6 +117,7 @@ public class MessageInfo implements Parcelable {
         parcel.writeInt(zanCnt);
         parcel.writeString(avatar);
         parcel.writeStringList(pricturlList);
+        parcel.writeInt(isZan);
     }
 
 
@@ -127,6 +137,7 @@ public class MessageInfo implements Parcelable {
             messageInfo.setZanCnt(source.readInt());
             messageInfo.setAvatar(source.readString());
             messageInfo.setPricturlList(source.createStringArrayList());
+            messageInfo.setIsZan(source.readInt());
             return messageInfo;
         }
 

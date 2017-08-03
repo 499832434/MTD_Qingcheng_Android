@@ -38,6 +38,7 @@ import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
+import com.qcjkjg.trafficrules.view.ApproveListLayout;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.MyListView;
@@ -70,7 +71,7 @@ public class CircleDetailActivity extends BaseActivity{
     private CircleDetailAdapter pictureAdapter;
     private List<String> pictureList=new ArrayList<String>();
     private MessageInfo info;
-    private TextView landlordTV,contentTV,leaveTV, num1TV, num2TV;
+    private TextView landlordTV,contentTV,leaveTV, num1TV, num2TV,fabulousTV,zanNumTV;
     private CircleImageView landlordCIV;
     private CircleReplyMeAdapter replyAdapter;
     private List<ReplyInfo> replyList=new ArrayList<ReplyInfo>();
@@ -83,12 +84,17 @@ public class CircleDetailActivity extends BaseActivity{
     private ProgressDialog pd;
     private AlertDialog dialog;
     private EditText contentET;
+    private ImageView fabulousIV;
+    private ApproveListLayout approveLL;
+    private List<String> approveList=new ArrayList<String>();
+    private RelativeLayout zanRL;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circle_detail);
         info=getIntent().getParcelableExtra(CircleFragment.CIRCLEFLAG);
         initView();
+        requestZanList();
         request();
     }
 
@@ -108,20 +114,46 @@ public class CircleDetailActivity extends BaseActivity{
 
         View view= LayoutInflater.from(CircleDetailActivity.this).inflate(R.layout.headview_circle_detail_picture,null);
         leaveTV=(TextView) view.findViewById(R.id.leaveTV);
-        leaveTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showReplyDialog(-1,null);
-            }
-        });
         landlordTV= (TextView) view.findViewById(R.id.landlordTV);
         contentTV= (TextView) view.findViewById(R.id.contentTV);
         landlordCIV= (CircleImageView) view.findViewById(R.id.landlordCIV);
         landlordTV.setText(info.getNickName());
+        fabulousIV= (ImageView) view.findViewById(R.id.fabulousIV);
+        fabulousTV= (TextView) view.findViewById(R.id.fabulousTV);
+        fabulousTV.setText(info.getZanCnt()+"");
+        view.findViewById(R.id.leaveRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!getUserIsLogin()){
+                    startActivity(new Intent(CircleDetailActivity.this,LoginActivity.class));
+                    return;
+                }
+                showReplyDialog(-1,null);
+            }
+        });
+        view.findViewById(R.id.fabulousRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestZan((Integer) fabulousIV.getTag());
+            }
+        });
+        if(info.getIsZan()==0){
+            fabulousIV.setImageResource(R.drawable.ic_praise_n);
+            fabulousIV.setTag(0);
+        }else {
+            fabulousIV.setImageResource(R.drawable.ic_praise_s);
+            fabulousIV.setTag(1);
+        }
         if(!TextUtils.isEmpty(info.getContent())){
             contentTV.setVisibility(View.VISIBLE);
             contentTV.setText(info.getContent());
         }
+
+        zanRL= (RelativeLayout) view.findViewById(R.id.zanRL);
+        approveLL= (ApproveListLayout) view.findViewById(R.id.approveLL);
+        zanNumTV= (TextView) view.findViewById(R.id.zanNumTV);
+
+
         Picasso.with(CircleDetailActivity.this).load(info.getAvatar()).into(landlordCIV);
         pictureLV= (MyListView) view.findViewById(R.id.pictureLV);
         pictureAdapter=new CircleDetailAdapter(CircleDetailActivity.this,info.getPricturlList());
@@ -135,72 +167,6 @@ public class CircleDetailActivity extends BaseActivity{
     }
 
 
-
-    /**
-     * 网络请求
-     */
-    private void request() {
-        if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
-            return;
-        }
-
-        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_GET_REPLY_LIST_API,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e("replyRe", response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if (jsonObject.getString("code").equals("0")) {
-                                replyList.clear();
-                                JSONArray array=jsonObject.getJSONArray("info");
-                                for(int i=0;i<array.length();i++){
-                                    JSONObject infoJo=array.getJSONObject(i);
-                                    ReplyInfo  info=new ReplyInfo();
-                                    info.setPhone(infoJo.getString("phone"));
-                                    info.setContent(infoJo.getString("content"));
-                                    info.setAvater(infoJo.getString("avatar"));
-                                    info.setCreateTime(sdf.format(new Date(infoJo.getLong("create_time") * 1000)));
-                                    JSONArray imageArray=infoJo.getJSONArray("images");
-                                    List<String> imageList=new ArrayList<String>();
-                                    for(int j=0;j<imageArray.length();j++){
-                                        imageList.add((String) imageArray.get(j));
-                                    }
-                                    info.setImagesList(imageList);
-                                    info.setNickName(infoJo.getString("nick_name"));
-                                    info.setReplyId(infoJo.getString("reply_id"));
-                                    info.setToPhone(infoJo.getString("to_phone"));
-                                    info.setToReplyId(infoJo.getInt("to_reply_id"));
-                                    if(infoJo.getInt("to_reply_id")>0){
-                                        info.setContentReply(infoJo.getString("content_reply"));
-                                    }
-                                    replyList.add(info);
-                                }
-
-                                if(replyList.size()>0){
-                                    replyAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put("c_id", info.getCid()+"");
-                return params;
-            }
-        };
-        InitApp.initApp.addToRequestQueue(request);
-    }
 
 
     public void showReplyDialog(final int flag,final ReplyInfo replyInfo) {
@@ -241,7 +207,7 @@ public class CircleDetailActivity extends BaseActivity{
                 texts.add(new BasicNameValuePair("phone", getUserInfo(1)));
                 if(-1==flag){
                     texts.add(new BasicNameValuePair("to_phone", ""));
-                    texts.add(new BasicNameValuePair("to_reply_id", "1"));
+                    texts.add(new BasicNameValuePair("to_reply_id", "0"));
                 }else{
                     texts.add(new BasicNameValuePair("to_phone", replyInfo.getPhone()));
                     texts.add(new BasicNameValuePair("to_reply_id", replyInfo.getReplyId()+""));
@@ -383,5 +349,173 @@ public class CircleDetailActivity extends BaseActivity{
                 }
             }
         }.start();
+    }
+
+    /**
+     * 网络请求
+     */
+    private void request() {
+        if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_GET_REPLY_LIST_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("replyRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                replyList.clear();
+                                JSONArray array=jsonObject.getJSONArray("info");
+                                for(int i=0;i<array.length();i++){
+                                    JSONObject infoJo=array.getJSONObject(i);
+                                    ReplyInfo  info=new ReplyInfo();
+                                    info.setPhone(infoJo.getString("phone"));
+                                    info.setContent(infoJo.getString("content"));
+                                    info.setAvater(infoJo.getString("avatar"));
+                                    info.setCreateTime(sdf.format(new Date(infoJo.getLong("create_time") * 1000)));
+                                    JSONArray imageArray=infoJo.getJSONArray("images");
+                                    List<String> imageList=new ArrayList<String>();
+                                    for(int j=0;j<imageArray.length();j++){
+                                        imageList.add((String) imageArray.get(j));
+                                    }
+                                    info.setImagesList(imageList);
+                                    info.setNickName(infoJo.getString("nick_name"));
+                                    info.setReplyId(infoJo.getString("reply_id"));
+                                    info.setToPhone(infoJo.getString("to_phone"));
+                                    info.setToReplyId(infoJo.getInt("to_reply_id"));
+                                    if(infoJo.getInt("to_reply_id")>0){
+                                        info.setToNickName(infoJo.getString("to_nick_name"));
+                                        info.setContentReply(infoJo.getString("content_reply"));
+                                    }
+                                    replyList.add(info);
+                                }
+
+                                if(replyList.size()>0){
+                                    replyAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", info.getCid()+"");
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 网络请求
+     */
+    private void requestZan(final  int flag) {
+        if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_ZAN_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("zanRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                int num;
+                                if(flag==0){
+                                    fabulousIV.setImageResource(R.drawable.ic_praise_s);
+                                    fabulousIV.setTag(1);
+                                    num=Integer.parseInt(fabulousTV.getText().toString())+1;
+                                }else{
+                                    fabulousIV.setImageResource(R.drawable.ic_praise_n);
+                                    fabulousIV.setTag(0);
+                                    num=Integer.parseInt(fabulousTV.getText().toString())-1;
+                                }
+                                fabulousTV.setText(num+"");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", info.getCid()+"");
+                params.put("phone", getUserInfo(1));
+                params.put("action",flag+"");
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 网络请求
+     */
+    private void requestZanList() {
+        if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_ZAN_LIST_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("zanListRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                JSONArray array=jsonObject.getJSONArray("info");
+                                for(int i=0;i<array.length();i++){
+                                    JSONObject infoJo=array.getJSONObject(i);
+                                    approveList.add(infoJo.getString("avatar"));
+                                }
+                                if(approveList.size()>0){
+                                    zanRL.setVisibility(View.VISIBLE);
+                                    approveLL.updateApproveList(approveList);
+                                    zanNumTV.setText(approveList.size()+"人赞过");
+                                }else {
+                                    zanRL.setVisibility(View.GONE);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", info.getCid()+"");
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
     }
 }
