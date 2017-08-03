@@ -38,7 +38,6 @@ import java.util.List;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.service.LocationService;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
-import net.tsz.afinal.http.AjaxParams;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
