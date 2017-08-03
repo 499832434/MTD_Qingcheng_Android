@@ -203,7 +203,7 @@ public class BaseActivity extends AppCompatActivity {
                             JSONObject jo = new JSONObject(response);
                             if (jo.has("code")) {
                                 if ("0".equalsIgnoreCase(jo.getString("code"))) {
-                                    Toast.makeText(BaseActivity.this,"mainActivity签到",Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(BaseActivity.this,"mainActivity签到",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (Exception e) {

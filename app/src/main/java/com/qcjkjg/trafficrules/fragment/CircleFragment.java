@@ -26,6 +26,7 @@ import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.ViewFactory;
@@ -33,6 +34,7 @@ import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
 import com.squareup.picasso.Picasso;
+import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,6 +62,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentView = inflater.inflate(R.layout.fragment_circle, container, false);
         initView();
+        EventBus.getDefault().register(this);
         return currentView;
     }
 
@@ -73,7 +76,6 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                         }else {
                             startActivity(new Intent(mActivity, LoginActivity.class));
                         }
-//                        startActivity(new Intent(mActivity, MessageMainActivity.class));
                     }
                 });
         View view=LayoutInflater.from(mActivity).inflate(R.layout.headview_circle,null);
@@ -265,5 +267,43 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     public void onResume() {
         super.onResume();
 
+    }
+
+    public  void updataItem(MessageInfo infoFlag,int position){
+        MessageInfo info=messageList.get(position);
+        info.setZanCnt(infoFlag.getZanCnt());
+        info.setReplyCnt(infoFlag.getReplyCnt());
+        info.setIsZan(infoFlag.getIsZan());
+        messageList.set(position,info);
+        int firstvisible = circleLV.getFirstVisiblePosition();
+        int lastvisibale = circleLV.getLastVisiblePosition();
+        if(position>=firstvisible&&position<=lastvisibale){
+            View view = circleLV.getChildAt(position - firstvisible);
+            MessageReplyMeAdapter.ViewHolder viewHolder = (MessageReplyMeAdapter.ViewHolder) view.getTag();
+            //然后使用viewholder去更新需要更新的view。
+            viewHolder.leaveTV.setText(infoFlag.getReplyCnt()+"");
+            viewHolder.fabulousTV.setText(infoFlag.getZanCnt()+"");
+            if(infoFlag.getIsZan()==1){
+                viewHolder.fabulousIV.setImageResource(R.drawable.ic_praise_s);
+            }else{
+                viewHolder.fabulousIV.setImageResource(R.drawable.ic_praise_n);
+            }
+        }
+
+    }
+
+
+    public void onEvent(CircleDataUpEvent event) {
+        MessageInfo info=event.getInfo();
+        int postion=event.getPositon();
+        if(postion<0){
+            return;
+        }
+        updataItem(info,postion);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

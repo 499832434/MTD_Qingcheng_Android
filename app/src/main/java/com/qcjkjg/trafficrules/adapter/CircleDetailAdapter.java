@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.luck.picture.lib.PictureExternalPreviewActivity;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.view.SubjectImageView;
 import com.qcjkjg.trafficrules.vo.Signup;

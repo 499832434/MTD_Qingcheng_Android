@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.activity.account.PersonalActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.squareup.picasso.Picasso;
@@ -77,7 +78,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 if(!mActivity.getUserIsLogin()){
                     startActivity(new Intent(mActivity, LoginActivity.class));
                 }else{
-
+                    startActivity(new Intent(mActivity, PersonalActivity.class));
                 }
                 break;
         }
