@@ -77,6 +77,7 @@ public class MessageReplyMeAdapter extends BaseAdapter {
             holder.leaveTV= (TextView) convertView.findViewById(R.id.leaveTV);
             holder.fabulousTV= (TextView) convertView.findViewById(R.id.fabulousTV);
             holder.mainRL= (RelativeLayout) convertView.findViewById(R.id.mainRL);
+            holder.fabulousIV= (ImageView) convertView.findViewById(R.id.fabulousIV);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -91,6 +92,11 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         }else{
             holder.contentTV.setVisibility(View.GONE);
         }
+        if(info.getIsZan()==1){
+            holder.fabulousIV.setImageResource(R.drawable.ic_praise_s);
+        }else{
+            holder.fabulousIV.setImageResource(R.drawable.ic_praise_n);
+        }
         holder.nameTV.setText(info.getNickName());
         holder.timeTV.setText(info.getCreateTime());
         holder.leaveTV.setText(info.getReplyCnt()+"");
@@ -102,6 +108,7 @@ public class MessageReplyMeAdapter extends BaseAdapter {
                 Intent intent = new Intent(context, CircleDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(CircleFragment.CIRCLEFLAG, mData.get(position));
+                bundle.putInt("position",position);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
@@ -116,10 +123,11 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         private TextView nameTV;
         private TextView contentTV;
         private TextView timeTV;
-        private TextView leaveTV;
-        private TextView fabulousTV;
+        public TextView leaveTV;
+        public TextView fabulousTV;
         private RelativeLayout mainRL;
         private MyGridLayout pictureMGL;
+        public ImageView fabulousIV;
     }
 
     private void addImageView(MyGridLayout myGL,List<String> list){

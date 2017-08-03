@@ -13,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.circle.CircleDetailActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
@@ -76,7 +78,13 @@ public class CircleReplyMeAdapter extends BaseAdapter {
         Picasso.with(context).load(mData.get(position).getAvater()).into(holder.avatarIV);
         holder.nameTV.setText(mData.get(position).getNickName());
         holder.timeTV.setText(mData.get(position).getCreateTime());
-        holder.numberTV.setText((mData.size()-position)+"楼");
+        if(position==0){
+            holder.numberTV.setText("沙发");
+        }else if(position==1){
+            holder.numberTV.setText("板凳");
+        }else{
+            holder.numberTV.setText((position+1)+"楼");
+        }
         if(mData.get(position).getToReplyId()>0){
             if(TextUtils.isEmpty(mData.get(position).getContentReply())){
                 holder.replyContentTV.setText("回复"+mData.get(position).getToNickName()+":[图片]");
@@ -103,9 +111,18 @@ public class CircleReplyMeAdapter extends BaseAdapter {
                 ((CircleDetailActivity) context).showReplyDialog(position, mData.get(position));
             }
         });
+        List<LocalMedia> selectList = new ArrayList<LocalMedia>();
         List<String> list=mData.get(position).getImagesList();
         if(list.size()>0){
-            addImageView(holder.pictureMGL, list);
+            for(int i=0;i<list.size();i++){
+                LocalMedia media=new LocalMedia();
+                media.setPath(list.get(i));
+                selectList.add(media);
+            }
+            holder.pictureMGL.setVisibility(View.VISIBLE);
+            addImageView(holder.pictureMGL, list,selectList);
+        }else {
+            holder.pictureMGL.setVisibility(View.GONE);
         }
         return convertView;
     }
@@ -121,7 +138,7 @@ public class CircleReplyMeAdapter extends BaseAdapter {
         private MyGridLayout pictureMGL;
     }
 
-    private void addImageView(MyGridLayout myGL,List<String> list){
+    private void addImageView(MyGridLayout myGL,List<String> list, final List<LocalMedia> selectList){
         myGL.removeAllViews();
         for(int i=0;i<list.size();i++){
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -132,10 +149,17 @@ public class CircleReplyMeAdapter extends BaseAdapter {
 
             int width=(DensityUtil.getResolution((FragmentActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
             ImageView imageView = new ImageView(context);
+            imageView.setTag(i);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, width);
             imageView.setLayoutParams(lp);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            Picasso.with(context).load(list.get(i)).into(imageView);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PictureSelector.create((FragmentActivity)context).externalPicturePreview((Integer) view.getTag(), selectList);
+                }
+            });
+            Picasso.with(context).load(list.get(i)).placeholder(R.drawable.item_blue).into(imageView);
             lineLayout.addView(imageView);
             myGL.addView(lineLayout);
         }

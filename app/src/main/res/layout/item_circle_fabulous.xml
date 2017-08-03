@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+              android:layout_height="60dp">
+    <com.qcjkjg.trafficrules.view.CircleImageView
+            android:layout_width="50dp"
+            android:id="@+id/pictureCIV"
+            android:layout_centerVertical="true"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:scaleType="fitXY"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_toRightOf="@+id/pictureCIV"
+              android:textSize="16sp"
+              android:layout_centerVertical="true"
+              android:text="彼岸花开"
+              android:layout_marginTop="5dp"
+              android:id="@+id/nameTV"
+              android:textColor="#333333"
+              android:layout_height="20dp"/>
+    <View android:layout_width="match_parent" android:layout_height="0.5dp"
+            android:background="#e1e1e1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="65dp"/>
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.qcjkjg.trafficrules.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +29,7 @@ public class ApproveListLayout extends HorizontalScrollView {
     //默认图片大小
     private static final int DEFAULT_PIC_SIZE = 50;
     //默认图片数量
-    private static final int DEFAULT_PIC_COUNT = 20;
+    private static final int DEFAULT_PIC_COUNT = 8;
     //默认图片偏移百分比 0～1
     private static final float DEFAULT_PIC_OFFSET = 0.3f;
 
@@ -37,6 +39,7 @@ public class ApproveListLayout extends HorizontalScrollView {
     private int picSize ;
     private int picCount = DEFAULT_PIC_COUNT;
     private float picOffset = DEFAULT_PIC_OFFSET;
+    private int cid;
 
     public ApproveListLayout(Context context) {
         this(context, null);
@@ -82,6 +85,15 @@ public class ApproveListLayout extends HorizontalScrollView {
         //循环把CircleImageView塞到RelativiLayout中，根据偏移量来摆放位置
         for (int i = 0; i < picCount; i++) {
             CircleImageView head = new CircleImageView(context);
+            head.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, BaseListViewActivity.class);
+                    intent.putExtra("flag",3);
+                    intent.putExtra("cid",cid);
+                    context.startActivity(intent);
+                }
+            });
             head.setId(head.hashCode() + i);
 //            head.setBorderColor(Color.WHITE);
 //            head.setBorderWidth(Math.round(UIUtils.dp2px(1)));
@@ -116,6 +128,11 @@ public class ApproveListLayout extends HorizontalScrollView {
 
     public void initLayout() {
         init();
+    }
+
+
+    public void setCid(int cid){
+        this.cid=cid;
     }
 
     //根据传进来的头像列表来更新头像

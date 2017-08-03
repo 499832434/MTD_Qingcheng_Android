@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,9 @@ import android.widget.*;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
@@ -30,9 +34,11 @@ import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.login.BindPhoneActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.adapter.CircleDetailAdapter;
 import com.qcjkjg.trafficrules.adapter.CircleReplyMeAdapter;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
@@ -46,6 +52,7 @@ import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.ReplyInfo;
 import com.qcjkjg.trafficrules.vo.User;
 import com.squareup.picasso.Picasso;
+import de.greenrobot.event.EventBus;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -65,11 +72,10 @@ import java.util.*;
 /**
  * Created by zongshuo on 2017/8/1.
  */
-public class CircleDetailActivity extends BaseActivity{
+public class CircleDetailActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
     private ListView detailLV;
     private MyListView pictureLV;
     private CircleDetailAdapter pictureAdapter;
-    private List<String> pictureList=new ArrayList<String>();
     private MessageInfo info;
     private TextView landlordTV,contentTV,leaveTV, num1TV, num2TV,fabulousTV,zanNumTV;
     private CircleImageView landlordCIV;
@@ -88,21 +94,30 @@ public class CircleDetailActivity extends BaseActivity{
     private ApproveListLayout approveLL;
     private List<String> approveList=new ArrayList<String>();
     private RelativeLayout zanRL;
+    private SwipeToLoadLayout swipeToLoadLayout;
+    private int positionFlag;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circle_detail);
         info=getIntent().getParcelableExtra(CircleFragment.CIRCLEFLAG);
+        positionFlag=getIntent().getIntExtra("position",0);
         initView();
-        requestZanList();
-        request();
+
+        swipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(true);
+            }
+        });
+
     }
 
     private void initView(){
         ((CustomTitleBar)findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                goBack();
             }
         });
         pd = new ProgressDialog(CircleDetailActivity.this);
@@ -119,31 +134,28 @@ public class CircleDetailActivity extends BaseActivity{
         landlordCIV= (CircleImageView) view.findViewById(R.id.landlordCIV);
         landlordTV.setText(info.getNickName());
         fabulousIV= (ImageView) view.findViewById(R.id.fabulousIV);
+        fabulousIV.setTag(0);
         fabulousTV= (TextView) view.findViewById(R.id.fabulousTV);
-        fabulousTV.setText(info.getZanCnt()+"");
         view.findViewById(R.id.leaveRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!getUserIsLogin()) {
+                    startActivity(new Intent(CircleDetailActivity.this, LoginActivity.class));
+                    return;
+                }
+                showReplyDialog(-1, null);
+            }
+        });
+        view.findViewById(R.id.fabulousRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!getUserIsLogin()){
                     startActivity(new Intent(CircleDetailActivity.this,LoginActivity.class));
                     return;
                 }
-                showReplyDialog(-1,null);
-            }
-        });
-        view.findViewById(R.id.fabulousRL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 requestZan((Integer) fabulousIV.getTag());
             }
         });
-        if(info.getIsZan()==0){
-            fabulousIV.setImageResource(R.drawable.ic_praise_n);
-            fabulousIV.setTag(0);
-        }else {
-            fabulousIV.setImageResource(R.drawable.ic_praise_s);
-            fabulousIV.setTag(1);
-        }
         if(!TextUtils.isEmpty(info.getContent())){
             contentTV.setVisibility(View.VISIBLE);
             contentTV.setText(info.getContent());
@@ -151,6 +163,7 @@ public class CircleDetailActivity extends BaseActivity{
 
         zanRL= (RelativeLayout) view.findViewById(R.id.zanRL);
         approveLL= (ApproveListLayout) view.findViewById(R.id.approveLL);
+        approveLL.setCid(info.getCid());
         zanNumTV= (TextView) view.findViewById(R.id.zanNumTV);
 
 
@@ -158,12 +171,30 @@ public class CircleDetailActivity extends BaseActivity{
         pictureLV= (MyListView) view.findViewById(R.id.pictureLV);
         pictureAdapter=new CircleDetailAdapter(CircleDetailActivity.this,info.getPricturlList());
         pictureLV.setAdapter(pictureAdapter);
+        final List<LocalMedia> pictureSelectList = new ArrayList<LocalMedia>();
+        List<String> list=info.getPricturlList();
+        if(list.size()>0){
+            for(int i=0;i<list.size();i++){
+                LocalMedia media=new LocalMedia();
+                media.setPath(list.get(i));
+                pictureSelectList.add(media);
+            }
+        }
+        pictureLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                PictureSelector.create(CircleDetailActivity.this).externalPicturePreview(i, pictureSelectList);
+            }
+        });
 
-        detailLV= (ListView) findViewById(R.id.detailLV);
+        detailLV= (ListView) findViewById(R.id.swipe_target);
         detailLV.addHeaderView(view);
         replyAdapter=new CircleReplyMeAdapter(CircleDetailActivity.this,replyList);
         detailLV.setAdapter(replyAdapter);
 
+        swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoadLayout);
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
     }
 
 
@@ -331,6 +362,8 @@ public class CircleDetailActivity extends BaseActivity{
                             @Override
                             public void run() {
                                 pd.dismiss();
+                                int num=Integer.parseInt(leaveTV.getText().toString());
+                                leaveTV.setText((num+1)+"");
 //                                request();
 //                                detailLV.setSelection(1);
                                 Toast.makeText(CircleDetailActivity.this, "成功", Toast.LENGTH_SHORT).show();
@@ -354,7 +387,7 @@ public class CircleDetailActivity extends BaseActivity{
     /**
      * 网络请求
      */
-    private void request() {
+    private void request(final String replyId) {
         if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
             return;
         }
@@ -367,7 +400,10 @@ public class CircleDetailActivity extends BaseActivity{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                replyList.clear();
+                                leaveTV.setText(jsonObject.getString("reply_cnt"));
+                                if(TextUtils.isEmpty(replyId)){
+                                    replyList.clear();
+                                }
                                 JSONArray array=jsonObject.getJSONArray("info");
                                 for(int i=0;i<array.length();i++){
                                     JSONObject infoJo=array.getJSONObject(i);
@@ -399,6 +435,8 @@ public class CircleDetailActivity extends BaseActivity{
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -412,6 +450,10 @@ public class CircleDetailActivity extends BaseActivity{
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("c_id", info.getCid()+"");
+                if(!TextUtils.isEmpty(replyId)){
+                    params.put("reply_id", replyId);
+                    Log.e("reply_id",replyId);
+                }
                 return params;
             }
         };
@@ -434,17 +476,14 @@ public class CircleDetailActivity extends BaseActivity{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                int num;
                                 if(flag==0){
                                     fabulousIV.setImageResource(R.drawable.ic_praise_s);
                                     fabulousIV.setTag(1);
-                                    num=Integer.parseInt(fabulousTV.getText().toString())+1;
                                 }else{
                                     fabulousIV.setImageResource(R.drawable.ic_praise_n);
                                     fabulousIV.setTag(0);
-                                    num=Integer.parseInt(fabulousTV.getText().toString())-1;
                                 }
-                                fabulousTV.setText(num+"");
+                                requestZanList();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -485,6 +524,16 @@ public class CircleDetailActivity extends BaseActivity{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
+                                approveList.clear();
+                                fabulousTV.setText(jsonObject.getString("zan_cnt"));
+                                zanNumTV.setText(jsonObject.getString("zan_cnt") + "人赞过");
+                                if("0".equals(jsonObject.getString("is_zan"))){
+                                    fabulousIV.setImageResource(R.drawable.ic_praise_n);
+                                    fabulousIV.setTag(0);
+                                }else {
+                                    fabulousIV.setImageResource(R.drawable.ic_praise_s);
+                                    fabulousIV.setTag(1);
+                                }
                                 JSONArray array=jsonObject.getJSONArray("info");
                                 for(int i=0;i<array.length();i++){
                                     JSONObject infoJo=array.getJSONObject(i);
@@ -493,7 +542,6 @@ public class CircleDetailActivity extends BaseActivity{
                                 if(approveList.size()>0){
                                     zanRL.setVisibility(View.VISIBLE);
                                     approveLL.updateApproveList(approveList);
-                                    zanNumTV.setText(approveList.size()+"人赞过");
                                 }else {
                                     zanRL.setVisibility(View.GONE);
                                 }
@@ -513,9 +561,48 @@ public class CircleDetailActivity extends BaseActivity{
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("c_id", info.getCid()+"");
+                if(getUserIsLogin()){
+                    params.put("phone", getUserInfo(1));
+                }
                 return params;
             }
         };
         InitApp.initApp.addToRequestQueue(request);
+    }
+
+    @Override
+    public void onLoadMore() {
+        swipeToLoadLayout.setLoadingMore(false);
+        if(replyList.size()>0){
+            request(replyList.get(replyList.size()-1).getReplyId()+"");
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        requestZanList();
+        request("");
+    }
+
+    // 捕获返回键的方法1
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // 按下BACK，同时没有重复
+            goBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    //返回处理
+
+    private void goBack(){
+        MessageInfo infoFlag=new MessageInfo();
+        infoFlag.setReplyCnt(Integer.parseInt(leaveTV.getText().toString()));
+        infoFlag.setZanCnt(Integer.parseInt(fabulousTV.getText().toString()));
+        infoFlag.setIsZan((Integer) fabulousIV.getTag());
+        EventBus.getDefault().post(new CircleDataUpEvent(infoFlag,positionFlag));
+        finish();
     }
 }

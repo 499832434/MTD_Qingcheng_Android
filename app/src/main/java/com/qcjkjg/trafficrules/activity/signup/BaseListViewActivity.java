@@ -19,6 +19,7 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.adapter.CircleFabulousAdapter;
 import com.qcjkjg.trafficrules.adapter.MessageFabulousAdapter;
 import com.qcjkjg.trafficrules.adapter.MyThemeAdapter;
 import com.qcjkjg.trafficrules.adapter.SystemMessageAdapter;
@@ -26,6 +27,7 @@ import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.MessageFabulous;
+import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,10 +45,13 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     private SystemMessageAdapter adapter0;
     private MyThemeAdapter adapter1;
     private MessageFabulousAdapter adapter2;
-    private int flag;//0:系统消息1:我的主题2:收到的赞
-    private List<Signup> signList=new ArrayList<Signup>();
+    private CircleFabulousAdapter adapter3;
+    private int flag;//0:系统消息1:我的主题2:收到的赞3:赞的车友
+    private List<Signup> signList=new ArrayList<Signup>();//0:系统消息
+    private List<MessageInfo> infoList=new ArrayList<MessageInfo>();//3:赞的车友
     private SwipeToLoadLayout swipeToLoadLayout;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private int cid;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +108,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 adapter2=new MessageFabulousAdapter(BaseListViewActivity.this,null);
                 listView.setAdapter(adapter2);
                 break;
+            case 3:
+                cid=getIntent().getIntExtra("cid",0);
+                ((CustomTitleBar) findViewById(R.id.customTitleBar)).setTitleTextView("赞的车友");
+                adapter3=new CircleFabulousAdapter(BaseListViewActivity.this,infoList);
+                listView.setAdapter(adapter3);
+                break;
         }
 
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoadLayout);
@@ -128,6 +139,9 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                     break;
                 case 2:
                     break;
+                case 3:
+                    request3(infoList.get(infoList.size() - 1).getZanId() + "");
+                    break;
             }
         }
     }
@@ -143,6 +157,9 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 break;
             case 2:
                 swipeToLoadLayout.setRefreshing(false);
+                break;
+            case 3:
+                request3("");
                 break;
         }
     }
@@ -179,17 +196,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                     signList.add(signup);
                                 }
                                 if(signList.size()>0){
-                                    switch (flag){
-                                        case 0:
-                                            adapter0.notifyDataSetChanged();
-                                            break;
-                                        case 1:
-                                            adapter1.notifyDataSetChanged();
-                                            break;
-                                        case 2:
-                                            adapter2.notifyDataSetChanged();
-                                            break;
-                                    }
+                                    adapter0.notifyDataSetChanged();
                                 }
                             }else{
                                 Toast.makeText(BaseListViewActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -216,6 +223,67 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 params.put("page_count", "10");
                 params.put("type", "1");
                 params.put("sign", InitApp.initApp.getSig(params));
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 网络请求
+     */
+    private void request3(final String zanid) {
+        if (!NetworkUtils.isNetworkAvailable(BaseListViewActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_ZAN_LIST_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("request3Re", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                if(TextUtils.isEmpty(zanid)){
+                                    infoList.clear();
+                                }
+                                JSONArray array=jsonObject.getJSONArray("info");
+                                for(int i=0;i<array.length();i++){
+                                    JSONObject obj=array.getJSONObject(i);
+                                    MessageInfo info=new MessageInfo();
+                                    info.setAvatar(obj.getString("avatar"));
+                                    info.setNickName(obj.getString("nick_name"));
+                                    info.setZanId(obj.getInt("zan_id"));
+                                    infoList.add(info);
+                                }
+                                if(infoList.size()>0){
+                                    adapter3.notifyDataSetChanged();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", cid+"");
+                if(getUserIsLogin()){
+                    params.put("phone", getUserInfo(1));
+                }
+                if(!TextUtils.isEmpty(zanid)){
+                    params.put("zan_id",zanid);
+                }
                 return params;
             }
         };
