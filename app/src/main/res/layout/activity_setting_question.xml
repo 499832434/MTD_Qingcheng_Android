@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_above="@+id/v1"
+                  android:layout_height="match_parent">
+        <com.qcjkjg.trafficrules.view.CustomTitleBar
+                android:id="@+id/customTitleBar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                custom:text="设置题库"
+                />
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="15dp"
+                  android:layout_marginBottom="15dp"
+                  android:text="学车第一步,选对题库"
+                  android:textSize="30sp"
+                  android:textColor="#333333"
+                  android:gravity="center_horizontal"
+                />
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="15dp"
+                  android:text="科目一共1454题,科目四共1211题"
+                  android:textSize="16sp"
+                  android:textColor="#999999"
+                  android:gravity="center_horizontal"
+                />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="驾驶证"
+                  android:layout_marginBottom="15dp"
+                  android:layout_marginTop="15dp"
+                  android:textSize="18sp"
+                  android:layout_marginLeft="15dp"
+                  android:textColor="#333333"/>
+        <GridView android:layout_width="match_parent"
+                  android:numColumns="2"
+                  android:layout_marginLeft="15dp"
+                  android:layout_marginRight="15dp"
+                  android:id="@+id/gridview"
+                  android:verticalSpacing="7dp"
+                  android:horizontalSpacing="7dp"
+                  android:layout_height="match_parent">
+
+        </GridView>
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="0.5dp"
+          android:background="#e1e1e1"
+          android:id="@+id/v1"
+          android:layout_above="@+id/commitTV"/>
+    <TextView android:layout_width="match_parent"
+              android:layout_height="48sp"
+              android:id="@+id/commitTV"
+              android:textColor="#3fb7f3"
+              android:gravity="center"
+              android:layout_alignParentBottom="true"
+              android:textSize="20sp"
+              android:text="确定"/>
+
+</RelativeLayout>

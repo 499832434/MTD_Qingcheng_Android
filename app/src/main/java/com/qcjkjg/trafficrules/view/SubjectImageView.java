@@ -9,6 +9,10 @@ import android.widget.ImageView;
  * Created by zongshuo on 2017/8/1.
  */
 public class SubjectImageView extends ImageView {
+    public SubjectImageView(Context context) {
+        super(context);
+    }
+
     public SubjectImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // TODO Auto-generated constructor stub

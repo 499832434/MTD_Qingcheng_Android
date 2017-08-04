@@ -14,10 +14,9 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +143,7 @@ public class ApproveListLayout extends HorizontalScrollView {
         int i = 1;
         for (String url : urlList) {
             if(!TextUtils.isEmpty(url)){
-                Picasso.with(context).load(url).into(headList.get(i));
+                ((BaseActivity)context).getNetWorkPicture(url,headList.get(i));
             }
             headList.get(i).setVisibility(View.VISIBLE);
             if (i == urlList.size()+1) {

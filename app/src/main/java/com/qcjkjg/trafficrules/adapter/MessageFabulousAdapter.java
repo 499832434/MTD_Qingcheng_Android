@@ -9,11 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.vo.MessageFabulous;
 import com.qcjkjg.trafficrules.vo.Signup;
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 /**
@@ -58,8 +57,8 @@ public class MessageFabulousAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(holder.rightIV);
-        Picasso.with(context).load("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg").into(holder.leftIV);
+        ((BaseActivity)context).getNetWorkPicture("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg", holder.rightIV);
+        ((BaseActivity)context).getNetWorkPicture("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg", holder.leftIV);
         return convertView;
     }
 

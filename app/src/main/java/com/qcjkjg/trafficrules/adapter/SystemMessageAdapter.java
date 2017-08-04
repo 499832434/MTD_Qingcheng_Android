@@ -10,10 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.vo.MessageSystem;
 import com.qcjkjg.trafficrules.vo.Signup;
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 /**
@@ -64,7 +63,7 @@ public class SystemMessageAdapter extends BaseAdapter {
         holder.abstractTV.setText(mData.get(position).getAbstractStr());
         holder.titleTV.setText(mData.get(position).getTitle());
         if(!TextUtils.isEmpty(mData.get(position).getPictureUrl())){
-            Picasso.with(context).load(mData.get(position).getPictureUrl()).into(holder.pictureIV);
+            ((BaseActivity)context).getNetWorkPicture(mData.get(position).getPictureUrl(),holder.pictureIV);
             holder.pictureIV.setVisibility(View.VISIBLE);
         }else {
             holder.pictureIV.setVisibility(View.GONE);

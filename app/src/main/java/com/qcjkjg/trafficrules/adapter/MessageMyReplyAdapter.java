@@ -59,8 +59,8 @@ public class MessageMyReplyAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MessageReplyActivity)context,new ArrayList<String>());
-        holder.pictureMGV.setAdapter(adapter);
+//        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((MessageReplyActivity)context,new ArrayList<String>());
+//        holder.pictureMGV.setAdapter(adapter);
         return convertView;
     }
 

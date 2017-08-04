@@ -13,16 +13,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.circle.CircleDetailActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.view.MyGridLayout;
 import com.qcjkjg.trafficrules.vo.ReplyInfo;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public class CircleReplyMeAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Picasso.with(context).load(mData.get(position).getAvater()).into(holder.avatarIV);
+        ((BaseActivity)context).getNetWorkPicture(mData.get(position).getAvater(),holder.avatarIV);
         holder.nameTV.setText(mData.get(position).getNickName());
         holder.timeTV.setText(mData.get(position).getCreateTime());
         if(position==0){
@@ -149,17 +150,18 @@ public class CircleReplyMeAdapter extends BaseAdapter {
 
             int width=(DensityUtil.getResolution((FragmentActivity)context)[1]-DensityUtil.dip2px(context,100))/3;
             ImageView imageView = new ImageView(context);
-            imageView.setTag(i);
+            imageView.setId(i);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, width);
             imageView.setLayoutParams(lp);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PictureSelector.create((FragmentActivity)context).externalPicturePreview((Integer) view.getTag(), selectList);
+                    PictureSelector.create((FragmentActivity) context).externalPicturePreview((Integer) view.getId(), selectList);
                 }
             });
-            Picasso.with(context).load(list.get(i)).placeholder(R.drawable.item_blue).into(imageView);
+            Glide.with(context).load(list.get(i)).into(imageView);
+//            Picasso.with(context).load(list.get(i)).placeholder(R.drawable.item_blue).into(imageView);
             lineLayout.addView(imageView);
             myGL.addView(lineLayout);
         }

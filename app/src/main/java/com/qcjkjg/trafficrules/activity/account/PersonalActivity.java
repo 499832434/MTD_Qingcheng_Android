@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
@@ -16,8 +17,6 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.view.CircleImageView;
-import com.squareup.picasso.Picasso;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +61,15 @@ public class PersonalActivity extends BaseActivity{
             nameTV.setText(getUserInfo(0));
         }
         if(!TextUtils.isEmpty(getUserInfo(2))){
-            Picasso.with(PersonalActivity.this).load(getUserInfo(2)).into(avatarCIV);
+            getNetWorkPicture(getUserInfo(2),avatarCIV);
         }
+
+        findViewById(R.id.changeRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PersonalActivity.this,ChangeNameActivity.class));
+            }
+        });
     }
 
     private GridImageAdapter.onAddPicClickListener onAddPicClickListener = new GridImageAdapter.onAddPicClickListener() {
@@ -111,8 +117,7 @@ public class PersonalActivity extends BaseActivity{
                     if(selectList.size()>0){
                         LocalMedia media=new LocalMedia();
                         media=selectList.get(0);
-                        Log.e("eee", media.getCompressPath());
-                        Picasso.with(PersonalActivity.this).load(new File(media.getCompressPath())).into(avatarCIV);
+                        Glide.with(PersonalActivity.this).load(new File(media.getCompressPath())).into(avatarCIV);
                     }
                     selectList.clear();
                     break;

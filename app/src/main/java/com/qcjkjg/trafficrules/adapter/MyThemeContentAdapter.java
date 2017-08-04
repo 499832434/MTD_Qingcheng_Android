@@ -57,8 +57,8 @@ public class MyThemeContentAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((BaseListViewActivity)context,new ArrayList<String>());
-        holder.pictureMGV.setAdapter(adapter);
+//        MyThemeContentPictureAdapter adapter=new MyThemeContentPictureAdapter((BaseListViewActivity)context,new ArrayList<String>());
+//        holder.pictureMGV.setAdapter(adapter);
         return convertView;
     }
 

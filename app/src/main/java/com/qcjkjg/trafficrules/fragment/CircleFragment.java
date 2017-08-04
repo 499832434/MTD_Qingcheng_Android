@@ -33,7 +33,6 @@ import com.qcjkjg.trafficrules.utils.ViewFactory;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
-import com.squareup.picasso.Picasso;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.json.JSONArray;

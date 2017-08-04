@@ -8,13 +8,19 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
@@ -46,6 +52,7 @@ import java.util.Set;
 public class BaseActivity extends AppCompatActivity {
     private String url;
     private DefaultHttpClient defaultHttpClient;
+    private RequestOptions options;
     /**
      * 上传的文本集合...........
      */
@@ -57,9 +64,14 @@ public class BaseActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initData();
     }
 
+    private void initData(){
+        options = new RequestOptions()
+                .placeholder(R.drawable.item_blue)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+    }
     public void setContentViewWithStatusBarColorByColorPrimaryDark(int layoutResID) {
         StatusBarColorCompat.setContentViewWithStatusBarColorByColorPrimaryDark(this, layoutResID);
         StatusBarColorCompat.setStatusBarColor(BaseActivity.this, getResources().getColor(R.color.white));
@@ -229,4 +241,16 @@ public class BaseActivity extends AppCompatActivity {
         };
         Volley.newRequestQueue(BaseActivity.this).add(req);
     }
+
+
+    public void getNetWorkPicture(String url,ImageView imageView){
+        Glide.with(BaseActivity.this).load(url).apply(options).into(imageView);
+    }
+
+    public void toast(String str){
+        if(!TextUtils.isEmpty(str)){
+            Toast.makeText(BaseActivity.this,str,Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

@@ -108,6 +108,14 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
+        <activity android:name=".activity.account.ChangeNameActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity android:name=".activity.account.AboutQichengActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
         <activity android:name=".activity.circle.CircleDetailActivity"
                   android:screenOrientation="portrait"
                 >
@@ -117,6 +125,11 @@
                 >
         </activity>
         <activity android:name=".activity.signup.MessageReplyActivity"
+                  android:screenOrientation="portrait"
+                  android:launchMode="singleTask"
+                >
+        </activity>
+        <activity android:name=".activity.account.SettingQuestionActivity"
                   android:screenOrientation="portrait"
                   android:launchMode="singleTask"
                 >

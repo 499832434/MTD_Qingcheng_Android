@@ -13,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.activity.account.AboutQichengActivity;
 import com.qcjkjg.trafficrules.activity.account.PersonalActivity;
+import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by zongshuo on 2017/7/31.
@@ -43,6 +45,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         vipIV= (ImageView) currentView.findViewById(R.id.vipIV);
         loginRL= (RelativeLayout) currentView.findViewById(R.id.loginRL);
         loginRL.setOnClickListener(this);
+        currentView.findViewById(R.id.aboutTV).setOnClickListener(this);
+        currentView.findViewById(R.id.questionTV).setOnClickListener(this);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 accountTV.setText(mActivity.getUserInfo(0));
             }
             if(!TextUtils.isEmpty(mActivity.getUserInfo(2))){
-                Picasso.with(mActivity).load(mActivity.getUserInfo(2)).into(accountIV);
+                ((BaseActivity)mActivity).getNetWorkPicture(mActivity.getUserInfo(2), accountIV);
             }
             if(!TextUtils.isEmpty(mActivity.getUserInfo(3))){
                 if("0".equals(mActivity.getUserInfo(3))){
@@ -74,6 +78,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.vipIV:
                 break;
+            case R.id.questionTV:
+                startActivity(new Intent(mActivity, SettingQuestionActivity.class));
+                break;
             case R.id.loginRL:
                 if(!mActivity.getUserIsLogin()){
                     startActivity(new Intent(mActivity, LoginActivity.class));
@@ -81,6 +88,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     startActivity(new Intent(mActivity, PersonalActivity.class));
                 }
                 break;
+            case R.id.aboutTV:
+                startActivity(new Intent(mActivity, AboutQichengActivity.class));
+               break;
         }
     }
 

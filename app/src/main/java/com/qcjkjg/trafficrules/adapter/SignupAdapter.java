@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.vo.Signup;
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 /**

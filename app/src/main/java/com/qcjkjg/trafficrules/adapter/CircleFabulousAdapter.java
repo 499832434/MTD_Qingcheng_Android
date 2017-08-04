@@ -10,10 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.vo.MessageFabulous;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class CircleFabulousAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if(!TextUtils.isEmpty(mData.get(position).getAvatar())){
-            Picasso.with(context).load(mData.get(position).getAvatar()).into(holder.pictureCIV);
+            ((BaseActivity)context).getNetWorkPicture(mData.get(position).getAvatar(), holder.pictureCIV);
         }
         holder.nameTV.setText(mData.get(position).getNickName());
         return convertView;

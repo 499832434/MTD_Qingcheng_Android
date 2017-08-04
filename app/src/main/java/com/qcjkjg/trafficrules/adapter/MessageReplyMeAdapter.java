@@ -11,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.CircleDetailActivity;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
@@ -28,7 +32,6 @@ import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.MessageMyReply;
 import com.qcjkjg.trafficrules.vo.MessageReplyMe;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +87,7 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         }
         MessageInfo info=mData.get(position);
         if(!TextUtils.isEmpty(info.getAvatar())){
-            Picasso.with(context).load(info.getAvatar()).into(holder.pictureIV);
+            ((BaseActivity)context).getNetWorkPicture(info.getAvatar(), holder.pictureIV);
         }
         if(!TextUtils.isEmpty(info.getContent())){
             holder.contentTV.setText(info.getContent());
@@ -144,7 +147,9 @@ public class MessageReplyMeAdapter extends BaseAdapter {
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, width);
             imageView.setLayoutParams(lp);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            Picasso.with(context).load(list.get(i)).into(imageView);
+//            Picasso.with(context).load(list.get(i)).into(imageView);
+//            new GlideBuilder(context).setMemoryCache(DiskCacheStrategy.NONE);
+            Glide.with(context).load(list.get(i)).into(imageView);
             lineLayout.addView(imageView);
             myGL.addView(lineLayout);
         }

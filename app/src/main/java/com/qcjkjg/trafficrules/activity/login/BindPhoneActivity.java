@@ -127,24 +127,24 @@ public class BindPhoneActivity extends BaseActivity{
                 if (data instanceof Throwable) {
                     Throwable throwable = (Throwable)data;
                     String msg = throwable.getMessage();
-                    toast(msg);
+                    toast1(msg);
                 } else {
                     if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         if (result == SMSSDK.RESULT_COMPLETE) {
-                            toast("验证码发送成功");
+                            toast1("验证码发送成功");
                         } else {
-                            toast("验证码发送失败");
+                            toast1("验证码发送失败");
                         }
                     }else if(event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE){
                         if (result == SMSSDK.RESULT_COMPLETE) {
-                            toast("验证码验证成功");
+                            toast1("验证码验证成功");
                             if("1".equals(flag)){
                                 request1();
                             }else{
                                 request0();
                             }
                         } else {
-                            toast("验证码验证失败");
+                            toast1("验证码验证失败");
                         }
                     }
                 }
@@ -162,7 +162,7 @@ public class BindPhoneActivity extends BaseActivity{
     }
 
     //吐司的一个小方法
-    private void toast(final String str) {
+    private void toast1(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

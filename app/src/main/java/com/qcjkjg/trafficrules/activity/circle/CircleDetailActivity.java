@@ -20,6 +20,9 @@ import com.android.volley.VolleyError;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
@@ -35,7 +38,6 @@ import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.login.BindPhoneActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
-import com.qcjkjg.trafficrules.adapter.CircleDetailAdapter;
 import com.qcjkjg.trafficrules.adapter.CircleReplyMeAdapter;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
@@ -44,14 +46,10 @@ import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
-import com.qcjkjg.trafficrules.view.ApproveListLayout;
-import com.qcjkjg.trafficrules.view.CircleImageView;
-import com.qcjkjg.trafficrules.view.CustomTitleBar;
-import com.qcjkjg.trafficrules.view.MyListView;
+import com.qcjkjg.trafficrules.view.*;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.ReplyInfo;
 import com.qcjkjg.trafficrules.vo.User;
-import com.squareup.picasso.Picasso;
 import de.greenrobot.event.EventBus;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -74,8 +72,6 @@ import java.util.*;
  */
 public class CircleDetailActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
     private ListView detailLV;
-    private MyListView pictureLV;
-    private CircleDetailAdapter pictureAdapter;
     private MessageInfo info;
     private TextView landlordTV,contentTV,leaveTV, num1TV, num2TV,fabulousTV,zanNumTV;
     private CircleImageView landlordCIV;
@@ -99,7 +95,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_circle_detail);
+        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_circle_detail);
         info=getIntent().getParcelableExtra(CircleFragment.CIRCLEFLAG);
         positionFlag=getIntent().getIntExtra("position",0);
         initView();
@@ -149,8 +145,8 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
         view.findViewById(R.id.fabulousRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!getUserIsLogin()){
-                    startActivity(new Intent(CircleDetailActivity.this,LoginActivity.class));
+                if (!getUserIsLogin()) {
+                    startActivity(new Intent(CircleDetailActivity.this, LoginActivity.class));
                     return;
                 }
                 requestZan((Integer) fabulousIV.getTag());
@@ -165,12 +161,23 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
         approveLL= (ApproveListLayout) view.findViewById(R.id.approveLL);
         approveLL.setCid(info.getCid());
         zanNumTV= (TextView) view.findViewById(R.id.zanNumTV);
-
-
-        Picasso.with(CircleDetailActivity.this).load(info.getAvatar()).into(landlordCIV);
-        pictureLV= (MyListView) view.findViewById(R.id.pictureLV);
-        pictureAdapter=new CircleDetailAdapter(CircleDetailActivity.this,info.getPricturlList());
-        pictureLV.setAdapter(pictureAdapter);
+        ((TextView)view.findViewById(R.id.timeTV)).setText(info.getCreateTime());
+        if(getUserIsLogin()){
+            if((!TextUtils.isEmpty(info.getPhone()))&&(info.getPhone().equals(getUserInfo(1)))){
+                ((TextView)view.findViewById(R.id.deleteTV)).setVisibility(View.VISIBLE);
+            }else{
+                ((TextView)view.findViewById(R.id.deleteTV)).setVisibility(View.GONE);
+            }
+        }else{
+            ((TextView)view.findViewById(R.id.deleteTV)).setVisibility(View.GONE);
+        }
+        ((TextView)view.findViewById(R.id.deleteTV)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteInfo();
+            }
+        });
+        getNetWorkPicture(info.getAvatar(), landlordCIV);
         final List<LocalMedia> pictureSelectList = new ArrayList<LocalMedia>();
         List<String> list=info.getPricturlList();
         if(list.size()>0){
@@ -180,12 +187,32 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                 pictureSelectList.add(media);
             }
         }
-        pictureLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                PictureSelector.create(CircleDetailActivity.this).externalPicturePreview(i, pictureSelectList);
-            }
-        });
+
+        LinearLayout pictureLL= (LinearLayout) view.findViewById(R.id.pictureLL);
+        for(int i=0;i<list.size();i++){
+
+            WindowManager wm = this.getWindowManager();
+            int width = wm.getDefaultDisplay().getWidth()-60;
+            ImageView imageView = new ImageView(this);
+            imageView.setId(i);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PictureSelector.create(CircleDetailActivity.this).externalPicturePreview(view.getId(), pictureSelectList);
+                }
+            });
+            imageView.setAdjustViewBounds(true);//设置图片自适应，只是这句话必须结合下面的setMaxWidth和setMaxHeight才能有效果。
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    width, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(30, 100, 30, 0);
+            imageView.setLayoutParams(layoutParams);
+            imageView.setMaxWidth(width);
+            imageView.setMaxHeight(width * 5);// 这里其实可以根据需求而定，我这里测试为最大宽度的5倍
+            getNetWorkPicture(list.get(i), imageView);
+            pictureLL.addView(imageView); //动态添加图片
+
+        }
 
         detailLV= (ListView) findViewById(R.id.swipe_target);
         detailLV.addHeaderView(view);
@@ -354,7 +381,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                         // 上传成功
                         closeConnect();
                         //由于我这边服务器编码为gbk，所以编码设置gbk，如果乱码就改为utf-8
-                        String result = EntityUtils.toString(
+                        final String result = EntityUtils.toString(
                                 httpResponse.getEntity(), "utf-8");
                         Log.e("circleDetailRe", result);
                         PictureFileUtils.deleteCacheDirFile(CircleDetailActivity.this);
@@ -362,14 +389,27 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                             @Override
                             public void run() {
                                 pd.dismiss();
-                                int num=Integer.parseInt(leaveTV.getText().toString());
-                                leaveTV.setText((num+1)+"");
-//                                request();
-//                                detailLV.setSelection(1);
-                                Toast.makeText(CircleDetailActivity.this, "成功", Toast.LENGTH_SHORT).show();
-                                if(dialog!=null&&dialog.isShowing()){
-                                    dialog.dismiss();
+
+                                try{
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    if (jsonObject.getString("code").equals("0")) {
+                                        int num=Integer.parseInt(leaveTV.getText().toString());
+                                        leaveTV.setText((num+1)+"");
+                                        Toast.makeText(CircleDetailActivity.this, "成功", Toast.LENGTH_SHORT).show();
+                                    }else if(jsonObject.getString("code").equals("404")){
+                                        toast(jsonObject.getString("msg"));
+                                        finish();
+                                    }else{
+                                        toast(jsonObject.getString("msg"));
+                                    }
+                                }catch(Exception e){
+
+                                }finally {
+                                    if(dialog!=null&&dialog.isShowing()){
+                                        dialog.dismiss();
+                                    }
                                 }
+
                             }
                         });
                     }
@@ -432,6 +472,11 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                 if(replyList.size()>0){
                                     replyAdapter.notifyDataSetChanged();
                                 }
+                            }else if(jsonObject.getString("code").equals("404")){
+                                toast(jsonObject.getString("msg"));
+                                finish();
+                            }else{
+                                toast(jsonObject.getString("msg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -484,6 +529,11 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                     fabulousIV.setTag(0);
                                 }
                                 requestZanList();
+                            }else if(jsonObject.getString("code").equals("404")){
+                                toast(jsonObject.getString("msg"));
+                                finish();
+                            }else{
+                                toast(jsonObject.getString("msg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -564,6 +614,49 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                 if(getUserIsLogin()){
                     params.put("phone", getUserInfo(1));
                 }
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 删除此话题
+     */
+    private void deleteInfo() {
+        if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_DETAIL_TOPIC_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("deletetopicRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                toast(jsonObject.getString("msg"));
+                                finish();
+                            }else{
+                                toast(jsonObject.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", info.getCid()+"");
+                params.put("phone",getUserInfo(1));
                 return params;
             }
         };
