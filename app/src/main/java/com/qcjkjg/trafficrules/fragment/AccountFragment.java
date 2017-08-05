@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.account.AboutQichengActivity;
+import com.qcjkjg.trafficrules.activity.account.MyMoneyActivity;
 import com.qcjkjg.trafficrules.activity.account.PersonalActivity;
 import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
@@ -47,6 +49,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         loginRL.setOnClickListener(this);
         currentView.findViewById(R.id.aboutTV).setOnClickListener(this);
         currentView.findViewById(R.id.questionTV).setOnClickListener(this);
+        currentView.findViewById(R.id.moneyTV).setOnClickListener(this);
+
+        String str="马上分享,获<font color='#ff506d'>双重现金</font>奖励";
+        ((TextView)currentView.findViewById(R.id.bottomTV)).setText(Html.fromHtml(str));
     }
 
     @Override
@@ -77,6 +83,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case R.id.accountTV:
                 break;
             case R.id.vipIV:
+                break;
+            case R.id.moneyTV:
+                startActivity(new Intent(mActivity, MyMoneyActivity.class));
                 break;
             case R.id.questionTV:
                 startActivity(new Intent(mActivity, SettingQuestionActivity.class));

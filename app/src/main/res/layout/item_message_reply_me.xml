@@ -59,6 +59,7 @@
                 />
 
         <RelativeLayout android:layout_width="match_parent"
+                        android:layout_marginRight="15dp"
                         android:layout_height="40dp">
             <TextView android:layout_width="wrap_content"
                       android:layout_centerVertical="true"
@@ -67,38 +68,53 @@
                       android:text="20分钟前"
                       android:id="@+id/timeTV"
                       android:textSize="16sp"/>
-            <ImageView android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/ic_comments"
-                       android:layout_toLeftOf="@+id/leaveTV"
-                       android:scaleType="centerInside"
-                       android:layout_marginRight="10dp"
-                       android:layout_centerVertical="true"/>
-            <TextView android:layout_width="wrap_content"
-                      android:layout_centerVertical="true"
-                      android:layout_height="wrap_content"
-                      android:textColor="#999999"
-                      android:id="@+id/leaveTV"
-                      android:layout_toLeftOf="@+id/fabulousIV"
-                      android:text="10"
-                      android:layout_marginRight="10dp"
-                      android:textSize="16sp"/>
-            <ImageView android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/ic_praise_n"
-                       android:layout_toLeftOf="@+id/fabulousTV"
-                       android:id="@+id/fabulousIV"
-                       android:scaleType="centerInside"
-                       android:layout_marginRight="10dp"
-                       android:layout_centerVertical="true"/>
-            <TextView android:layout_width="wrap_content"
-                      android:layout_centerVertical="true"
-                      android:layout_height="wrap_content"
-                      android:textColor="#999999"
-                      android:id="@+id/fabulousTV"
-                      android:layout_alignParentRight="true"
-                      android:text="10"
-                      android:textSize="16sp"/>
+            <RelativeLayout android:layout_width="wrap_content"
+                            android:id="@+id/leaveRL"
+                            android:layout_toLeftOf="@+id/fabulousRL"
+                            android:layout_height="match_parent">
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_comments"
+                           android:scaleType="centerInside"
+                           android:layout_marginRight="10dp"
+                           android:id="@+id/leaveIV"
+                           android:layout_centerVertical="true"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_centerVertical="true"
+                          android:layout_height="wrap_content"
+                          android:textColor="#999999"
+                          android:id="@+id/leaveTV"
+                          android:text="0"
+                          android:layout_toRightOf="@+id/leaveIV"
+                          android:layout_marginRight="10dp"
+                          android:textSize="16sp"/>
+            </RelativeLayout>
+
+
+
+
+
+            <RelativeLayout android:layout_width="wrap_content"
+                            android:id="@+id/fabulousRL"
+                            android:layout_alignParentRight="true"
+                            android:layout_height="match_parent">
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_praise_n"
+                           android:id="@+id/fabulousIV"
+                           android:scaleType="centerInside"
+                           android:layout_marginRight="10dp"
+                           android:layout_centerVertical="true"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_centerVertical="true"
+                          android:layout_height="wrap_content"
+                          android:textColor="#999999"
+                          android:layout_toRightOf="@+id/fabulousIV"
+                          android:id="@+id/fabulousTV"
+                          android:text="0"
+                          android:textSize="16sp"/>
+            </RelativeLayout>
+
         </RelativeLayout>
     </LinearLayout>
 

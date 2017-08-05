@@ -1,44 +1,64 @@
 package com.qcjkjg.trafficrules.fragment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.compress.Luban;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.adapter.CircleReplyMeAdapter;
+import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.ViewFactory;
+import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
+import com.qcjkjg.trafficrules.vo.ReplyInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -50,12 +70,12 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     protected MainActivity mActivity;
     private CycleViewPager cycleViewPager;
     private ListView circleLV;
-    private List<View> views = new ArrayList<View>();
     private List<MessageInfo> messageList=new ArrayList<MessageInfo>();
-    private SwipeToLoadLayout swipeToLoadLayout;
     private MessageReplyMeAdapter messageAdapter;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     public static String CIRCLEFLAG = "circleflag";
+    private SwipeToLoadLayout swipeToLoadLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -284,8 +304,10 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
             viewHolder.fabulousTV.setText(infoFlag.getZanCnt()+"");
             if(infoFlag.getIsZan()==1){
                 viewHolder.fabulousIV.setImageResource(R.drawable.ic_praise_s);
+                viewHolder.fabulousIV.setTag(1);
             }else{
                 viewHolder.fabulousIV.setImageResource(R.drawable.ic_praise_n);
+                viewHolder.fabulousIV.setTag(0);
             }
         }
 
@@ -305,4 +327,61 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+
+    /**
+     * 点赞网络请求
+     */
+    public void requestZan(final  int flag,final int position) {
+        if (!NetworkUtils.isNetworkAvailable(mActivity)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_ZAN_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("zanRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                MessageInfo info=messageList.get(position);
+                                if(flag==0){
+                                    info.setZanCnt(info.getZanCnt()+1);
+                                    info.setIsZan(1);
+                                }else{
+                                    info.setZanCnt(info.getZanCnt()-1);
+                                    info.setIsZan(0);
+                                }
+                                updataItem(info, position);
+                            }else if(jsonObject.getString("code").equals("404")){
+                                mActivity.toast(jsonObject.getString("msg"));
+                            }else{
+                                mActivity.toast(jsonObject.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", messageList.get(position).getCid()+"");
+                params.put("phone", mActivity.getUserInfo(1));
+                params.put("action",flag+"");
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+
+
 }

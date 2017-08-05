@@ -16,5 +16,6 @@ public interface ApiConstants {
     String CIRCLE_GET_REPLY_CONTENT_API="http://47.92.112.59:2017/reply";//考友圈获取回复
     String CIRCLE_ZAN_API="http://47.92.112.59:2017/zan";//考友圈点赞
     String CIRCLE_ZAN_LIST_API="http://47.92.112.59:2017/zanlist";//赞列表
-    String CIRCLE_DETAIL_TOPIC_API="http://47.92.112.59:2017/deletec";//删除话题
+    String CIRCLE_DETAIL_DELETE_API="http://47.92.112.59:2017/deletec";//删除话题
+    String CIRCLE_DETAIL_TOPIC_API="http://47.92.112.59:2017/circledetail";//考友圈话题详情
 }

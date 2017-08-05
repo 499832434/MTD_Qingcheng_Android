@@ -72,8 +72,8 @@ import java.util.*;
  */
 public class CircleDetailActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
     private ListView detailLV;
-    private MessageInfo info;
-    private TextView landlordTV,contentTV,leaveTV, num1TV, num2TV,fabulousTV,zanNumTV;
+//    private MessageInfo info;
+    private TextView landlordTV,contentTV,leaveTV, num1TV, num2TV,fabulousTV,zanNumTV,timeTV,deleteTV;
     private CircleImageView landlordCIV;
     private CircleReplyMeAdapter replyAdapter;
     private List<ReplyInfo> replyList=new ArrayList<ReplyInfo>();
@@ -92,12 +92,15 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
     private RelativeLayout zanRL;
     private SwipeToLoadLayout swipeToLoadLayout;
     private int positionFlag;
+    private int cid;
+    private LinearLayout pictureLL;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_circle_detail);
-        info=getIntent().getParcelableExtra(CircleFragment.CIRCLEFLAG);
-        positionFlag=getIntent().getIntExtra("position",0);
+//        info=getIntent().getParcelableExtra(CircleFragment.CIRCLEFLAG);
+        positionFlag=getIntent().getIntExtra("position", 0);
+        cid=getIntent().getIntExtra("cid", 0);
         initView();
 
         swipeToLoadLayout.post(new Runnable() {
@@ -128,7 +131,6 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
         landlordTV= (TextView) view.findViewById(R.id.landlordTV);
         contentTV= (TextView) view.findViewById(R.id.contentTV);
         landlordCIV= (CircleImageView) view.findViewById(R.id.landlordCIV);
-        landlordTV.setText(info.getNickName());
         fabulousIV= (ImageView) view.findViewById(R.id.fabulousIV);
         fabulousIV.setTag(0);
         fabulousTV= (TextView) view.findViewById(R.id.fabulousTV);
@@ -152,67 +154,14 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                 requestZan((Integer) fabulousIV.getTag());
             }
         });
-        if(!TextUtils.isEmpty(info.getContent())){
-            contentTV.setVisibility(View.VISIBLE);
-            contentTV.setText(info.getContent());
-        }
-
         zanRL= (RelativeLayout) view.findViewById(R.id.zanRL);
         approveLL= (ApproveListLayout) view.findViewById(R.id.approveLL);
-        approveLL.setCid(info.getCid());
+        approveLL.setCid(cid);
         zanNumTV= (TextView) view.findViewById(R.id.zanNumTV);
-        ((TextView)view.findViewById(R.id.timeTV)).setText(info.getCreateTime());
-        if(getUserIsLogin()){
-            if((!TextUtils.isEmpty(info.getPhone()))&&(info.getPhone().equals(getUserInfo(1)))){
-                ((TextView)view.findViewById(R.id.deleteTV)).setVisibility(View.VISIBLE);
-            }else{
-                ((TextView)view.findViewById(R.id.deleteTV)).setVisibility(View.GONE);
-            }
-        }else{
-            ((TextView)view.findViewById(R.id.deleteTV)).setVisibility(View.GONE);
-        }
-        ((TextView)view.findViewById(R.id.deleteTV)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteInfo();
-            }
-        });
-        getNetWorkPicture(info.getAvatar(), landlordCIV);
-        final List<LocalMedia> pictureSelectList = new ArrayList<LocalMedia>();
-        List<String> list=info.getPricturlList();
-        if(list.size()>0){
-            for(int i=0;i<list.size();i++){
-                LocalMedia media=new LocalMedia();
-                media.setPath(list.get(i));
-                pictureSelectList.add(media);
-            }
-        }
 
-        LinearLayout pictureLL= (LinearLayout) view.findViewById(R.id.pictureLL);
-        for(int i=0;i<list.size();i++){
-
-            WindowManager wm = this.getWindowManager();
-            int width = wm.getDefaultDisplay().getWidth()-60;
-            ImageView imageView = new ImageView(this);
-            imageView.setId(i);
-//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    PictureSelector.create(CircleDetailActivity.this).externalPicturePreview(view.getId(), pictureSelectList);
-                }
-            });
-            imageView.setAdjustViewBounds(true);//设置图片自适应，只是这句话必须结合下面的setMaxWidth和setMaxHeight才能有效果。
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    width, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(30, 100, 30, 0);
-            imageView.setLayoutParams(layoutParams);
-            imageView.setMaxWidth(width);
-            imageView.setMaxHeight(width * 5);// 这里其实可以根据需求而定，我这里测试为最大宽度的5倍
-            getNetWorkPicture(list.get(i), imageView);
-            pictureLL.addView(imageView); //动态添加图片
-
-        }
+        timeTV=(TextView)view.findViewById(R.id.timeTV);
+        deleteTV=(TextView)view.findViewById(R.id.deleteTV);
+        pictureLL= (LinearLayout) view.findViewById(R.id.pictureLL);
 
         detailLV= (ListView) findViewById(R.id.swipe_target);
         detailLV.addHeaderView(view);
@@ -261,7 +210,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                 String content=contentET.getText().toString();
                 List<BasicNameValuePair> texts = new ArrayList<BasicNameValuePair>();
                 texts.add(new BasicNameValuePair("content",content));
-                texts.add(new BasicNameValuePair("c_id", info.getCid()+""));
+                texts.add(new BasicNameValuePair("c_id", cid+""));
                 texts.add(new BasicNameValuePair("phone", getUserInfo(1)));
                 if(-1==flag){
                     texts.add(new BasicNameValuePair("to_phone", ""));
@@ -334,8 +283,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
     };
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
@@ -494,7 +442,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("c_id", info.getCid()+"");
+                params.put("c_id", cid+"");
                 if(!TextUtils.isEmpty(replyId)){
                     params.put("reply_id", replyId);
                     Log.e("reply_id",replyId);
@@ -504,6 +452,70 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
         };
         InitApp.initApp.addToRequestQueue(request);
     }
+
+    /**
+     * 网络请求
+     */
+    private void requestTitleDetail() {
+        if (!NetworkUtils.isNetworkAvailable(CircleDetailActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_DETAIL_TOPIC_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("TitleDetailRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                JSONObject json=jsonObject.getJSONObject("info");
+                                MessageInfo info=new MessageInfo();
+                                info.setNickName(json.getString("nick_name"));
+                                info.setContent(json.getString("content"));
+                                info.setPhone(json.getString("phone"));
+                                info.setAvatar(json.getString("avatar"));
+                                info.setCreateTime(sdf.format(new Date(json.getLong("create_time") * 1000)));
+                                List<String> imagesList=new ArrayList<String>();
+                                JSONArray array=json.getJSONArray("images");
+                                for(int j=0;j<array.length();j++){
+                                    imagesList.add((String) array.get(j));
+                                }
+                                info.setPricturlList(imagesList);
+                                setHead(info);
+                            }else if(jsonObject.getString("code").equals("404")){
+                                toast(jsonObject.getString("msg"));
+                                finish();
+                            }else{
+                                toast(jsonObject.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("c_id", cid+"");
+                if(getUserIsLogin()){
+                    params.put("phone", getUserInfo(1));
+                }
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+
 
     /**
      * 网络请求
@@ -549,7 +561,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("c_id", info.getCid()+"");
+                params.put("c_id", cid+"");
                 params.put("phone", getUserInfo(1));
                 params.put("action",flag+"");
                 return params;
@@ -610,7 +622,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("c_id", info.getCid()+"");
+                params.put("c_id", cid+"");
                 if(getUserIsLogin()){
                     params.put("phone", getUserInfo(1));
                 }
@@ -628,7 +640,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
             return;
         }
 
-        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_DETAIL_TOPIC_API,
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.CIRCLE_DETAIL_DELETE_API,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -655,7 +667,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("c_id", info.getCid()+"");
+                params.put("c_id", cid+"");
                 params.put("phone",getUserInfo(1));
                 return params;
             }
@@ -673,6 +685,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
 
     @Override
     public void onRefresh() {
+        requestTitleDetail();
         requestZanList();
         request("");
     }
@@ -697,5 +710,67 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
         infoFlag.setIsZan((Integer) fabulousIV.getTag());
         EventBus.getDefault().post(new CircleDataUpEvent(infoFlag,positionFlag));
         finish();
+    }
+
+
+    private void setHead(MessageInfo info){
+        landlordTV.setText(info.getNickName());
+        if(!TextUtils.isEmpty(info.getContent())){
+            contentTV.setVisibility(View.VISIBLE);
+            contentTV.setText(info.getContent());
+        }
+        timeTV.setText(info.getCreateTime());
+
+        deleteTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteInfo();
+            }
+        });
+        if (getUserIsLogin()) {
+            if((!TextUtils.isEmpty(info.getPhone()))&&(info.getPhone().equals(getUserInfo(1)))){
+                deleteTV.setVisibility(View.VISIBLE);
+            }else{
+                deleteTV.setVisibility(View.GONE);
+            }
+        } else {
+            deleteTV.setVisibility(View.GONE);
+
+        }
+
+        getNetWorkPicture(info.getAvatar(), landlordCIV);
+
+        final List<LocalMedia> pictureSelectList = new ArrayList<LocalMedia>();
+        List<String> list=info.getPricturlList();
+        if(list.size()>0){
+            for(int i=0;i<list.size();i++){
+                LocalMedia media=new LocalMedia();
+                media.setPath(list.get(i));
+                pictureSelectList.add(media);
+            }
+        }
+
+        for(int i=0;i<list.size();i++){
+            WindowManager wm = this.getWindowManager();
+            int width = wm.getDefaultDisplay().getWidth()-60;
+            ImageView imageView = new ImageView(this);
+            imageView.setId(i);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PictureSelector.create(CircleDetailActivity.this).externalPicturePreview(view.getId(), pictureSelectList);
+                }
+            });
+            imageView.setAdjustViewBounds(true);//设置图片自适应，只是这句话必须结合下面的setMaxWidth和setMaxHeight才能有效果。
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    width, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(30, 100, 30, 0);
+            imageView.setLayoutParams(layoutParams);
+            imageView.setMaxWidth(width);
+            imageView.setMaxHeight(width * 5);// 这里其实可以根据需求而定，我这里测试为最大宽度的5倍
+            getNetWorkPicture(list.get(i), imageView);
+            pictureLL.addView(imageView); //动态添加图片
+
+        }
     }
 }

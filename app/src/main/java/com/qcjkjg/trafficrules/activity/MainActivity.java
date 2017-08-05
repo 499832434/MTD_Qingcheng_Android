@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity {
     private FragmentManager mFragmentManager;
     public CustomViewPager masterViewPager;
     public static String SINGUPTAG = "singup";
+    public CircleFragment circleFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +150,8 @@ public class MainActivity extends BaseActivity {
             } else if (position == 1) {
                 return new Fragment();
             } else if (position == 2) {
-                return new CircleFragment();
+                circleFragment=new CircleFragment();
+                return circleFragment;
             } else if (position == 3) {
                 return new AccountFragment();
             }

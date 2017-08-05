@@ -39,6 +39,16 @@
                            android:layout_height="wrap_content"/>
             </RelativeLayout>
 
+            <TextView android:layout_width="wrap_content"
+                      android:textColor="#ffffff"
+                      android:text="客服中心"
+                      android:layout_marginTop="15dp"
+                      android:layout_marginRight="15dp"
+                      android:layout_alignParentRight="true"
+                      android:layout_alignParentTop="true"
+                      android:textSize="16sp"
+                      android:layout_height="wrap_content"/>
+
         </RelativeLayout>
         <LinearLayout android:layout_width="match_parent"
                       android:orientation="horizontal"
@@ -51,6 +61,7 @@
                       android:drawableTop="@drawable/ic_jiangjin"
                       android:textColor="#333333"
                       android:text="我的奖金"
+                      android:id="@+id/moneyTV"
                       android:textSize="16sp"
                       android:gravity="center_horizontal"
                       android:layout_height="match_parent"/>
@@ -168,7 +179,8 @@
 
         <TextView android:layout_width="match_parent"
                   android:textColor="#999999"
-                  android:text="马上分享,获双重现金奖励"
+                  android:text=""
+                  android:id="@+id/bottomTV"
                   android:gravity="center"
                   android:layout_marginTop="10dp"
                   android:textSize="18sp"

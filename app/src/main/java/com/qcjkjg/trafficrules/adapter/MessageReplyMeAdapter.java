@@ -21,6 +21,7 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.CircleDetailActivity;
+import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
@@ -80,6 +81,8 @@ public class MessageReplyMeAdapter extends BaseAdapter {
             holder.leaveTV= (TextView) convertView.findViewById(R.id.leaveTV);
             holder.fabulousTV= (TextView) convertView.findViewById(R.id.fabulousTV);
             holder.mainRL= (RelativeLayout) convertView.findViewById(R.id.mainRL);
+            holder.leaveRL= (RelativeLayout) convertView.findViewById(R.id.leaveRL);
+            holder.fabulousRL= (RelativeLayout) convertView.findViewById(R.id.fabulousRL);
             holder.fabulousIV= (ImageView) convertView.findViewById(R.id.fabulousIV);
             convertView.setTag(holder);
         } else {
@@ -97,12 +100,14 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         }
         if(info.getIsZan()==1){
             holder.fabulousIV.setImageResource(R.drawable.ic_praise_s);
+            holder.fabulousIV.setTag(1);
         }else{
             holder.fabulousIV.setImageResource(R.drawable.ic_praise_n);
+            holder.fabulousIV.setTag(0);
         }
         holder.nameTV.setText(info.getNickName());
         holder.timeTV.setText(info.getCreateTime());
-        holder.leaveTV.setText(info.getReplyCnt()+"");
+        holder.leaveTV.setText(info.getReplyCnt() + "");
         holder.fabulousTV.setText(info.getZanCnt() + "");
         List<String> list=info.getPricturlList();
         holder.mainRL.setOnClickListener(new View.OnClickListener() {
@@ -111,13 +116,34 @@ public class MessageReplyMeAdapter extends BaseAdapter {
                 Intent intent = new Intent(context, CircleDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(CircleFragment.CIRCLEFLAG, mData.get(position));
+                bundle.putInt("cid",mData.get(position).getCid());
                 bundle.putInt("position",position);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
         });
+        holder.leaveRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!((BaseActivity)context).getUserIsLogin()) {
+                    context.startActivity(new Intent(context, LoginActivity.class));
+                    return;
+                }
+                ((BaseActivity)context).showReplyDialog(-1, null, mData.get(position).getCid(), mData.get(position), position);
+            }
+        });
+        holder.fabulousRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!((BaseActivity)context).getUserIsLogin()) {
+                    context.startActivity(new Intent(context, LoginActivity.class));
+                    return;
+                }
+                ((MainActivity)context).circleFragment.requestZan((Integer) holder.fabulousIV.getTag(),position);
+            }
+        });
 
-        addImageView(holder.pictureMGL,list);
+        addImageView(holder.pictureMGL, list);
         return convertView;
     }
 
@@ -128,7 +154,7 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         private TextView timeTV;
         public TextView leaveTV;
         public TextView fabulousTV;
-        private RelativeLayout mainRL;
+        private RelativeLayout mainRL,leaveRL,fabulousRL;
         private MyGridLayout pictureMGL;
         public ImageView fabulousIV;
     }
