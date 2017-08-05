@@ -328,7 +328,6 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         EventBus.getDefault().unregister(this);
     }
 
-
     /**
      * 点赞网络请求
      */
