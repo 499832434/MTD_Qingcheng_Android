@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
-import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
 import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.view.MyListView;
 import com.qcjkjg.trafficrules.vo.MessageMyReply;
@@ -21,13 +20,13 @@ import java.util.List;
 /**
  * Created by zongshuo on 2017/7/19.
  */
-public class MessageMyReplyAdapter extends BaseAdapter {
+public class MessageReplyAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<MessageMyReply> mData ;
     private Context context;
 
-    public MessageMyReplyAdapter(FragmentActivity context, List<MessageMyReply> data) {
+    public MessageReplyAdapter(FragmentActivity context, List<MessageMyReply> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;

@@ -2,16 +2,19 @@ package com.qcjkjg.trafficrules.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.vo.MessageFabulous;
+import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
 import java.util.List;
 
@@ -21,10 +24,10 @@ import java.util.List;
 public class MessageFabulousAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<MessageFabulous> mData;
+    private List<MessageInfo> mData;
     private Context context;
 
-    public MessageFabulousAdapter(FragmentActivity context, List<MessageFabulous> data) {
+    public MessageFabulousAdapter(FragmentActivity context, List<MessageInfo> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
@@ -32,7 +35,7 @@ public class MessageFabulousAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 9;
+        return mData.size();
     }
 
     @Override
@@ -53,18 +56,37 @@ public class MessageFabulousAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.item_message_fabulous, null);
             holder.rightIV= (ImageView) convertView.findViewById(R.id.rightIV);
             holder.leftIV= (CircleImageView) convertView.findViewById(R.id.leftIV);
+            holder.timeTV= (TextView) convertView.findViewById(R.id.timeTV);
+            holder.contentTV= (TextView) convertView.findViewById(R.id.contentTV);
+            holder.nameTV= (TextView) convertView.findViewById(R.id.nameTV);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ((BaseActivity)context).getNetWorkPicture("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg", holder.rightIV);
-        ((BaseActivity)context).getNetWorkPicture("http://b.zol-img.com.cn/desk/bizhi/image/4/960x600/1396085330945.jpg", holder.leftIV);
+        if(TextUtils.isEmpty(mData.get(position).getContent())){
+            holder.contentTV.setVisibility(View.GONE);
+        }else{
+            holder.contentTV.setText(mData.get(position).getContent());
+            holder.contentTV.setVisibility(View.VISIBLE);
+        }
+        holder.nameTV.setText(mData.get(position).getNickName());
+        holder.timeTV.setText(mData.get(position).getCreateTime());
+        if(mData.get(position).getPricturlList().size()==0){
+            holder.rightIV.setVisibility(View.GONE);
+        }else{
+            holder.rightIV.setVisibility(View.VISIBLE);
+            Glide.with(context).load(mData.get(position).getPricturlList().get(0)).into(holder.rightIV);
+        }
+        if(!TextUtils.isEmpty(mData.get(position).getAvatar())){
+            Glide.with(context).load(mData.get(position).getAvatar()).into(holder.leftIV);
+        }
         return convertView;
     }
 
     public final class ViewHolder {
         private ImageView rightIV;
         private CircleImageView leftIV;
+        private TextView nameTV,contentTV,timeTV;
     }
 
 }

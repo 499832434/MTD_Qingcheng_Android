@@ -1,15 +1,10 @@
 package com.qcjkjg.trafficrules.fragment;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
@@ -20,45 +15,25 @@ import com.android.volley.VolleyError;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.compress.Luban;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureMimeType;
-import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.tools.PictureFileUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
-import com.qcjkjg.trafficrules.adapter.CircleReplyMeAdapter;
-import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
-import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
+import com.qcjkjg.trafficrules.adapter.CircleListAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
+import com.qcjkjg.trafficrules.utils.DateUtils;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
-import com.qcjkjg.trafficrules.utils.ViewFactory;
-import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
-import com.qcjkjg.trafficrules.vo.ReplyInfo;
-import com.qcjkjg.trafficrules.vo.Signup;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -71,7 +46,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     private CycleViewPager cycleViewPager;
     private ListView circleLV;
     private List<MessageInfo> messageList=new ArrayList<MessageInfo>();
-    private MessageReplyMeAdapter messageAdapter;
+    private CircleListAdapter messageAdapter;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     public static String CIRCLEFLAG = "circleflag";
     private SwipeToLoadLayout swipeToLoadLayout;
@@ -103,7 +78,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         swipeToLoadLayout.setOnLoadMoreListener(this);
         circleLV= (ListView) currentView.findViewById(R.id.swipe_target);
 //        circleLV.addHeaderView(view);
-        messageAdapter=new MessageReplyMeAdapter(mActivity, messageList);
+        messageAdapter=new CircleListAdapter(mActivity, messageList,0);
         circleLV.setAdapter(messageAdapter);
         cycleViewPager= (CycleViewPager) view.findViewById(R.id.cycleViewPager);
         cycleViewPager.setIndicatorCenter();
@@ -229,7 +204,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                                     info.setNickName(obj.getString("nick_name"));
                                     info.setContent(obj.getString("content"));
                                     info.setPhone(obj.getString("phone"));
-                                    info.setCreateTime(sdf.format(new Date(obj.getLong("create_time") * 1000)));
+                                    info.setCreateTime(DateUtils.getInterval(obj.getLong("create_time")));
                                     info.setZanCnt(obj.getInt("zan_cnt"));
                                     info.setAvatar(obj.getString("avatar"));
                                     info.setIsZan(obj.getInt("is_zan"));
@@ -298,7 +273,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         int lastvisibale = circleLV.getLastVisiblePosition();
         if(position>=firstvisible&&position<=lastvisibale){
             View view = circleLV.getChildAt(position - firstvisible);
-            MessageReplyMeAdapter.ViewHolder viewHolder = (MessageReplyMeAdapter.ViewHolder) view.getTag();
+            CircleListAdapter.ViewHolder viewHolder = (CircleListAdapter.ViewHolder) view.getTag();
             //然后使用viewholder去更新需要更新的view。
             viewHolder.leaveTV.setText(infoFlag.getReplyCnt()+"");
             viewHolder.fabulousTV.setText(infoFlag.getZanCnt()+"");

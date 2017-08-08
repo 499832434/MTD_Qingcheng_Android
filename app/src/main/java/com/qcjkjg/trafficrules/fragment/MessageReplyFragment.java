@@ -1,7 +1,6 @@
 package com.qcjkjg.trafficrules.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,16 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import com.qcjkjg.trafficrules.R;
-import com.qcjkjg.trafficrules.activity.MainActivity;
-import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
-import com.qcjkjg.trafficrules.adapter.MessageMyReplyAdapter;
-import com.qcjkjg.trafficrules.adapter.MessageReplyMeAdapter;
-import com.qcjkjg.trafficrules.adapter.SignupAdapter;
-import com.qcjkjg.trafficrules.view.CustomTitleBar;
+import com.qcjkjg.trafficrules.adapter.CircleReplyMeAdapter;
+import com.qcjkjg.trafficrules.adapter.MessageReplyAdapter;
+import com.qcjkjg.trafficrules.adapter.CircleListAdapter;
+import com.qcjkjg.trafficrules.adapter.MyThemeAdapter;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
+import com.qcjkjg.trafficrules.vo.MessageTheme;
+import com.qcjkjg.trafficrules.vo.ReplyInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zongshuo on 2017/7/19.
@@ -28,11 +28,12 @@ public class MessageReplyFragment extends Fragment{
     private View currentView = null;
     protected MessageReplyActivity mActivity;
     private ListView replyLV;
-    private MessageReplyMeAdapter replyMeAdapter;
-    private MessageMyReplyAdapter myReplyAdapter;
+    private MyThemeAdapter adapter1;
+    private CircleReplyMeAdapter adapter2;
     private final static String FRAGMENT_TYPE = "fragmentType";
     private int fragmentType = 0;
-
+    private List<ReplyInfo> list2=new ArrayList<ReplyInfo>();
+    private List<MessageTheme> list1=new ArrayList<MessageTheme>();
     public static MessageReplyFragment newInstance(MessageReplyActivity parentActivity,  int fragmentType) {
         MessageReplyFragment fr = new MessageReplyFragment();
         Bundle bundle = new Bundle();
@@ -52,11 +53,11 @@ public class MessageReplyFragment extends Fragment{
         fragmentType = getArguments().getInt(FRAGMENT_TYPE);
         replyLV= (ListView) currentView.findViewById(R.id.replyLV);
         if(0==fragmentType){
-            myReplyAdapter=new MessageMyReplyAdapter(mActivity,null);
-            replyLV.setAdapter(myReplyAdapter);
+            adapter1=new MyThemeAdapter(mActivity,list1);
+            replyLV.setAdapter(adapter1);
         }else{
-            replyMeAdapter=new MessageReplyMeAdapter(mActivity,new ArrayList<MessageInfo>());
-            replyLV.setAdapter(replyMeAdapter);
+            adapter2=new CircleReplyMeAdapter(mActivity,list2);
+            replyLV.setAdapter(adapter2);
         }
     }
 

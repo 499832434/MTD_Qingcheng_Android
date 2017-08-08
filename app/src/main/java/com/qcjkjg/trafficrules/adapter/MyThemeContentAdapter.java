@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
-import com.qcjkjg.trafficrules.activity.signup.MyThemeActivity;
 import com.qcjkjg.trafficrules.view.MyGridView;
 import com.qcjkjg.trafficrules.vo.MessageThemeContent;
 

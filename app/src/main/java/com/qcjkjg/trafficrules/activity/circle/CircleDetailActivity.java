@@ -43,6 +43,7 @@ import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.net.HighRequest;
+import com.qcjkjg.trafficrules.utils.DateUtils;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
@@ -399,7 +400,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                     info.setPhone(infoJo.getString("phone"));
                                     info.setContent(infoJo.getString("content"));
                                     info.setAvater(infoJo.getString("avatar"));
-                                    info.setCreateTime(sdf.format(new Date(infoJo.getLong("create_time") * 1000)));
+                                    info.setCreateTime(DateUtils.getInterval(infoJo.getLong("create_time")));
                                     JSONArray imageArray=infoJo.getJSONArray("images");
                                     List<String> imageList=new ArrayList<String>();
                                     for(int j=0;j<imageArray.length();j++){
@@ -475,7 +476,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                 info.setContent(json.getString("content"));
                                 info.setPhone(json.getString("phone"));
                                 info.setAvatar(json.getString("avatar"));
-                                info.setCreateTime(sdf.format(new Date(json.getLong("create_time") * 1000)));
+                                info.setCreateTime(DateUtils.getInterval(json.getLong("create_time")));
                                 List<String> imagesList=new ArrayList<String>();
                                 JSONArray array=json.getJSONArray("images");
                                 for(int j=0;j<array.length();j++){

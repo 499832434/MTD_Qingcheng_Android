@@ -40,16 +40,18 @@ import java.util.List;
 /**
  * Created by zongshuo on 2017/7/19.
  */
-public class MessageReplyMeAdapter extends BaseAdapter {
+public class CircleListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<MessageInfo> mData =new ArrayList<MessageInfo>();
     private Context context;
+    private int flag;//0:考友圈1:我的主题
 
-    public MessageReplyMeAdapter(FragmentActivity context, List<MessageInfo> data) {
+    public CircleListAdapter(FragmentActivity context, List<MessageInfo> data, int flag) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
+        this.flag=flag;
     }
 
     @Override
@@ -110,39 +112,42 @@ public class MessageReplyMeAdapter extends BaseAdapter {
         holder.leaveTV.setText(info.getReplyCnt() + "");
         holder.fabulousTV.setText(info.getZanCnt() + "");
         List<String> list=info.getPricturlList();
-        holder.mainRL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, CircleDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(CircleFragment.CIRCLEFLAG, mData.get(position));
-                bundle.putInt("cid",mData.get(position).getCid());
-                bundle.putInt("position",position);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            }
-        });
-        holder.leaveRL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!((BaseActivity)context).getUserIsLogin()) {
-                    context.startActivity(new Intent(context, LoginActivity.class));
-                    return;
+        if(0==flag){
+            holder.mainRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, CircleDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(CircleFragment.CIRCLEFLAG, mData.get(position));
+                    bundle.putInt("cid",mData.get(position).getCid());
+                    bundle.putInt("position",position);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
                 }
-                ((BaseActivity)context).showReplyDialog(-1, null, mData.get(position).getCid(), mData.get(position), position);
-            }
-        });
-        holder.fabulousRL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!((BaseActivity)context).getUserIsLogin()) {
-                    context.startActivity(new Intent(context, LoginActivity.class));
-                    return;
+            });
+            holder.leaveRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!((BaseActivity)context).getUserIsLogin()) {
+                        context.startActivity(new Intent(context, LoginActivity.class));
+                        return;
+                    }
+                    ((BaseActivity)context).showReplyDialog(-1, null, mData.get(position).getCid(), mData.get(position), position);
                 }
-                ((MainActivity)context).circleFragment.requestZan((Integer) holder.fabulousIV.getTag(),position);
-            }
-        });
-
+            });
+            holder.fabulousRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!((BaseActivity)context).getUserIsLogin()) {
+                        context.startActivity(new Intent(context, LoginActivity.class));
+                        return;
+                    }
+                    ((MainActivity)context).circleFragment.requestZan((Integer) holder.fabulousIV.getTag(),position);
+                }
+            });
+        }else{
+            holder.pictureIV.setVisibility(View.GONE);
+        }
         addImageView(holder.pictureMGL, list);
         return convertView;
     }

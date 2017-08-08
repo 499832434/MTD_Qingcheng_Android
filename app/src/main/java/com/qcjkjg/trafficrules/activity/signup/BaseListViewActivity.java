@@ -24,10 +24,12 @@ import com.qcjkjg.trafficrules.adapter.MessageFabulousAdapter;
 import com.qcjkjg.trafficrules.adapter.MyThemeAdapter;
 import com.qcjkjg.trafficrules.adapter.SystemMessageAdapter;
 import com.qcjkjg.trafficrules.net.HighRequest;
+import com.qcjkjg.trafficrules.utils.DateUtils;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.MessageFabulous;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
+import com.qcjkjg.trafficrules.vo.MessageTheme;
 import com.qcjkjg.trafficrules.vo.Signup;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +51,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     private int flag;//0:系统消息1:我的主题2:收到的赞3:赞的车友
     private List<Signup> signList=new ArrayList<Signup>();//0:系统消息
     private List<MessageInfo> infoList=new ArrayList<MessageInfo>();//3:赞的车友
+    private List<MessageTheme> themeList=new ArrayList<MessageTheme>();//1:我的主题
+    private List<MessageInfo> fabulousList=new ArrayList<MessageInfo>();//2:收到的赞
     private SwipeToLoadLayout swipeToLoadLayout;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private int cid;
@@ -100,12 +104,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 break;
             case 1:
                 ((CustomTitleBar) findViewById(R.id.customTitleBar)).setTitleTextView("我的主题");
-                adapter1=new MyThemeAdapter(BaseListViewActivity.this,null);
+                adapter1=new MyThemeAdapter(BaseListViewActivity.this,themeList);
                 listView.setAdapter(adapter1);
                 break;
             case 2:
                 ((CustomTitleBar) findViewById(R.id.customTitleBar)).setTitleTextView("收到的赞");
-                adapter2=new MessageFabulousAdapter(BaseListViewActivity.this,null);
+                adapter2=new MessageFabulousAdapter(BaseListViewActivity.this,fabulousList);
                 listView.setAdapter(adapter2);
                 break;
             case 3:
@@ -136,8 +140,10 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                     request0(signList.get(signList.size() - 1).getNewsId() + "");
                     break;
                 case 1:
+                    request1();
                     break;
                 case 2:
+                    request2(fabulousList.get(fabulousList.size()-1).getZanId()+"");
                     break;
                 case 3:
                     request3(infoList.get(infoList.size() - 1).getZanId() + "");
@@ -153,10 +159,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 request0("");
                 break;
             case 1:
-                swipeToLoadLayout.setRefreshing(false);
+                cid=-1;
+                request1();
                 break;
             case 2:
                 swipeToLoadLayout.setRefreshing(false);
+                request2("");
                 break;
             case 3:
                 request3("");
@@ -280,6 +288,185 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 params.put("c_id", cid+"");
                 if(getUserIsLogin()){
                     params.put("phone", getUserInfo(1));
+                }
+                if(!TextUtils.isEmpty(zanid)){
+                    params.put("zan_id",zanid);
+                }
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 网络请求
+     */
+    private void request1() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.MY_THEME_LIST_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("mythemeRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                if(cid==-1){
+                                    themeList.clear();
+                                }
+                                JSONArray infoArr=jsonObject.getJSONArray("info");
+
+                                for(int i=0;i<infoArr.length();i++){
+                                    JSONObject obj=infoArr.getJSONObject(i);
+                                    MessageInfo info=new MessageInfo();
+                                    info.setCid(obj.getInt("c_id"));
+                                    cid=obj.getInt("c_id");
+                                    info.setReplyCnt(obj.getInt("reply_cnt"));
+                                    info.setNickName(obj.getString("nick_name"));
+                                    info.setContent(obj.getString("content"));
+                                    info.setPhone(obj.getString("phone"));
+                                    String dateStr=sdf.format(new Date(obj.getLong("create_time") * 1000));
+//                                    info.setCustomTime(dateStr);
+                                    info.setCreateTime(DateUtils.getInterval(obj.getLong("create_time")));
+                                    info.setZanCnt(obj.getInt("zan_cnt"));
+                                    info.setAvatar(obj.getString("avatar"));
+                                    info.setIsZan(obj.getInt("is_zan"));
+                                    List<String> imagesList=new ArrayList<String>();
+                                    JSONArray array=obj.getJSONArray("images");
+                                    for(int j=0;j<array.length();j++){
+                                        imagesList.add((String) array.get(j));
+                                    }
+                                    info.setPricturlList(imagesList);
+
+                                    if(themeList.size()==0){
+                                        List<MessageInfo> messageList=new ArrayList<MessageInfo>();
+                                        MessageTheme theme=new MessageTheme();
+                                        theme.setTime(dateStr);
+                                        messageList.add(info);
+                                        theme.setList(messageList);
+                                        themeList.add(theme);
+                                    }else{
+                                        boolean flag=true;
+                                        for(int j=0;j<themeList.size();j++){
+                                            if(dateStr.equals(themeList.get(j).getTime())){
+                                                MessageTheme theme=themeList.get(j);
+                                                List<MessageInfo> messageList=theme.getList();
+                                                messageList.add(info);
+                                                theme.setList(messageList);
+                                                themeList.set(j,theme);
+                                                flag=false;
+                                                break;
+                                            }
+                                        }
+                                        if(flag){
+                                            List<MessageInfo> messageList=new ArrayList<MessageInfo>();
+                                            MessageTheme theme=new MessageTheme();
+                                            theme.setTime(dateStr);
+                                            messageList.add(info);
+                                            theme.setList(messageList);
+                                            themeList.add(theme);
+                                        }
+                                    }
+                                }
+                                if(themeList.size()>0){
+                                    adapter1.notifyDataSetChanged();
+                                }
+                            }else{
+                                Toast.makeText(BaseListViewActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                if(-1!=cid){
+                    params.put("c_id", cid+"");
+                }
+                if(getUserIsLogin()){
+                    params.put("phone",getUserInfo(1));
+                }
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+    /**
+     * 网络请求
+     */
+    private void request2(final String zanid) {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.SIGN_ZAN_LIST_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("fabulousRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                if(TextUtils.isEmpty(zanid)){
+                                    fabulousList.clear();
+                                }
+                                JSONArray infoArr=jsonObject.getJSONArray("info");
+                                for(int i=0;i<infoArr.length();i++){
+                                    JSONObject obj=infoArr.getJSONObject(i);
+                                    MessageInfo info=new MessageInfo();
+                                    info.setCid(obj.getInt("c_id"));
+                                    info.setNickName(obj.getString("nick_name"));
+                                    info.setContent(obj.getString("to_content"));
+                                    String dateStr=sdf.format(new Date(obj.getLong("pubtime") * 1000));
+                                    info.setCreateTime(dateStr);
+                                    info.setAvatar(obj.getString("avatar"));
+                                    info.setZanId(obj.getInt("zan_id"));
+                                    List<String> imagesList=new ArrayList<String>();
+                                    if(!TextUtils.isEmpty(obj.getString("to_image"))){
+                                        imagesList.add(obj.getString("to_image"));
+                                    }
+                                    info.setPricturlList(imagesList);
+                                    fabulousList.add(info);
+                                }
+                                if(fabulousList.size()>0){
+                                    Log.e("ffff",fabulousList.size()+"");
+                                    adapter2.notifyDataSetChanged();
+                                }
+                            }else{
+                                Toast.makeText(BaseListViewActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                if(getUserIsLogin()){
+                    params.put("phone",getUserInfo(1));
                 }
                 if(!TextUtils.isEmpty(zanid)){
                     params.put("zan_id",zanid);

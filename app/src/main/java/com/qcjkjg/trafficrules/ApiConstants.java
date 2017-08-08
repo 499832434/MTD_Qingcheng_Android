@@ -18,4 +18,6 @@ public interface ApiConstants {
     String CIRCLE_ZAN_LIST_API="http://47.92.112.59:2017/zanlist";//赞列表
     String CIRCLE_DETAIL_DELETE_API="http://47.92.112.59:2017/deletec";//删除话题
     String CIRCLE_DETAIL_TOPIC_API="http://47.92.112.59:2017/circledetail";//考友圈话题详情
+    String MY_THEME_LIST_API="http://47.92.112.59:2017/mycircle";//我的主题列表
+    String SIGN_ZAN_LIST_API="http://47.92.112.59:2017/zanme";//收到的赞列表
 }
