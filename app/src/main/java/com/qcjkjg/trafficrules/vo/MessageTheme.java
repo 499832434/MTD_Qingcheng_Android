@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class MessageTheme {
     private String time;
-    private List<MessageInfo> list=new ArrayList<MessageInfo>();
+    private List<ReplyInfo> list=new ArrayList<ReplyInfo>();
 
     public String getTime() {
         return time;
@@ -18,11 +18,11 @@ public class MessageTheme {
         this.time = time;
     }
 
-    public List<MessageInfo> getList() {
+    public List<ReplyInfo> getList() {
         return list;
     }
 
-    public void setList(List<MessageInfo> list) {
+    public void setList(List<ReplyInfo> list) {
         this.list = list;
     }
 }

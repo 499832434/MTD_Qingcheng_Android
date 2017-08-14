@@ -13,7 +13,7 @@ public class AboutQichengActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_about_qicheng);
+        setContentView(R.layout.activity_about_qicheng);
         initView();
     }
 

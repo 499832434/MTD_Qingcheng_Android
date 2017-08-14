@@ -15,7 +15,7 @@ public class MyMoneyActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_my_money);
+        setContentView(R.layout.activity_my_money);
 
         initView();
     }

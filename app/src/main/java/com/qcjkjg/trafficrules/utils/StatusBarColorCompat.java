@@ -27,7 +27,7 @@ public class StatusBarColorCompat {
 	public static final int KITKAT_STATUSBAR_HEIGHT = IS_KITKAT ? getStatusBarHeight() : 0;
 	private static final String KITKAT_FAKE_STATUSBAR_BACKGROUND_VIEW_TAG = "KITKAT_FAKE_STATUSBAR_BACKGROUND_VIEW_TAG";
 
-	public static void setContentViewWithStatusBarColorByColorPrimaryDark(Activity activity, int layoutResID) {
+	public static void setContentView(Activity activity, int layoutResID) {
 		setContentViewFitsSystemWindows(activity, layoutResID);
 		setStatusBarColor(activity, getColorPrimaryDark(activity));
 	}

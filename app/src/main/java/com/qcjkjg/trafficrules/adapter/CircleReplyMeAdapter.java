@@ -76,7 +76,7 @@ public class CircleReplyMeAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ((BaseActivity)context).getNetWorkPicture(mData.get(position).getAvater(),holder.avatarIV);
+        ((BaseActivity)context).getNetWorkPicture(mData.get(position).getAvatar(),holder.avatarIV);
         holder.nameTV.setText(mData.get(position).getNickName());
         holder.timeTV.setText(mData.get(position).getCreateTime());
         if(position==0){

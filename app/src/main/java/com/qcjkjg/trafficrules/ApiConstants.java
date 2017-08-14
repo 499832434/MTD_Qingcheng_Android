@@ -20,4 +20,7 @@ public interface ApiConstants {
     String CIRCLE_DETAIL_TOPIC_API="http://47.92.112.59:2017/circledetail";//考友圈话题详情
     String MY_THEME_LIST_API="http://47.92.112.59:2017/mycircle";//我的主题列表
     String SIGN_ZAN_LIST_API="http://47.92.112.59:2017/zanme";//收到的赞列表
+    String SIGN_MY_REPLY_API="http://47.92.112.59:2017/ireply";//我的回复
+    String SIGN_REPLY_ME_API="http://47.92.112.59:2017/replyme";//回复我的
+    String UPDATE_USER_INFO_API="http://47.92.112.59:2017/updateuserinfo";//修改用户信息
 }

@@ -21,6 +21,7 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.adapter.CircleListAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
@@ -65,20 +66,26 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(mActivity.getUserIsLogin()){
-                            startActivity(new Intent(mActivity, PublishCircleInfoActivity.class));
-                        }else {
-                            startActivity(new Intent(mActivity, LoginActivity.class));
-                        }
+                        startActivity(new Intent(mActivity, MessageMainActivity.class));
                     }
                 });
+        currentView.findViewById(R.id.publishIV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mActivity.getUserIsLogin()){
+                    startActivity(new Intent(mActivity, PublishCircleInfoActivity.class));
+                }else {
+                    startActivity(new Intent(mActivity, LoginActivity.class));
+                }
+            }
+        });
         View view=LayoutInflater.from(mActivity).inflate(R.layout.headview_circle,null);
         swipeToLoadLayout = (SwipeToLoadLayout) currentView.findViewById(R.id.swipeToLoadLayout);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
         circleLV= (ListView) currentView.findViewById(R.id.swipe_target);
 //        circleLV.addHeaderView(view);
-        messageAdapter=new CircleListAdapter(mActivity, messageList,0);
+        messageAdapter=new CircleListAdapter(mActivity, messageList);
         circleLV.setAdapter(messageAdapter);
         cycleViewPager= (CycleViewPager) view.findViewById(R.id.cycleViewPager);
         cycleViewPager.setIndicatorCenter();

@@ -7,18 +7,35 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
+import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
+import com.qcjkjg.trafficrules.event.ChangeNickNameEvent;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.view.CircleImageView;
+import com.qcjkjg.trafficrules.vo.MessageInfo;
+import de.greenrobot.event.EventBus;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,7 +48,8 @@ public class PersonalActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_personal);
+        setContentView(R.layout.activity_personal);
+        EventBus.getDefault().register(this);
         initView();
     }
 
@@ -46,7 +64,15 @@ public class PersonalActivity extends BaseActivity{
         commitTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                List<BasicNameValuePair> texts = new ArrayList<BasicNameValuePair>();
+                texts.add(new BasicNameValuePair("phone", getUserInfo(1)));
+                texts.add(new BasicNameValuePair("nick_name", nameTV.getText().toString()));
+                HashMap<File, String> files = new HashMap<File, String>();
+                if(selectList.size()>0){
+                    LocalMedia media = selectList.get(0);
+                    files.put(new File(media.getCompressPath()), "file");
+                }
+                upload(texts, files, ApiConstants.UPDATE_USER_INFO_API);
             }
         });
         nameTV= (TextView) findViewById(R.id.nameTV);
@@ -122,5 +148,54 @@ public class PersonalActivity extends BaseActivity{
                     break;
             }
         }
+    }
+
+    public void onEvent(ChangeNickNameEvent event) {
+        String name=event.getName();
+        nameTV.setText(name);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void upload(final List<BasicNameValuePair> texts,
+                       final HashMap<File, String> files,final String url) {
+        new Thread(){
+            @Override
+            public void run()
+            {
+                DefaultHttpClient defaultHttpClient=iniClient();
+                HttpPost httpPost = iniHttpPost(texts, files, url);
+                try {
+                    Log.e("hhhh","zzzz");
+                    HttpResponse httpResponse = defaultHttpClient
+                            .execute(httpPost);
+                    if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                        // 上传成功
+                        closeConnect();
+                        //由于我这边服务器编码为gbk，所以编码设置gbk，如果乱码就改为utf-8
+                        String result = EntityUtils.toString(
+                                httpResponse.getEntity(), "utf-8");
+                        Log.e("上传成功........", result);
+                        PictureFileUtils.deleteCacheDirFile(PersonalActivity.this);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(PersonalActivity.this, "成功", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        });
+                    }
+                } catch (ClientProtocolException e) {
+                    // e.printStackTrace();
+                } catch (IOException e) {
+                    // e.printStackTrace();
+                } finally {
+
+                }
+            }
+        }.start();
     }
 }

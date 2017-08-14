@@ -16,10 +16,75 @@ public class ReplyInfo {
     private String phone;
     private String createTime;
     private String replyId;
-    private String avater;
+    private String avatar;
     private String images;
     private String contentReply;
     private List<String> imagesList=new ArrayList<String>();
+
+    private int replyCnt;
+    private int zanCnt;
+    private int isZan;//1：赞过  0：未赞过
+    private int zanId;
+    private int cid;
+    private int themeFlag=0;//0:没有1:有
+    private String customTime;
+
+
+    public String getCustomTime() {
+        return customTime;
+    }
+
+    public void setCustomTime(String customTime) {
+        this.customTime = customTime;
+    }
+
+    public int getThemeFlag() {
+        return themeFlag;
+    }
+
+    public void setThemeFlag(int themeFlag) {
+        this.themeFlag = themeFlag;
+    }
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
+
+    public int getReplyCnt() {
+        return replyCnt;
+    }
+
+    public void setReplyCnt(int replyCnt) {
+        this.replyCnt = replyCnt;
+    }
+
+    public int getZanCnt() {
+        return zanCnt;
+    }
+
+    public void setZanCnt(int zanCnt) {
+        this.zanCnt = zanCnt;
+    }
+
+    public int getIsZan() {
+        return isZan;
+    }
+
+    public void setIsZan(int isZan) {
+        this.isZan = isZan;
+    }
+
+    public int getZanId() {
+        return zanId;
+    }
+
+    public void setZanId(int zanId) {
+        this.zanId = zanId;
+    }
 
     public List<String> getImagesList() {
         return imagesList;
@@ -101,12 +166,13 @@ public class ReplyInfo {
         this.replyId = replyId;
     }
 
-    public String getAvater() {
-        return avater;
+
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setAvater(String avater) {
-        this.avater = avater;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getImages() {

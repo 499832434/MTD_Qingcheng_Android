@@ -66,7 +66,7 @@ public class MessageFabulousAdapter extends BaseAdapter {
         if(TextUtils.isEmpty(mData.get(position).getContent())){
             holder.contentTV.setVisibility(View.GONE);
         }else{
-            holder.contentTV.setText(mData.get(position).getContent());
+            holder.contentTV.setText("赞了我:"+mData.get(position).getContent());
             holder.contentTV.setVisibility(View.VISIBLE);
         }
         holder.nameTV.setText(mData.get(position).getNickName());

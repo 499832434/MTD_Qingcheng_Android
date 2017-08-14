@@ -49,7 +49,7 @@ public class BindPhoneActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_bind_phone);
+        setContentView(R.layout.activity_bind_phone);
 
         MobSDK.init(BindPhoneActivity.this, "1fb79eff89450", "b724cc5addb70159fe06b2ae0555838a");
         flag=getIntent().getStringExtra("flag");

@@ -95,10 +95,11 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
     private int positionFlag;
     private int cid;
     private LinearLayout pictureLL;
+    private int toastFlag=0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_circle_detail);
+        setContentView(R.layout.activity_circle_detail);
 //        info=getIntent().getParcelableExtra(CircleFragment.CIRCLEFLAG);
         positionFlag=getIntent().getIntExtra("position", 0);
         cid=getIntent().getIntExtra("cid", 0);
@@ -399,7 +400,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                     ReplyInfo  info=new ReplyInfo();
                                     info.setPhone(infoJo.getString("phone"));
                                     info.setContent(infoJo.getString("content"));
-                                    info.setAvater(infoJo.getString("avatar"));
+                                    info.setAvatar(infoJo.getString("avatar"));
                                     info.setCreateTime(DateUtils.getInterval(infoJo.getLong("create_time")));
                                     JSONArray imageArray=infoJo.getJSONArray("images");
                                     List<String> imageList=new ArrayList<String>();
@@ -431,6 +432,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                             e.printStackTrace();
                         }finally {
                             swipeToLoadLayout.setRefreshing(false);
+                            toastFlag=1;
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -485,10 +487,14 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                 info.setPricturlList(imagesList);
                                 setHead(info);
                             }else if(jsonObject.getString("code").equals("404")){
-                                toast(jsonObject.getString("msg"));
+                                if(1==toastFlag){
+                                    toast(jsonObject.getString("msg"));
+                                }
                                 finish();
                             }else{
-                                toast(jsonObject.getString("msg"));
+                                if(1==toastFlag){
+                                    toast(jsonObject.getString("msg"));
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -543,10 +549,14 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                                 }
                                 requestZanList();
                             }else if(jsonObject.getString("code").equals("404")){
-                                toast(jsonObject.getString("msg"));
+                                if(1==toastFlag){
+                                    toast(jsonObject.getString("msg"));
+                                }
                                 finish();
                             }else{
-                                toast(jsonObject.getString("msg"));
+                                if(1==toastFlag){
+                                    toast(jsonObject.getString("msg"));
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -681,6 +691,8 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
         swipeToLoadLayout.setLoadingMore(false);
         if(replyList.size()>0){
             request(replyList.get(replyList.size()-1).getReplyId()+"");
+        }else{
+            request("");
         }
     }
 

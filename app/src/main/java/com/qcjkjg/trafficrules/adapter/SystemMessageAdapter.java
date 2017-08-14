@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
-import com.qcjkjg.trafficrules.vo.MessageSystem;
 import com.qcjkjg.trafficrules.vo.Signup;
 import java.util.List;
 

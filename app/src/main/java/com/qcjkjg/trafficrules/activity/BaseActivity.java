@@ -97,10 +97,7 @@ public class BaseActivity extends AppCompatActivity {
                 .placeholder(R.drawable.item_blue)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
-    public void setContentViewWithStatusBarColorByColorPrimaryDark(int layoutResID) {
-        StatusBarColorCompat.setContentViewWithStatusBarColorByColorPrimaryDark(this, layoutResID);
-        StatusBarColorCompat.setStatusBarColor(BaseActivity.this, getResources().getColor(R.color.white));
-    }
+
 
     /**
      * 拨打电话
@@ -120,7 +117,9 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void toast(Context context,String str){
-        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+        if(!TextUtils.isEmpty(str)){
+            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -280,13 +279,15 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void showReplyDialog(final int flag,final ReplyInfo replyInfo,final int cid,final MessageInfo info,final int positionFlag) {
+//        if(dialog!=null){
+//            selectList.clear();
+//            recyclerView.setVisibility(View.GONE);
+//            num1TV.setVisibility(View.GONE);
+//            num2TV.setVisibility(View.GONE);
+//            dialog.show();
+//        }
         if(dialog!=null){
-            selectList.clear();
-            recyclerView.setVisibility(View.GONE);
-            num1TV.setVisibility(View.GONE);
-            num2TV.setVisibility(View.GONE);
-            dialog.show();
-            return;
+           dialog=null;
         }
         dialog = new AlertDialog.Builder(this, R.style.style_dialog).create();
         dialog.setCanceledOnTouchOutside(true);

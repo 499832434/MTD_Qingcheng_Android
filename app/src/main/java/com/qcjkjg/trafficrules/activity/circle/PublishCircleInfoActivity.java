@@ -63,7 +63,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_publish_circle_info);
+        setContentView(R.layout.activity_publish_circle_info);
 
         initView();
     }

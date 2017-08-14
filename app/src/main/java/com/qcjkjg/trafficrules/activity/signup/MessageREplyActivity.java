@@ -35,7 +35,7 @@ public class MessageReplyActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_message_reply);
+        setContentView(R.layout.activity_message_reply);
         initImageView();
         initView();
     }

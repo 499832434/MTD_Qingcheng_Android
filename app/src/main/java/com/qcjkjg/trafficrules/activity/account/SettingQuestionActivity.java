@@ -23,7 +23,7 @@ public class SettingQuestionActivity extends BaseActivity implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_setting_question);
+        setContentView(R.layout.activity_setting_question);
 
         initView();
     }

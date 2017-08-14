@@ -19,18 +19,14 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
-import com.qcjkjg.trafficrules.adapter.CircleFabulousAdapter;
-import com.qcjkjg.trafficrules.adapter.MessageFabulousAdapter;
-import com.qcjkjg.trafficrules.adapter.MyThemeAdapter;
-import com.qcjkjg.trafficrules.adapter.SystemMessageAdapter;
+import com.qcjkjg.trafficrules.adapter.*;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.DateUtils;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
-import com.qcjkjg.trafficrules.vo.MessageFabulous;
-import com.qcjkjg.trafficrules.vo.MessageInfo;
-import com.qcjkjg.trafficrules.vo.MessageTheme;
-import com.qcjkjg.trafficrules.vo.Signup;
+import com.qcjkjg.trafficrules.vo.*;
+import de.greenrobot.event.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +48,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     private List<Signup> signList=new ArrayList<Signup>();//0:系统消息
     private List<MessageInfo> infoList=new ArrayList<MessageInfo>();//3:赞的车友
     private List<MessageTheme> themeList=new ArrayList<MessageTheme>();//1:我的主题
+    private List<ReplyInfo> newThemeList=new ArrayList<ReplyInfo>();//1:我的主题
     private List<MessageInfo> fabulousList=new ArrayList<MessageInfo>();//2:收到的赞
     private SwipeToLoadLayout swipeToLoadLayout;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -59,7 +56,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_base_listview);
+        setContentView(R.layout.activity_base_listview);
+        EventBus.getDefault().register(this);
         initData();
         initView();
     }
@@ -104,7 +102,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 break;
             case 1:
                 ((CustomTitleBar) findViewById(R.id.customTitleBar)).setTitleTextView("我的主题");
-                adapter1=new MyThemeAdapter(BaseListViewActivity.this,themeList);
+                adapter1=new MyThemeAdapter(BaseListViewActivity.this,newThemeList,0);
                 listView.setAdapter(adapter1);
                 break;
             case 2:
@@ -316,12 +314,13 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                             if (jsonObject.getString("code").equals("0")) {
                                 if(cid==-1){
                                     themeList.clear();
+                                    newThemeList.clear();
                                 }
                                 JSONArray infoArr=jsonObject.getJSONArray("info");
 
                                 for(int i=0;i<infoArr.length();i++){
                                     JSONObject obj=infoArr.getJSONObject(i);
-                                    MessageInfo info=new MessageInfo();
+                                    ReplyInfo info=new ReplyInfo();
                                     info.setCid(obj.getInt("c_id"));
                                     cid=obj.getInt("c_id");
                                     info.setReplyCnt(obj.getInt("reply_cnt"));
@@ -329,7 +328,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                     info.setContent(obj.getString("content"));
                                     info.setPhone(obj.getString("phone"));
                                     String dateStr=sdf.format(new Date(obj.getLong("create_time") * 1000));
-//                                    info.setCustomTime(dateStr);
+                                    info.setCustomTime(dateStr);
                                     info.setCreateTime(DateUtils.getInterval(obj.getLong("create_time")));
                                     info.setZanCnt(obj.getInt("zan_cnt"));
                                     info.setAvatar(obj.getString("avatar"));
@@ -339,10 +338,10 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                     for(int j=0;j<array.length();j++){
                                         imagesList.add((String) array.get(j));
                                     }
-                                    info.setPricturlList(imagesList);
+                                    info.setImagesList(imagesList);
 
                                     if(themeList.size()==0){
-                                        List<MessageInfo> messageList=new ArrayList<MessageInfo>();
+                                        List<ReplyInfo> messageList=new ArrayList<ReplyInfo>();
                                         MessageTheme theme=new MessageTheme();
                                         theme.setTime(dateStr);
                                         messageList.add(info);
@@ -353,7 +352,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                         for(int j=0;j<themeList.size();j++){
                                             if(dateStr.equals(themeList.get(j).getTime())){
                                                 MessageTheme theme=themeList.get(j);
-                                                List<MessageInfo> messageList=theme.getList();
+                                                List<ReplyInfo> messageList=theme.getList();
                                                 messageList.add(info);
                                                 theme.setList(messageList);
                                                 themeList.set(j,theme);
@@ -362,7 +361,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                             }
                                         }
                                         if(flag){
-                                            List<MessageInfo> messageList=new ArrayList<MessageInfo>();
+                                            List<ReplyInfo> messageList=new ArrayList<ReplyInfo>();
                                             MessageTheme theme=new MessageTheme();
                                             theme.setTime(dateStr);
                                             messageList.add(info);
@@ -372,6 +371,15 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                     }
                                 }
                                 if(themeList.size()>0){
+                                    for(int i=0;i<themeList.size();i++){
+                                        for(int j=0;j<themeList.get(i).getList().size();j++){
+                                            ReplyInfo info=themeList.get(i).getList().get(j);
+                                            if(j==0){
+                                                info.setThemeFlag(1);
+                                            }
+                                            newThemeList.add(info);
+                                        }
+                                    }
                                     adapter1.notifyDataSetChanged();
                                 }
                             }else{
@@ -475,5 +483,46 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
             }
         };
         InitApp.initApp.addToRequestQueue(request);
+    }
+
+
+    public  void updataItem(MessageInfo infoFlag,int position){
+        ReplyInfo info=newThemeList.get(position);
+        info.setZanCnt(infoFlag.getZanCnt());
+        info.setReplyCnt(infoFlag.getReplyCnt());
+        info.setIsZan(infoFlag.getIsZan());
+        newThemeList.set(position,info);
+        int firstvisible = listView.getFirstVisiblePosition();
+        int lastvisibale = listView.getLastVisiblePosition();
+        if(position>=firstvisible&&position<=lastvisibale){
+            View view = listView.getChildAt(position - firstvisible);
+            MyThemeAdapter.ViewHolder viewHolder = (MyThemeAdapter.ViewHolder) view.getTag();
+            //然后使用viewholder去更新需要更新的view。
+            viewHolder.leaveTV.setText(infoFlag.getReplyCnt()+"");
+            viewHolder.fabulousTV.setText(infoFlag.getZanCnt()+"");
+            if(infoFlag.getIsZan()==1){
+                viewHolder.fabulousIV.setImageResource(R.drawable.ic_praise_s);
+                viewHolder.fabulousIV.setTag(1);
+            }else{
+                viewHolder.fabulousIV.setImageResource(R.drawable.ic_praise_n);
+                viewHolder.fabulousIV.setTag(0);
+            }
+        }
+
+    }
+
+
+    public void onEvent(CircleDataUpEvent event) {
+        MessageInfo info=event.getInfo();
+        int postion=event.getPositon();
+        if(postion<0){
+            return;
+        }
+        updataItem(info, postion);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

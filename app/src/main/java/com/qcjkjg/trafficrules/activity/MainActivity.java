@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         PushManager.getInstance().initialize(this.getApplicationContext(), QingChenPushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();

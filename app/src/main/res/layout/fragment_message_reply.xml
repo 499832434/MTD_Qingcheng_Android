@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <ListView android:layout_width="match_parent"
-              android:dividerHeight="0.5dp"
-              android:divider="#e1e1e1"
-              android:id="@+id/replyLV"
-              android:layout_height="match_parent">
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+            android:id="@+id/swipeToLoadLayout"
+            custom:swipe_style="classic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff">
+        <include
+                android:id="@id/swipe_refresh_header"
+                layout="@layout/layout_google_hook_header" />
 
-    </ListView>
+        <ListView android:layout_width="match_parent"
+                  android:id="@+id/swipe_target"
+                  android:divider="@null"
+                  android:layout_height="match_parent">
+        </ListView>
+
+        <include
+                android:id="@id/swipe_load_more_footer"
+                layout="@layout/layout_classic_footer" />
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 </LinearLayout>

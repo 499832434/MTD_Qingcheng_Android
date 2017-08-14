@@ -43,7 +43,7 @@ public class SignupContentActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithStatusBarColorByColorPrimaryDark(R.layout.activity_signup_content);
+        setContentView(R.layout.activity_signup_content);
 
         signup=getIntent().getParcelableExtra(MainActivity.SINGUPTAG);
         initView();
