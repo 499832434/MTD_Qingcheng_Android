@@ -26,6 +26,7 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.fragment.AccountFragment;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
+import com.qcjkjg.trafficrules.fragment.ExamFragment;
 import com.qcjkjg.trafficrules.fragment.SignupFragment;
 import com.qcjkjg.trafficrules.service.QingChenIntentService;
 import com.qcjkjg.trafficrules.service.QingChenPushService;
@@ -148,7 +149,7 @@ public class MainActivity extends BaseActivity {
             if (position == 0) {
                 return new SignupFragment();
             } else if (position == 1) {
-                return new Fragment();
+                return new ExamFragment();
             } else if (position == 2) {
                 circleFragment=new CircleFragment();
                 return circleFragment;

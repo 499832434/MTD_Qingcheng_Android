@@ -91,6 +91,7 @@ dependencies {
     compile project(':umeng')
     compile(name: 'swipetoloadLayout', ext: 'aar')
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.2.1'
 //    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'me.codeboy.android:cycle-view-pager:2.0.0'
     compile 'com.mcxiaoke.volley:library:1.0.18'
