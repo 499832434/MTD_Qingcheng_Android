@@ -80,7 +80,6 @@ public class DbHelper extends AbstractDatabaseHelper {
     }
 
 
-
     @Override
     protected String getTag() {
         return TAG;
