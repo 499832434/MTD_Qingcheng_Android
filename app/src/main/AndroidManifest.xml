@@ -108,7 +108,15 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
+        <activity android:name=".activity.exam.SubClassActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
         <activity android:name=".activity.account.MyMoneyActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity android:name=".activity.exam.AnswerActivity"
                   android:screenOrientation="portrait"
                 >
         </activity>
@@ -120,11 +128,23 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
+        <activity android:name=".activity.exam.SubchapterActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
         <activity android:name=".activity.circle.CircleDetailActivity"
                   android:screenOrientation="portrait"
                 >
         </activity>
         <activity android:name=".activity.account.PersonalActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity android:name=".activity.exam.VipActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity android:name=".activity.exam.ErrorCollectActivity"
                   android:screenOrientation="portrait"
                 >
         </activity>

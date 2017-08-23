@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="subclass">
+        <item>文字题</item>
+        <item>图片题</item>
+        <item>判断题</item>
+        <item>单选题</item>
+        <item>时间题</item>
+        <item>速度题</item>
+        <item>距离题</item>
+        <item>罚款题</item>
+        <item>标志题</item>
+        <item>手势题</item>
+        <item>信号灯</item>
+        <item>记分题</item>
+        <item>酒驾题</item>
+        <item>标线题</item>
+        <item>灯光题</item>
+        <item>装置题</item>
+        <item>路况题</item>
+        <item>仪表题</item>
+    </string-array>
+    <string-array name="subtype1_chapter">
+        <item>道路交通安全法律、法规和规章-101</item>
+        <item>交通信号及其含义-102</item>
+        <item>安全行车基础知识-103</item>
+        <item>机动车驾驶操作相关基础-104</item>
+        <item>货车专项-105</item>
+        <item>客车专项-106</item>
+        <item>道路交通安全法-107</item>
+        <item>交通信号-108</item>
+        <item>安全行车、文明驾驶-109</item>
+        <item>地方题库-110</item>
+    </string-array>
+    <string-array name="subtype4_chapter">
+        <item>违法行为综合判断与案例分析-201</item>
+        <item>安全行车常识-202</item>
+        <item>常见交通标志、标线和交通手势辨识-203</item>
+        <item>驾驶职业道德和文明驾驶常识-204</item>
+        <item>恶劣气候和交通道路条件下驾驶常识-205</item>
+        <item>紧急情况下避险常识-206</item>
+        <item>交通事故救护及常见危化品处置常识-207</item>
+        <item>地方题库-210</item>
+        <item>摩托车安全文明驾驶-212</item>
+    </string-array>
+
+    <string-array name="vip">
+        <item>1.经编技巧题库(一)-VIP2</item>
+        <item>2.经编技巧题库(二)-VIP3</item>
+        <item>3.经编技巧题库(三)-VIP4</item>
+        <item>4.经编技巧题库(四)-VIP5</item>
+        <item>5.经编技巧题库(五)-VIP6</item>
+        <item>6.经编技巧题库(六)-VIP7</item>
+    </string-array>
+</resources>

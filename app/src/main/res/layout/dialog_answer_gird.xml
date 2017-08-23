@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="#ffffff"
+              android:gravity="center"
+              android:id="@+id/LL"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:id="@+id/bottomRL"
+                    android:layout_alignParentBottom="true"
+                    android:paddingRight="15dp"
+                    android:layout_height="48dp">
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:id="@+id/collectIV"
+                   android:src="@drawable/ic_stars_n"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:textColor="#666666"
+                  android:text="收藏"
+                  android:layout_toRightOf="@+id/collectIV"
+                  android:textSize="16sp"
+                />
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:layout_toLeftOf="@+id/rightTV"
+                   android:src="@drawable/ic_tab_r"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:id="@+id/rightTV"
+                  android:layout_toLeftOf="@+id/IV2"
+                  android:textColor="#62d35f"
+                  android:text="0"
+                  android:textSize="16sp"
+                />
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:id="@+id/IV2"
+                   android:layout_toLeftOf="@+id/wrongTV"
+                   android:src="@drawable/ic_tab_x"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:id="@+id/wrongTV"
+                  android:layout_toLeftOf="@+id/IV3"
+                  android:textColor="#fe6464"
+                  android:text="0"
+                  android:textSize="16sp"
+                />
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:id="@+id/IV3"
+                   android:layout_toLeftOf="@+id/numFlagTV"
+                   android:src="@drawable/ic_ti"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:gravity="center_vertical"
+                  android:layout_centerVertical="true"
+                  android:layout_alignParentRight="true"
+                  android:id="@+id/numFlagTV"
+                  android:textColor="#666666"
+                  android:text="0/1000"
+                  android:textSize="16sp"
+                />
+    </RelativeLayout>
+    <View
+            android:layout_width="match_parent"
+            android:background="#F2F2F2"
+            android:layout_height="0.5dp"/>
+    <GridView android:layout_width="match_parent"
+              android:numColumns="6"
+              android:listSelector="@color/transparent"
+              android:paddingBottom="10dp"
+              android:paddingTop="10dp"
+              android:id="@+id/subGV"
+              android:verticalSpacing="10dp"
+              android:layout_height="300dp">
+
+    </GridView>
+</LinearLayout>

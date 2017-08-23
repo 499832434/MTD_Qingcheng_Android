@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.qcjkjg.trafficrules.view.CustomTitleBar
+            android:id="@+id/customTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            custom:text="答题"
+            />
+    <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_below="@+id/customTitleBar"
+            android:layout_above="@+id/V"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+    <View android:layout_width="match_parent" android:layout_height="0.5dp"
+            android:background="#e1e1e1"
+          android:id="@+id/V"
+            android:layout_above="@+id/bottomRL"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:id="@+id/bottomRL"
+                    android:layout_alignParentBottom="true"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_height="48dp">
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:id="@+id/collectIV"
+                android:src="@drawable/ic_stars_n"
+                android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                  android:textColor="#666666"
+                  android:text="收藏"
+                  android:layout_toRightOf="@+id/collectIV"
+                  android:textSize="16sp"
+                />
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:layout_toLeftOf="@+id/rightTV"
+                   android:src="@drawable/ic_tab_r"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:id="@+id/rightTV"
+                  android:layout_toLeftOf="@+id/IV2"
+                  android:textColor="#62d35f"
+                  android:text="0"
+                  android:textSize="16sp"
+                />
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:id="@+id/IV2"
+                   android:layout_toLeftOf="@+id/wrongTV"
+                   android:src="@drawable/ic_tab_x"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                  android:id="@+id/wrongTV"
+                  android:layout_toLeftOf="@+id/IV3"
+                  android:textColor="#fe6464"
+                  android:text="0"
+                  android:textSize="16sp"
+                />
+        <ImageView android:layout_width="48dp"
+                   android:layout_height="48dp"
+                   android:id="@+id/IV3"
+                   android:layout_toLeftOf="@+id/numFlagTV"
+                   android:src="@drawable/ic_ti"
+                   android:scaleType="centerInside"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:gravity="center_vertical"
+                  android:layout_centerVertical="true"
+                  android:layout_alignParentRight="true"
+                  android:id="@+id/numFlagTV"
+                  android:textColor="#666666"
+                  android:text="0/1000"
+                  android:textSize="16sp"
+                />
+    </RelativeLayout>
+</RelativeLayout>

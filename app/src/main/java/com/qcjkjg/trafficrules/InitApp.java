@@ -42,14 +42,16 @@ public class InitApp extends Application{
     public static final String USER_IS_VIP_KEY = "USER_IS_VIP_KEY";
     public static final String USER_PLATFORM_KEY = "USER_PLATFORM_KEY";//0:QQ 1:WEIXIN
     public static final String USER_CLIENT_ID_KEY = "USER_CLIENT_ID_KEY";
+    public static final String USER_CAR_TYPE_KEY = "USER_CAR_TYPE_KEY";//驾驶证类型
     public static final String USER_CLIENT_ID_KEY_FLAG = "USER_CLIENT_ID_KEY_FLAG";
+    public static final String USER_COLLECT_SUB_KEY = "USER_COLLECT_SUB_KEY";//收藏题目
 
 
 
 
     public static String VERSION = "4.1";
     public static String DEVICE_TYPE = "0";
-    public static String DB_NAME = "sci99_mobile_news2.db";
+    public static String DB_NAME = "qcAnswer.db";
     private String appPkgName = null;
     public static String PUBLIC_KEY = "56CD79BAB508342D8B2BAEEABD70021B";
     public static InitApp initApp;

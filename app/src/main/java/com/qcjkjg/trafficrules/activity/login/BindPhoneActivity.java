@@ -212,7 +212,7 @@ public class BindPhoneActivity extends BaseActivity{
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("phone", getUserInfo(1));
+                params.put("phone", ((EditText) findViewById(R.id.phoneET)).getText().toString().trim());
                 params.put("client_id", getUserInfo(4));
                 params.put("device_type", InitApp.DEVICE_TYPE);
                 return params;

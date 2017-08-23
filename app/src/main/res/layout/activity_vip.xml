@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.qcjkjg.trafficrules.view.CustomTitleBar
+            android:id="@+id/customTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            custom:text="VIP服务"
+            />
+    <ScrollView android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:layout_height="wrap_content">
+        <com.qcjkjg.trafficrules.view.MyListView
+                android:layout_width="match_parent"
+                android:id="@+id/vipLV"
+                android:divider="@null"
+                android:layout_height="wrap_content">
+
+        </com.qcjkjg.trafficrules.view.MyListView>
+    </ScrollView>
+</LinearLayout>

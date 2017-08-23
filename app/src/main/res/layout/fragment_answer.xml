@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                >
+            <TextView android:layout_width="wrap_content"
+                      android:text=""
+                      android:id="@+id/subTypeTV"
+                      android:background="@drawable/bg_label"
+                      android:layout_height="wrap_content"/>
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/subTitleTV"
+                      android:lineSpacingExtra="5dp"
+                      android:text="@string/content"/>
+        </RelativeLayout>
+
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/a10001"
+                   android:id="@+id/subPicIV"
+                   android:layout_marginBottom="10dp"
+                   android:layout_marginTop="10dp"
+                   android:scaleType="fitXY"
+                />
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:id="@+id/aLL"
+                      android:layout_height="40dp">
+            <ImageView android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:id="@+id/aIV"
+                       android:src="@drawable/ic_a"
+                       android:scaleType="centerInside"
+                    />
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:gravity="center_vertical"
+                      android:text=""
+                      android:id="@+id/aTV"
+                      android:textColor="#333333"
+                      android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:id="@+id/bLL"
+                      android:layout_height="40dp">
+            <ImageView android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:id="@+id/bIV"
+                       android:src="@drawable/ic_b"
+                       android:scaleType="centerInside"
+                    />
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:gravity="center_vertical"
+                      android:text=""
+                      android:id="@+id/bTV"
+                      android:textColor="#333333"
+                      android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:id="@+id/cLL"
+                      android:layout_height="40dp">
+            <ImageView android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:id="@+id/cIV"
+                       android:src="@drawable/ic_c"
+                       android:scaleType="centerInside"
+                    />
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:gravity="center_vertical"
+                      android:text=""
+                      android:id="@+id/cTV"
+                      android:textColor="#333333"
+                      android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:id="@+id/dLL"
+                      android:layout_height="40dp">
+            <ImageView android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:id="@+id/dIV"
+                       android:src="@drawable/ic_d"
+                       android:scaleType="centerInside"
+                    />
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:gravity="center_vertical"
+                      android:text=""
+                      android:id="@+id/dTV"
+                      android:textColor="#333333"
+                      android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:id="@+id/detailLL"
+                      android:visibility="gone"
+                      android:layout_height="wrap_content">
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="60dp"
+                          android:orientation="horizontal"
+                    >
+                <View android:layout_width="0dp"
+                      android:layout_height="0.5dp"
+                      android:layout_marginLeft="16dp"
+                      android:layout_marginRight="5dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="#d2d2d2"
+                      android:layout_weight="1"
+                        />
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:text="试题解析"
+                          android:layout_gravity="center_vertical"
+                          android:textColor="#adadad"
+                          android:layout_weight="1"
+                          android:singleLine="true"
+                          android:gravity="center_horizontal"
+                        />
+                <View android:layout_width="0dp"
+                      android:layout_height="0.5dp"
+                      android:layout_marginLeft="5dp"
+                      android:layout_marginRight="16dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="#d2d2d2"
+                      android:layout_weight="1"
+                        />
+            </LinearLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="48dp">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerVertical="true"
+                          android:textSize="16sp"
+                          android:id="@+id/subAnswerTV"
+                          android:text="答案   B"
+                          android:textColor="#333333"
+                        />
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerVertical="true"
+                          android:textSize="16sp"
+                          android:text="难度"
+                          android:textColor="#333333"
+                          android:layout_toLeftOf="@+id/starIV1"
+                        />
+                <ImageView android:layout_width="20dp"
+                           android:src="@drawable/ic_stars_n"
+                           android:scaleType="centerInside"
+                           android:id="@+id/starIV1"
+                           android:layout_toLeftOf="@+id/starIV2"
+                           android:layout_centerVertical="true"
+                           android:layout_height="20dp"/>
+                <ImageView android:layout_width="20dp"
+                           android:src="@drawable/ic_stars_n"
+                           android:id="@+id/starIV2"
+                           android:layout_toLeftOf="@+id/starIV3"
+                           android:scaleType="centerInside"
+                           android:layout_centerVertical="true"
+                           android:layout_height="20dp"/>
+                <ImageView android:layout_width="20dp"
+                           android:src="@drawable/ic_stars_n"
+                           android:id="@+id/starIV3"
+                           android:layout_toLeftOf="@+id/starIV4"
+                           android:scaleType="centerInside"
+                           android:layout_centerVertical="true"
+                           android:layout_height="20dp"/>
+                <ImageView android:layout_width="20dp"
+                           android:id="@+id/starIV4"
+                           android:layout_toLeftOf="@+id/starIV5"
+                           android:src="@drawable/ic_stars_n"
+                           android:scaleType="centerInside"
+                           android:layout_centerVertical="true"
+                           android:layout_height="20dp"/>
+                <ImageView android:layout_width="20dp"
+                           android:id="@+id/starIV5"
+                           android:src="@drawable/ic_stars_n"
+                           android:scaleType="centerInside"
+                           android:layout_centerVertical="true"
+                           android:layout_alignParentRight="true"
+                           android:layout_height="20dp"/>
+            </RelativeLayout>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerVertical="true"
+                      android:textSize="16sp"
+                      android:id="@+id/subInfosTV"
+                      android:text="@string/content"
+                      android:textColor="#333333"
+                      android:lineSpacingExtra="5dp"
+                    />
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginBottom="10dp"
+                       android:layout_marginTop="10dp"
+                       android:scaleType="fitXY"
+                       android:id="@+id/infoPicIV"
+                    />
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="60dp"
+                          android:orientation="horizontal"
+                    >
+                <View android:layout_width="0dp"
+                      android:layout_height="0.5dp"
+                      android:layout_marginLeft="16dp"
+                      android:layout_marginRight="5dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="#d2d2d2"
+                      android:layout_weight="1"
+                        />
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:text="答题技巧语音"
+                          android:layout_gravity="center_vertical"
+                          android:textColor="#adadad"
+                          android:layout_weight="1"
+                          android:singleLine="true"
+                          android:gravity="center_horizontal"
+                        />
+                <View android:layout_width="0dp"
+                      android:layout_height="0.5dp"
+                      android:layout_marginLeft="5dp"
+                      android:layout_marginRight="16dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="#d2d2d2"
+                      android:layout_weight="1"
+                        />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="200dp"
+                          android:orientation="horizontal"
+                          android:gravity="center"
+                          android:layout_gravity="center_horizontal"
+                          android:background="@drawable/ic_bg_play"
+                          android:layout_height="40dp">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textColor="#ffffff"
+                          android:text="播放语音"
+                          android:id="@+id/soundTV"
+                          android:layout_gravity="center"
+                          android:drawablePadding="10dp"
+                          android:drawableLeft="@drawable/ic_play"
+                          android:textSize="16sp"
+                        />
+            </LinearLayout>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerVertical="true"
+                      android:textSize="16sp"
+                      android:id="@+id/vipTV"
+                      android:visibility="gone"
+                      android:layout_marginTop="10dp"
+                      android:text="@string/content"
+                      android:textColor="#333333"
+                      android:lineSpacingExtra="5dp"
+                    />
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:visibility="gone"
+                       android:layout_marginBottom="10dp"
+                       android:layout_marginTop="10dp"
+                       android:scaleType="fitXY"
+                       android:id="@+id/vipIV"
+                    />
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="60dp"
+                          android:orientation="horizontal"
+                    >
+                <View android:layout_width="0dp"
+                      android:layout_height="0.5dp"
+                      android:layout_marginLeft="16dp"
+                      android:layout_marginRight="5dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="#d2d2d2"
+                      android:layout_weight="1"
+                        />
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:text="统计"
+                          android:layout_gravity="center_vertical"
+                          android:textColor="#adadad"
+                          android:layout_weight="1"
+                          android:singleLine="true"
+                          android:gravity="center_horizontal"
+                        />
+                <View android:layout_width="0dp"
+                      android:layout_height="0.5dp"
+                      android:layout_marginLeft="5dp"
+                      android:layout_marginRight="16dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="#d2d2d2"
+                      android:layout_weight="1"
+                        />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent"
+                          android:orientation="horizontal"
+                          android:layout_height="wrap_content">
+                <LinearLayout android:layout_width="0dp"
+                              android:layout_weight="1"
+                              android:orientation="vertical"
+                              android:layout_height="wrap_content">
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textSize="16sp"
+                              android:text="我的错误率"
+                              android:layout_marginBottom="10dp"
+                              android:textColor="#333333"
+                            />
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textSize="14sp"
+                              android:id="@+id/myErrorTV"
+                              android:text="共做过3次,做错1次"
+                              android:textColor="#666666"
+                              android:layout_marginBottom="10dp"
+                            />
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp"
+                              android:layout_weight="1"
+                              android:orientation="vertical"
+                              android:layout_height="wrap_content">
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textSize="16sp"
+                              android:text="考友错误人数"
+                              android:layout_marginBottom="10dp"
+                              android:textColor="#333333"
+                            />
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textSize="14sp"
+                              android:id="@+id/errorNumTV"
+                              android:text="共1000人做错"
+                              android:textColor="#666666"
+                              android:layout_marginBottom="10dp"
+                            />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
