@@ -21,6 +21,7 @@ public class DbHelper extends AbstractDatabaseHelper {
     private static final String TAG = "DbHelper";
     private static final int DB_VERSION = 1;
 
+
     private static final String[] CREATE_SQLS = {
             "CREATE TABLE IF NOT EXISTS [qc_sub_answer] (" +
                     "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
