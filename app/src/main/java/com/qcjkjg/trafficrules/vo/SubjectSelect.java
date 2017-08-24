@@ -17,6 +17,8 @@ public class SubjectSelect {
     private int answerStatus;//0:未作答1:正确2:错误
     private String answerChoice;//答题选项
     private int subType;
+    private String carId;//车型
+    private String errorAnswer;//错题
 
     public SubjectSelect() {
         this.seqAnswer = "-1";
@@ -25,7 +27,9 @@ public class SubjectSelect {
         this.vipAnswer = "-1";
         this.topAnswer = "-1";
         this.collectAnswer = "-1";
+        this.errorAnswer = "-1";
         this.subType = 1;
+        this.carId = "1";
         this.answerStatus=0;
     }
 
@@ -131,5 +135,21 @@ public class SubjectSelect {
 
     public void setCollectAnswer(String collectAnswer) {
         this.collectAnswer = collectAnswer;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
+    }
+
+    public String getErrorAnswer() {
+        return errorAnswer;
+    }
+
+    public void setErrorAnswer(String errorAnswer) {
+        this.errorAnswer = errorAnswer;
     }
 }

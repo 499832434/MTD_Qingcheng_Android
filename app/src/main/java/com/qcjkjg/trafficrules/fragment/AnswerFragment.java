@@ -21,6 +21,7 @@ import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,6 +48,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private String checkedStr;//用户选择项
     private SubjectSelect subjectSelect;//数据库中题目信息
     private int answerNum=0,errorNum=0;
+    private List<String> moreList=new ArrayList<String>();//多选选项
 
     @Nullable
     @Override
@@ -154,28 +156,52 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         ((TextView)currentView.findViewById(R.id.dTV)).setText(subjectFlag.getSubD());
 
 
-        if("submemory".equals(type)){
-            setNoClick();
-            for(int i=0;i<abcdImageList.size();i++){
-                if(answerStr.equals(abcdImageList.get(i).getTag())){
-                    setAbcd(i,false);
-                    break;
-                }
+        if("3".equals(subjectFlag.getSubType())){
+            if(TextUtils.isEmpty(subjectSelect.getAnswerChoice())){
+                currentView.findViewById(R.id.makeB).setVisibility(View.VISIBLE);
+                currentView.findViewById(R.id.makeB).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(moreList.size()==0){
+                            mActivity.toast(mActivity,"请至少选择一个答案");
+                        }else{
+                            Collections.sort(moreList);
+                            StringBuffer sb=new StringBuffer();
+                            for(int i=0;i<moreList.size();i++){
+                                sb.append(moreList.get(i));
+                            }
+                            Log.e("gg",sb.toString());
+                        }
+                    }
+                });
+            }else{
+
             }
         }else{
-            if(!TextUtils.isEmpty(subjectSelect.getAnswerChoice())){
+            if("submemory".equals(type)){
                 setNoClick();
-                if(aIV.getTag().equals(subjectSelect.getAnswerChoice())){
-                    setAbcd(0,false);
-                }else if(bIV.getTag().equals(subjectSelect.getAnswerChoice())){
-                    setAbcd(1,false);
-                }else if(cIV.getTag().equals(subjectSelect.getAnswerChoice())){
-                    setAbcd(2,false);
-                }else{
-                    setAbcd(3,false);
+                for(int i=0;i<abcdImageList.size();i++){
+                    if(answerStr.equals(abcdImageList.get(i).getTag())){
+                        setAbcd(i,false);
+                        break;
+                    }
+                }
+            }else{
+                if(!TextUtils.isEmpty(subjectSelect.getAnswerChoice())){
+                    setNoClick();
+                    if(aIV.getTag().equals(subjectSelect.getAnswerChoice())){
+                        setAbcd(0,false);
+                    }else if(bIV.getTag().equals(subjectSelect.getAnswerChoice())){
+                        setAbcd(1,false);
+                    }else if(cIV.getTag().equals(subjectSelect.getAnswerChoice())){
+                        setAbcd(2,false);
+                    }else{
+                        setAbcd(3,false);
+                    }
                 }
             }
         }
+
 
 
     }
@@ -190,20 +216,36 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.aLL:
-                checkedStr="A";
-                setAbcd(0,true);
+                if("3".equals(subjectFlag.getSubType())){
+                    setMoreAbcd("A",aIV);
+                }else{
+                    checkedStr="A";
+                    setAbcd(0,true);
+                }
                 break;
             case R.id.bLL:
-                checkedStr="B";
-                setAbcd(1,true);
+                if("3".equals(subjectFlag.getSubType())){
+                    setMoreAbcd("B",bIV);
+                }else{
+                    checkedStr="B";
+                    setAbcd(1,true);
+                }
                 break;
             case R.id.cLL:
-                checkedStr="C";
-                setAbcd(2,true);
+                if("3".equals(subjectFlag.getSubType())){
+                    setMoreAbcd("C",cIV);
+                }else{
+                    checkedStr="C";
+                    setAbcd(2,true);
+                }
                 break;
             case R.id.dLL:
-                checkedStr="D";
-                setAbcd(3,true);
+                if("3".equals(subjectFlag.getSubType())){
+                    setMoreAbcd("D",dIV);
+                }else{
+                    checkedStr="D";
+                    setAbcd(3,true);
+                }
                 break;
         }
     }
@@ -211,16 +253,16 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private void setAbcd(int position,boolean flag){
         switch (position){
             case 0:
-                setAbcding(aIV,flag);
+                setAbcding(aIV, flag);
                 break;
             case 1:
-                setAbcding(bIV,flag);
+                setAbcding(bIV, flag);
                 break;
             case 2:
-                setAbcding(cIV,flag);
+                setAbcding(cIV, flag);
                 break;
             case 3:
-                setAbcding(dIV,flag);
+                setAbcding(dIV, flag);
                 break;
         }
     }
@@ -241,6 +283,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             if(flag){
                 mActivity.setWholeTV(false);
                 add(1);
+                setError();
             }
         }
         setWorngAbcd();
@@ -273,7 +316,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             }
             getPicture(subjectFlag.getVipPic(), ((ImageView) currentView.findViewById(R.id.vipIV)));
         }
-        ((TextView)currentView.findViewById(R.id.myErrorTV)).setText("共做过"+answerNum+"次,做错"+errorNum+"次");
+        ((TextView)currentView.findViewById(R.id.myErrorTV)).setText("共做过" + answerNum + "次,做错" + errorNum + "次");
     }
 
     private void setStar() {
@@ -324,6 +367,18 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
+        }else if("subcollectchapter".equals(type)){
+            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            subjectSelect.setCollectAnswer("0");
+        }else if("subcollectall".equals(type)){
+            subjectSelect.setChapterAnswer("0");
+            subjectSelect.setCollectAnswer("0");
+        }else if("suberrorchapter".equals(type)){
+            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            subjectSelect.setErrorAnswer("0");
+        }else if("suberrorall".equals(type)){
+            subjectSelect.setChapterAnswer("0");
+            subjectSelect.setErrorAnswer("0");
         }
         DbHelper db=new DbHelper(mActivity);
         db.addSub(subjectSelect);
@@ -341,6 +396,18 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
+        }else if("subcollectchapter".equals(type)){
+            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            subjectSelect.setCollectAnswer("0");
+        }else if("subcollectall".equals(type)){
+            subjectSelect.setChapterAnswer("0");
+            subjectSelect.setCollectAnswer("0");
+        }else if("suberrorchapter".equals(type)){
+            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            subjectSelect.setErrorAnswer("0");
+        }else if("suberrorall".equals(type)){
+            subjectSelect.setChapterAnswer("0");
+            subjectSelect.setErrorAnswer("0");
         }
         DbHelper db=new DbHelper(mActivity);
         return db.querySub(subjectSelect);
@@ -362,5 +429,29 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    private void setError(){
+        if("suberrorchapter".equals(type)||"suberrorall".equals(type)){
+            return;
+        }
+        DbHelper db=new DbHelper(mActivity);
+        db.addCollectSub(false,subjectFlag.getSubId(),fragmentType,subjectFlag.getSubChapter());
+    }
 
+    private void setMoreAbcd(String str,ImageView IV){
+        if(!"0".equals(IV.getTag())){
+            moreList.add(str);
+            IV.setImageResource(R.drawable.ic_bg_red);
+            IV.setTag("0");
+        }else{
+            for(int i=0;i<moreList.size();i++){
+                if(str.equals(moreList.get(i))){
+                    moreList.remove(i);
+                    IV.setImageResource(R.drawable.ic_bg_blue);
+                    IV.setTag(str);
+                    break;
+                }
+            }
+        }
+
+    }
 }

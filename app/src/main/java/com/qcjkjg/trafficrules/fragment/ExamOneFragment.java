@@ -11,10 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
-import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
-import com.qcjkjg.trafficrules.activity.exam.SubClassActivity;
-import com.qcjkjg.trafficrules.activity.exam.SubchapterActivity;
-import com.qcjkjg.trafficrules.activity.exam.VipActivity;
+import com.qcjkjg.trafficrules.activity.exam.*;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
@@ -117,6 +114,14 @@ public class ExamOneFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mActivity, VipActivity.class);
+                intent.putExtra("fragmentType", fragmentType + "");
+                startActivity(intent);
+            }
+        });
+        currentView.findViewById(R.id.cuotiTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, ErrorCollectActivity.class);
                 intent.putExtra("fragmentType", fragmentType + "");
                 startActivity(intent);
             }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:minHeight="60dp"
+                android:id="@+id/mainRL"
+                android:paddingLeft="15dp"
+                android:layout_height="wrap_content">
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="文字题"
+              android:id="@+id/subvipTV"
+              android:layout_alignParentLeft="true"
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="10dp"
+              android:textSize="16sp"
+              android:layout_toLeftOf="@+id/subclassNumTV"
+              android:textColor="#333333"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="100道题"
+              android:id="@+id/subvipNumTV"
+              android:layout_centerVertical="true"
+              android:textSize="14sp"
+              android:layout_toLeftOf="@+id/IV"
+              android:layout_marginRight="5dp"
+              android:textColor="#3EB7F3"/>
+
+    <ImageView android:layout_width="20dp"
+               android:id="@+id/IV"
+               android:src="@drawable/ic_left"
+               android:layout_centerVertical="true"
+               android:layout_alignParentRight="true"
+               android:layout_marginRight="5dp"
+               android:scaleType="centerInside"
+               android:layout_height="20dp"/>
+    <View android:layout_width="match_parent"
+          android:layout_alignParentBottom="true"
+          android:background="#e1e1e1"
+          android:layout_height="0.5dp"/>
+</RelativeLayout>

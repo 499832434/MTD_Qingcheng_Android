@@ -77,7 +77,34 @@ public class AnswerActivity extends BaseActivity{
         }else if("subvip".equals(type)){
             String subvip=getIntent().getStringExtra("subvip");
             subjectList=helper.getSubjectList(fragmentType,subvip,"subvip");
+        }else if("subcollectchapter".equals(type)){
+            String subcollectchapter=getIntent().getStringExtra("subcollectchapter");
+            DbHelper db=new DbHelper(AnswerActivity.this);
+            List<String> list=db.selectCollectChapterSubid(true,subcollectchapter,fragmentType);
+            if(list.size()!=0){
+                subjectList=helper.getSubjectCollectList(fragmentType, list);
+            }
+        }else if("subcollectall".equals(type)){
+            DbHelper dbHelper=new DbHelper(AnswerActivity.this);
+            List<String> list=dbHelper.selectCollectAllSubid(true,fragmentType);
+            if(list.size()!=0){
+                subjectList=helper.getSubjectCollectList(fragmentType, list);
+            }
+        }else if("suberrorchapter".equals(type)){
+            String suberrorchapter=getIntent().getStringExtra("suberrorchapter");
+            DbHelper db=new DbHelper(AnswerActivity.this);
+            List<String> list=db.selectCollectChapterSubid(false,suberrorchapter,fragmentType);
+            if(list.size()!=0){
+                subjectList=helper.getSubjectCollectList(fragmentType, list);
+            }
+        }else if("suberrorall".equals(type)){
+            DbHelper dbHelper=new DbHelper(AnswerActivity.this);
+            List<String> list=dbHelper.selectCollectAllSubid(false,fragmentType);
+            if(list.size()!=0){
+                subjectList=helper.getSubjectCollectList(fragmentType, list);
+            }
         }
+
 
 
 
@@ -184,6 +211,22 @@ public class AnswerActivity extends BaseActivity{
         }else if("subvip".equals(type)){
             String subvip=getIntent().getStringExtra("subvip");
             subjectSelect.setVipAnswer(subvip);
+        }else if("subcollectchapter".equals(type)){
+            String subcollectchapter=getIntent().getStringExtra("subcollectchapter");
+            subjectSelect.setChapterAnswer(subcollectchapter);
+            subjectSelect.setCollectAnswer("0");
+        }else if("subcollectall".equals(type)){
+            String subcollectall=getIntent().getStringExtra("subcollectall");
+            subjectSelect.setChapterAnswer(subcollectall);
+            subjectSelect.setCollectAnswer("0");
+        }else if("suberrorchapter".equals(type)){
+            String suberrorchapter=getIntent().getStringExtra("suberrorchapter");
+            subjectSelect.setChapterAnswer(suberrorchapter);
+            subjectSelect.setErrorAnswer("0");
+        }else if("suberrorall".equals(type)){
+            String suberrorall=getIntent().getStringExtra("suberrorall");
+            subjectSelect.setChapterAnswer(suberrorall);
+            subjectSelect.setErrorAnswer("0");
         }
         if(flag){
             subjectSelect.setAnswerStatus(1);
@@ -208,11 +251,11 @@ public class AnswerActivity extends BaseActivity{
         try{
             DbHelper db=new DbHelper(AnswerActivity.this);
             if(flag){
-                db.addCollectSub(subId);
+                db.addCollectSub(true,subId,fragmentType,subjectList.get(fragmentPositon).getSubChapter());
                 collectIV.setImageResource(R.drawable.ic_stars);
                 collectIV.setTag("0");//收藏
             }else {
-                db.delectCollectSub(subId);
+                db.delectCollectSub(true,subId,fragmentType);
                 collectIV.setImageResource(R.drawable.ic_stars_n);
                 collectIV.setTag("1");//取消收藏
             }
@@ -225,7 +268,7 @@ public class AnswerActivity extends BaseActivity{
     public void getCollectStatus(int position){
         fragmentPositon=position;
         DbHelper db=new DbHelper(AnswerActivity.this);
-        boolean flag=db.selectCollectSub(subjectList.get(position).getSubId());
+        boolean flag=db.selectCollectSub(true,subjectList.get(position).getSubId(),fragmentType);
         if(flag){
             collectIV.setImageResource(R.drawable.ic_stars);
             collectIV.setTag("0");//收藏

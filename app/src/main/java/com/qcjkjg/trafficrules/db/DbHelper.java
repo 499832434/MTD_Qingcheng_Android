@@ -27,6 +27,7 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
                     "  [user_id] varchar(10) , " +//用户id
                     "  [sub_id] INTEGER , " +//题目id
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
                     "  [answer_num] INTEGER DEFAULT 0, " +//答过次数
                     "  [error_num] INTEGER DEFAULT 0, " +//答错次数 1是答错 0是默认
                     "  [seq_answer] varchar(10) DEFAULT '-1', " +//顺序
@@ -35,6 +36,7 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [vip_answer] varchar(10) DEFAULT '-1', " +//vip
                     "  [top_answer] varchar(10) DEFAULT '-1', " +//top
                     "  [collect_answer] varchar(10) DEFAULT '-1', " +//收藏
+                    "  [error_answer] varchar(10) DEFAULT '-1', " +//错题
                     "  [sub_type] INTEGER DEFAULT 1, " +//科目
                     "  [answer_status] INTEGER DEFAULT 0, " +//0:未作答1:正确2:错误
                     "  [answer_choice] varchar(10))", //答题结果
@@ -43,18 +45,32 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
                     "  [user_id] varchar(10) , " +//用户id
                     "  [sub_id] INTEGER , " +//题目id
-                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id]) ON CONFLICT IGNORE);"
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
+                    "  [sub_type] INTEGER DEFAULT 1, " +//科目
+                    "  [chapter_answer] varchar(10) DEFAULT '-1', " +//章节
+                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);",
+
+            "CREATE TABLE IF NOT EXISTS [qc_sub_error] (" +
+                    "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
+                    "  [user_id] varchar(10) , " +//用户id
+                    "  [sub_id] INTEGER , " +//题目id
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
+                    "  [sub_type] INTEGER DEFAULT 1, " +//科目
+                    "  [chapter_answer] varchar(10) DEFAULT '-1', " +//章节
+                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);"
 
     };
 
     private static final String[] UPDATE_SQLS = {
             "drop table if exists qc_sub_answer;",
             "drop table if exists qc_sub_collect;",
+            "drop table if exists qc_sub_error;",
 
             "CREATE TABLE IF NOT EXISTS [qc_sub_answer] (" +
                     "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
                     "  [user_id] varchar(10) , " +//用户id
                     "  [sub_id] INTEGER , " +//题目id
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
                     "  [answer_num] INTEGER DEFAULT 0, " +//答过次数
                     "  [error_num] INTEGER DEFAULT 0, " +//答错次数 1是答错 0是默认
                     "  [seq_answer] varchar(10) DEFAULT '-1', " +//顺序
@@ -63,6 +79,7 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [vip_answer] varchar(10) DEFAULT '-1', " +//vip
                     "  [top_answer] varchar(10) DEFAULT '-1', " +//top
                     "  [collect_answer] varchar(10) DEFAULT '-1', " +//收藏
+                    "  [error_answer] varchar(10) DEFAULT '-1', " +//错题
                     "  [sub_type] INTEGER DEFAULT 1, " +//科目
                     "  [answer_status] INTEGER DEFAULT 0, " +//0:未作答1:正确2:错误
                     "  [answer_choice] varchar(10))", //答题结果
@@ -71,7 +88,17 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
                     "  [user_id] varchar(10) , " +//用户id
                     "  [sub_id] INTEGER , " +//题目id
-                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id]) ON CONFLICT IGNORE);"
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
+                    "  [sub_type] INTEGER DEFAULT 1, " +//科目
+                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);",
+
+            "CREATE TABLE IF NOT EXISTS [qc_sub_error] (" +
+                    "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
+                    "  [user_id] varchar(10) , " +//用户id
+                    "  [sub_id] INTEGER , " +//题目id
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
+                    "  [sub_type] INTEGER DEFAULT 1, " +//科目
+                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);"
     };
 
     private Context ctx;
@@ -114,6 +141,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             ContentValues values = new ContentValues();
             values.put("user_id", ((BaseActivity)ctx).getUserInfo(1));
             values.put("sub_id", subjectSelect.getSubId());
+            values.put("car_id", ((BaseActivity)ctx).getUserInfo(5));
             values.put("answer_num",subjectSelect.getAnswerNum());
             values.put("error_num", subjectSelect.getErrorNum());
             values.put("seq_answer",subjectSelect.getSeqAnswer());
@@ -122,6 +150,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             values.put("vip_answer", subjectSelect.getVipAnswer());
             values.put("top_answer", subjectSelect.getTopAnswer());
             values.put("collect_answer", subjectSelect.getCollectAnswer());
+            values.put("error_answer", subjectSelect.getErrorAnswer());
             values.put("sub_type", subjectSelect.getSubType());
             values.put("answer_choice", subjectSelect.getAnswerChoice());
             values.put("answer_status", subjectSelect.getAnswerStatus());
@@ -146,7 +175,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         SubjectSelect subjectSelect1=new SubjectSelect();
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select * from qc_sub_answer where user_id=? and sub_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubId()+"",subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getSubType()+""});
+            cursor = this.mDb.rawQuery("select * from qc_sub_answer where user_id=? and sub_id=? and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubId()+"",((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
             while (cursor.moveToNext()) {
                 subjectSelect1.setAnswerChoice(cursor.getString(cursor.getColumnIndex("answer_choice")));
             }
@@ -204,7 +233,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         Cursor cursor = null;
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and answer_status=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and sub_type=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),subjectSelect.getAnswerStatus()+"",subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getSubType()+""});
+            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and car_id=? and answer_status=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),((BaseActivity)ctx).getUserInfo(5),subjectSelect.getAnswerStatus()+"",subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
             while (cursor.moveToNext()) {
                 cursor.getString(cursor.getColumnIndex("sub_id"));
             }
@@ -219,61 +248,22 @@ public class DbHelper extends AbstractDatabaseHelper {
         }
     }
 
-//    public final void addCollectSub(String subId){
-//        try {
-//            this.open(this.ctx);
-//            this.mDb.beginTransaction();
-//            ContentValues values = new ContentValues();
-//            values.put("user_id", ((BaseActivity)ctx).getUserInfo(1));
-//            values.put("sub_id",subId);
-//            this.mDb.insert("qc_sub_collect", null, values);
-//            this.mDb.setTransactionSuccessful();
-//        } catch (Exception e) {
-//
-//        } finally {
-//            try {
-//                this.mDb.endTransaction();
-//            } catch (Exception e) {
-//
-//            }
-//            this.close();
-//        }
-//    }
-//
-//    public final void delectCollectSub(String subId) {
-//        this.open(this.ctx);
-//        try {
-//            this.mDb.delete("qc_sub_collect", "user_id=? and sub_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId});
-//        } catch (Exception e) {
-//
-//        } finally {
-//            this.close();
-//        }
-//    }
-//
-//    public final boolean selectCollectSub(String subId) {
-//        Cursor cursor = null;
-//        try {
-//            this.open(this.ctx);
-//            cursor = this.mDb.rawQuery("select sub_id from qc_sub_collect where user_id=? and sub_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId});
-//            return cursor.moveToFirst();
-//        } catch (Exception e) {
-//            return cursor.moveToFirst();
-//        } finally {
-//            if (cursor != null && !cursor.isClosed()) {
-//                cursor.close();
-//            }
-//            this.close();
-//        }
-//    }
-    public final void addCollectSub(String subId){
+    //flag: true 收藏 ,false 错题
+    public final void addCollectSub(Boolean flag,String subId,String sub_type,String chapter_answer){
         try {
             this.open(this.ctx);
             this.mDb.beginTransaction();
             ContentValues values = new ContentValues();
-            values.put("user_id", ((BaseActivity)ctx).getUserInfo(1));
-            values.put("sub_id",subId);
-            this.mDb.insert("qc_sub_collect", null, values);
+            values.put("user_id", ((BaseActivity) ctx).getUserInfo(1));
+            values.put("sub_id", subId);
+            values.put("car_id", ((BaseActivity)ctx).getUserInfo(5));
+            values.put("sub_type",sub_type);
+            values.put("chapter_answer", chapter_answer);
+            if(flag){
+                this.mDb.insert("qc_sub_collect", null, values);
+            }else{
+                this.mDb.insert("qc_sub_error", null, values);
+            }
             this.mDb.setTransactionSuccessful();
         } catch (Exception e) {
 
@@ -287,10 +277,14 @@ public class DbHelper extends AbstractDatabaseHelper {
         }
 }
 
-    public final void delectCollectSub(String subId) {
+    public final void delectCollectSub(Boolean flag,String subId,String sub_type) {
         this.open(this.ctx);
         try {
-            this.mDb.delete("qc_sub_collect", "user_id=? and sub_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId});
+            if(flag){
+                this.mDb.delete("qc_sub_collect", "user_id=? and sub_id=? and car_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId, ((BaseActivity) ctx).getUserInfo(5), sub_type});
+            }else{
+                this.mDb.delete("qc_sub_error", "user_id=? and sub_id=? and car_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId, ((BaseActivity) ctx).getUserInfo(5), sub_type});
+            }
         } catch (Exception e) {
 
         } finally {
@@ -298,14 +292,92 @@ public class DbHelper extends AbstractDatabaseHelper {
         }
     }
 
-    public final boolean selectCollectSub(String subId) {
+    public final boolean selectCollectSub(Boolean flag,String subId,String sub_type) {
         Cursor cursor = null;
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select sub_id from qc_sub_collect where user_id=? and sub_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId});
+            if(flag){
+                cursor = this.mDb.rawQuery("select sub_id from qc_sub_collect where user_id=? and sub_id=? and car_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId,((BaseActivity) ctx).getUserInfo(5),sub_type});
+            }else{
+                cursor = this.mDb.rawQuery("select sub_id from qc_sub_error where user_id=? and sub_id=? and car_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId,((BaseActivity) ctx).getUserInfo(5),sub_type});
+            }
             return cursor.moveToFirst();
         } catch (Exception e) {
             return cursor.moveToFirst();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+    //查询收藏表中 按章节分类的数量
+    public final List<String> selectCollectChapter(Boolean flag,String sub_type) {
+        Cursor cursor = null;
+        try {
+            List<String> list=new ArrayList<String>();
+            this.open(this.ctx);
+            if(flag){
+                cursor = this.mDb.rawQuery("select chapter_answer,count(1) as a from qc_sub_collect where user_id=?  and car_id=? and sub_type=? group by chapter_answer", new String[]{((BaseActivity) ctx).getUserInfo(1), ((BaseActivity) ctx).getUserInfo(5),sub_type});
+            }else{
+                cursor = this.mDb.rawQuery("select chapter_answer,count(1) as a from qc_sub_error where user_id=?  and car_id=? and sub_type=? group by chapter_answer", new String[]{((BaseActivity) ctx).getUserInfo(1), ((BaseActivity) ctx).getUserInfo(5),sub_type});
+            }
+            while (cursor.moveToNext()) {
+                list.add(cursor.getString(cursor.getColumnIndex("chapter_answer"))+"-"+
+                        cursor.getString(cursor.getColumnIndex("a")));
+            }
+            return list;
+        } catch (Exception e) {
+            return new ArrayList<String>();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+    //查询收藏表中 按章节分类的题目id
+    public final List<String> selectCollectChapterSubid(Boolean flag,String sub_chapter,String sub_type) {
+        Cursor cursor = null;
+        try {
+            List<String> list=new ArrayList<String>();
+            this.open(this.ctx);
+            if(flag){
+                cursor = this.mDb.rawQuery("select sub_id from qc_sub_collect where user_id=?  and car_id=? and sub_type=? and chapter_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1), ((BaseActivity) ctx).getUserInfo(5),sub_type,sub_chapter});
+            }else{
+                cursor = this.mDb.rawQuery("select sub_id from qc_sub_error where user_id=?  and car_id=? and sub_type=? and chapter_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1), ((BaseActivity) ctx).getUserInfo(5),sub_type,sub_chapter});
+            }
+            while (cursor.moveToNext()) {
+                list.add(cursor.getString(cursor.getColumnIndex("sub_id")));
+            }
+            return list;
+        } catch (Exception e) {
+            return new ArrayList<String>();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+
+    //查询收藏表中 全部收藏题目id
+    public final List<String> selectCollectAllSubid(Boolean flag,String sub_type) {
+        Cursor cursor = null;
+        try {
+            List<String> list=new ArrayList<String>();
+            this.open(this.ctx);
+            if(flag){
+                cursor = this.mDb.rawQuery("select sub_id from qc_sub_collect where user_id=?  and car_id=? and sub_type=? ", new String[]{((BaseActivity) ctx).getUserInfo(1), ((BaseActivity) ctx).getUserInfo(5),sub_type});
+            }else{
+                cursor = this.mDb.rawQuery("select sub_id from qc_sub_error where user_id=?  and car_id=? and sub_type=? ", new String[]{((BaseActivity) ctx).getUserInfo(1), ((BaseActivity) ctx).getUserInfo(5),sub_type});
+            }
+            while (cursor.moveToNext()) {
+                list.add(cursor.getString(cursor.getColumnIndex("sub_id")));
+            }
+            return list;
+        } catch (Exception e) {
+            return new ArrayList<String>();
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -320,7 +392,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         List<SubjectSelect> subjectSelectList=new ArrayList<SubjectSelect>();
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select sub_id,answer_status from qc_sub_answer where user_id=?  and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getSubType()+""});
+            cursor = this.mDb.rawQuery("select sub_id,answer_status from qc_sub_answer where user_id=?  and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
             while (cursor.moveToNext()) {
                 SubjectSelect subjectSelect1=new SubjectSelect();
                 subjectSelect1.setSubId(cursor.getInt(cursor.getColumnIndex("sub_id")));
@@ -344,7 +416,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         List<String> list=new ArrayList<String>();
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select distinct sub_id from qc_sub_answer where user_id=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubType()+""});
+            cursor = this.mDb.rawQuery("select distinct sub_id from qc_sub_answer where user_id=? and sub_type=? and car_id=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubType()+"",((BaseActivity)ctx).getUserInfo(5)});
             while (cursor.moveToNext()) {
                 list.add(cursor.getString(cursor.getColumnIndex("sub_id")));
             }

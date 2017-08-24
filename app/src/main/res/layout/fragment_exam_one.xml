@@ -168,6 +168,7 @@
                       android:drawableTop="@drawable/ic_cuoti_shoucang"
                       android:textColor="#333333"
                       android:text="错题收藏"
+                      android:id="@+id/cuotiTV"
                       android:textSize="16sp"
                       android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="wrap_content"

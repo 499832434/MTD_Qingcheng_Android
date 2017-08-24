@@ -159,6 +159,18 @@ public class SubDialog extends Dialog {
             subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectList.get(0).getSubVip());
+        }else if("subcollectchapter".equals(type)){
+            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
+            subjectSelect.setCollectAnswer("0");
+        }else if("subcollectall".equals(type)){
+            subjectSelect.setChapterAnswer("0");
+            subjectSelect.setCollectAnswer("0");
+        }else if("suberrorchapter".equals(type)){
+            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
+            subjectSelect.setErrorAnswer("0");
+        }else if("suberrorall".equals(type)){
+            subjectSelect.setChapterAnswer("0");
+            subjectSelect.setErrorAnswer("0");
         }
         DbHelper db=new DbHelper(context);
         return db.queryWholeSub(subjectSelect);
