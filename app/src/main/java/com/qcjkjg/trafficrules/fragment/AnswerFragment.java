@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
-import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.vo.Subject;
@@ -157,25 +156,33 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
 
         if("3".equals(subjectFlag.getSubType())){
-            if(TextUtils.isEmpty(subjectSelect.getAnswerChoice())){
-                currentView.findViewById(R.id.makeB).setVisibility(View.VISIBLE);
-                currentView.findViewById(R.id.makeB).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(moreList.size()==0){
-                            mActivity.toast(mActivity,"请至少选择一个答案");
-                        }else{
-                            Collections.sort(moreList);
-                            StringBuffer sb=new StringBuffer();
-                            for(int i=0;i<moreList.size();i++){
-                                sb.append(moreList.get(i));
-                            }
-                            Log.e("gg",sb.toString());
-                        }
-                    }
-                });
+            if("submemory".equals(type)){
+                setNoClick();
+                setMoreAbcding(false,answerStr);
             }else{
-
+                if(!TextUtils.isEmpty(subjectSelect.getAnswerChoice())){
+                    setNoClick();
+                    setMoreAbcding(false, subjectSelect.getAnswerChoice());
+                }else{
+                    currentView.findViewById(R.id.makeB).setVisibility(View.VISIBLE);
+                    currentView.findViewById(R.id.makeB).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(moreList.size()==0){
+                                mActivity.toast(mActivity,"请至少选择一个答案");
+                            }else{
+                                Collections.sort(moreList);
+                                StringBuffer sb=new StringBuffer();
+                                for(int i=0;i<moreList.size();i++){
+                                    sb.append(moreList.get(i));
+                                }
+                                Log.e("gg",sb.toString());
+                                checkedStr=sb.toString();
+                                setMoreAbcding(true,sb.toString());
+                            }
+                        }
+                    });
+                }
             }
         }else{
             if("submemory".equals(type)){
@@ -217,7 +224,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()){
             case R.id.aLL:
                 if("3".equals(subjectFlag.getSubType())){
-                    setMoreAbcd("A",aIV);
+                    setMoreAbcd("A",aIV,true);
                 }else{
                     checkedStr="A";
                     setAbcd(0,true);
@@ -225,7 +232,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.bLL:
                 if("3".equals(subjectFlag.getSubType())){
-                    setMoreAbcd("B",bIV);
+                    setMoreAbcd("B",bIV,true);
                 }else{
                     checkedStr="B";
                     setAbcd(1,true);
@@ -233,7 +240,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.cLL:
                 if("3".equals(subjectFlag.getSubType())){
-                    setMoreAbcd("C",cIV);
+                    setMoreAbcd("C",cIV,true);
                 }else{
                     checkedStr="C";
                     setAbcd(2,true);
@@ -241,7 +248,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.dLL:
                 if("3".equals(subjectFlag.getSubType())){
-                    setMoreAbcd("D",dIV);
+                    setMoreAbcd("D",dIV,true);
                 }else{
                     checkedStr="D";
                     setAbcd(3,true);
@@ -280,6 +287,12 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             IV.setImageResource(R.drawable.ic_dui);
         }else{
             IV.setImageResource(R.drawable.ic_cuowu);
+            for(int i=0;i<abcdImageList.size();i++){
+                if(answerStr.equals(abcdImageList.get(i).getTag())){
+                    abcdImageList.get(i).setImageResource(R.drawable.ic_dui);
+                    break;
+                }
+            }
             if(flag){
                 mActivity.setWholeTV(false);
                 add(1);
@@ -290,12 +303,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         setNoClick();
     }
     private void setWorngAbcd(){
-        for(int i=0;i<abcdImageList.size();i++){
-            if(answerStr.equals(abcdImageList.get(i).getTag())){
-                abcdImageList.get(i).setImageResource(R.drawable.ic_dui);
-                break;
-            }
-        }
+
         answerNum=queryAnswerNum();
         errorNum=queryErrorNum();
 
@@ -437,21 +445,113 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         db.addCollectSub(false,subjectFlag.getSubId(),fragmentType,subjectFlag.getSubChapter());
     }
 
-    private void setMoreAbcd(String str,ImageView IV){
+    private void setMoreAbcd(String str,ImageView IV,boolean flag){
         if(!"0".equals(IV.getTag())){
             moreList.add(str);
-            IV.setImageResource(R.drawable.ic_bg_red);
+            if("A".equals(str)){
+                IV.setImageResource(R.drawable.ic_aa);
+            }else if("B".equals(str)){
+                IV.setImageResource(R.drawable.ic_bb);
+            }else if("C".equals(str)){
+                IV.setImageResource(R.drawable.ic_cc);
+            }else if("D".equals(str)){
+                IV.setImageResource(R.drawable.ic_dd);
+            }
             IV.setTag("0");
         }else{
             for(int i=0;i<moreList.size();i++){
                 if(str.equals(moreList.get(i))){
                     moreList.remove(i);
-                    IV.setImageResource(R.drawable.ic_bg_blue);
+                    if("A".equals(str)){
+                        IV.setImageResource(R.drawable.ic_a);
+                    }else if("B".equals(str)){
+                        IV.setImageResource(R.drawable.ic_b);
+                    }else if("C".equals(str)){
+                        IV.setImageResource(R.drawable.ic_c);
+                    }else if("D".equals(str)){
+                        IV.setImageResource(R.drawable.ic_d);
+                    }
                     IV.setTag(str);
                     break;
                 }
             }
         }
+    }
 
+    private void setMoreAbcding(boolean flag,String answer){
+        if("subnodone".equals(type)&&flag){
+            ((AnswerActivity)mActivity).setNodoneFlag(false);
+        }
+        if(answerStr.equals(answer)){
+            if(flag){
+                mActivity.setWholeTV(true);
+                add(0);
+                mActivity.setNext(positionFlag);
+            }
+            char[] chars=answerStr.toCharArray();
+            for(Character ch:chars){
+                if(ch=='A'){
+                    abcdImageList.get(0).setImageResource(R.drawable.ic_dui);
+                }else if(ch=='B'){
+                    abcdImageList.get(1).setImageResource(R.drawable.ic_dui);
+                }else if(ch=='C'){
+                    abcdImageList.get(2).setImageResource(R.drawable.ic_dui);
+                }else if(ch=='D'){
+                    abcdImageList.get(3).setImageResource(R.drawable.ic_dui);
+                }
+            }
+        }else{
+            char[] chars1=answerStr.toCharArray();
+            for(Character ch:chars1){
+                if(ch=='A'){
+                    abcdImageList.get(0).setImageResource(R.drawable.ic_aaa);
+                    abcdImageList.get(0).setTag("1");
+                }else if(ch=='B'){
+                    abcdImageList.get(1).setImageResource(R.drawable.ic_bbb);
+                    abcdImageList.get(1).setTag("1");
+                }else if(ch=='C'){
+                    abcdImageList.get(2).setImageResource(R.drawable.ic_ccc);
+                    abcdImageList.get(2).setTag("1");
+                }else if(ch=='D'){
+                    abcdImageList.get(3).setImageResource(R.drawable.ic_ddd);
+                    abcdImageList.get(3).setTag("1");
+                }
+            }
+            char[] chars2=answer.toCharArray();
+            for(Character ch:chars2){
+                if(ch=='A'){
+                    if("1".equals(abcdImageList.get(0).getTag())){
+                        abcdImageList.get(0).setImageResource(R.drawable.ic_dui);
+                    }else{
+                        abcdImageList.get(0).setImageResource(R.drawable.ic_cuowu);
+                    }
+                }else if(ch=='B'){
+                    if("1".equals(abcdImageList.get(1).getTag())){
+                        abcdImageList.get(1).setImageResource(R.drawable.ic_dui);
+                    }else{
+                        abcdImageList.get(1).setImageResource(R.drawable.ic_cuowu);
+                    }
+                }else if(ch=='C'){
+                    if("1".equals(abcdImageList.get(2).getTag())){
+                        abcdImageList.get(2).setImageResource(R.drawable.ic_dui);
+                    }else{
+                        abcdImageList.get(2).setImageResource(R.drawable.ic_cuowu);
+                    }
+                }else if(ch=='D'){
+                    if("1".equals(abcdImageList.get(3).getTag())){
+                        abcdImageList.get(3).setImageResource(R.drawable.ic_dui);
+                    }else{
+                        abcdImageList.get(3).setImageResource(R.drawable.ic_cuowu);
+                    }
+                }
+            }
+            if(flag){
+                mActivity.setWholeTV(false);
+                add(1);
+                setError();
+            }
+        }
+        setWorngAbcd();
+        setNoClick();
     }
 }
