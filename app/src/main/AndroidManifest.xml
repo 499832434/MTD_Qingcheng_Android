@@ -100,7 +100,11 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
-        <activity android:name=".activity.signup.MyThemeActivity"
+        <activity android:name=".activity.tubiao.TubiaoActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity android:name=".activity.tubiao.TubiaoDetailActivity"
                   android:screenOrientation="portrait"
                 >
         </activity>

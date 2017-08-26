@@ -14,6 +14,7 @@ import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.*;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
+import com.qcjkjg.trafficrules.activity.tubiao.TubiaoActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.vo.Subject;
@@ -75,8 +76,16 @@ public class ExamOneFragment extends Fragment{
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科四考规");
         }
 
-        ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共"+seqNum+"题");
+        ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
 
+        currentView.findViewById(R.id.aboutTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, TubiaoActivity.class);
+                intent.putExtra("type", fragmentType + "");
+                startActivity(intent);
+            }
+        });
         currentView.findViewById(R.id.seqAnswerLL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

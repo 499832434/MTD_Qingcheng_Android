@@ -1,6 +1,7 @@
 package com.qcjkjg.trafficrules.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.activity.tubiao.TubiaoActivity;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 /**
@@ -57,6 +59,15 @@ public class ExamSecondFragment extends Fragment{
         }else{
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科三考规");
         }
+
+        currentView.findViewById(R.id.aboutTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, TubiaoActivity.class);
+                intent.putExtra("type", fragmentType + "");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

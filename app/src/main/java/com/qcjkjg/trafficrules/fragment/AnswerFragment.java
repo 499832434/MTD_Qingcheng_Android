@@ -171,6 +171,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                             if(moreList.size()==0){
                                 mActivity.toast(mActivity,"请至少选择一个答案");
                             }else{
+                                view.setVisibility(View.GONE);
                                 Collections.sort(moreList);
                                 StringBuffer sb=new StringBuffer();
                                 for(int i=0;i<moreList.size();i++){

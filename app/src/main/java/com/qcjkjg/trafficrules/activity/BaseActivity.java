@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -587,5 +588,18 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         cycleViewPager.setData(views, true, true, 5000);
+    }
+
+
+    public void getLocalPicture(String path,ImageView imageView){
+        if(!TextUtils.isEmpty(path)){
+            String subPic=path.substring(0, path.length() - 4);
+            int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
+            Drawable drawable=getResources().getDrawable(id);
+            imageView.setImageDrawable(drawable);
+            imageView.setVisibility(View.VISIBLE);
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
     }
 }

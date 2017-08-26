@@ -80,7 +80,19 @@ public class SubclassGridAdapter extends BaseAdapter {
         holder.subclassNameTV.setText(mData.get(position));
         DbCreateHelper helper=new DbCreateHelper(context);
         subjectList=new ArrayList<Subject>();
-        subjectList=helper.getSubjectList(fragmentType, mData.get(position),"subclass");
+        if("文字题".equals(mData.get(position))){
+            subjectList=helper.getSubjectListPicture(fragmentType,false);
+        }else if("图片题".equals(mData.get(position))){
+            subjectList=helper.getSubjectListPicture(fragmentType,true);
+        }else if("单选题".equals(mData.get(position))){
+            subjectList=helper.getSubjectListType(fragmentType,2);
+        }else if("多选题".equals(mData.get(position))){
+            subjectList=helper.getSubjectListType(fragmentType,3);
+        }else if("判断题".equals(mData.get(position))){
+            subjectList=helper.getSubjectListType(fragmentType,1);
+        }else {
+            subjectList=helper.getSubjectList(fragmentType, mData.get(position),"subclass");
+        }
         holder.subclassNumTV.setText(subjectList.size() + "");
         final String subclass=mData.get(position);
         holder.mainRL.setOnClickListener(new View.OnClickListener() {

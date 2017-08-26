@@ -67,7 +67,20 @@ public class AnswerActivity extends BaseActivity{
         DbCreateHelper helper=new DbCreateHelper(AnswerActivity.this);
         if("subclass".equals(type)){
             String subclass=getIntent().getStringExtra("subclass");
-            subjectList=helper.getSubjectList(fragmentType,subclass,"subclass");
+            if("文字题".equals(subclass)){
+                subjectList=helper.getSubjectListPicture(fragmentType,false);
+            }else if("图片题".equals(subclass)){
+                subjectList=helper.getSubjectListPicture(fragmentType,true);
+            }else if("单选题".equals(subclass)){
+                subjectList=helper.getSubjectListType(fragmentType,2);
+            }else if("多选题".equals(subclass)){
+                subjectList=helper.getSubjectListType(fragmentType,3);
+            }else if("判断题".equals(subclass)){
+                subjectList=helper.getSubjectListType(fragmentType,1);
+            }else {
+                subjectList=helper.getSubjectList(fragmentType, subclass,"subclass");
+            }
+//            subjectList=helper.getSubjectList(fragmentType,subclass,"subclass");
         }else if("subseq".equals(type)||"submemory".equals(type)){
             subjectList=helper.getSubjectList(fragmentType,"","subseq");
         }else if("subchapter".equals(type)){

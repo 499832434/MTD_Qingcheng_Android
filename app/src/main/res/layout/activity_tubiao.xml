@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.qcjkjg.trafficrules.view.CustomTitleBar
+            android:id="@+id/customTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            custom:text="图标速记"
+            />
+    <ListView android:layout_width="match_parent"
+              android:divider="@color/title_line_color"
+              android:dividerHeight="0.5dp"
+              android:id="@+id/tubiaoLV"
+              android:layout_height="match_parent">
+    </ListView>
+</LinearLayout>

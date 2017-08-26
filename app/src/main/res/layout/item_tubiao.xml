@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="48dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="交通标志大全"
+                  android:id="@+id/nameTV"
+                  android:textSize="16sp"
+                  android:layout_centerVertical="true"
+                  android:layout_alignParentLeft="true"
+                  android:layout_marginLeft="15dp"
+                  android:textColor="#333333"
+                />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="449张"
+                  android:id="@+id/numTV"
+                  android:textSize="14sp"
+                  android:layout_centerVertical="true"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginRight="15dp"
+                  android:textColor="#666666"
+                />
+    </RelativeLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:layout_marginBottom="10dp"
+                  android:layout_height="wrap_content">
+        <ImageView android:layout_width="60dp" android:layout_height="60dp"
+                android:scaleType="fitXY"
+                   android:id="@+id/IV1"
+                   android:layout_marginLeft="15dp"
+                />
+        <ImageView android:layout_width="60dp" android:layout_height="60dp"
+                   android:scaleType="fitXY"
+                   android:id="@+id/IV2"
+                   android:layout_marginLeft="15dp"
+                   />
+        <ImageView android:layout_width="60dp" android:layout_height="60dp"
+                   android:scaleType="fitXY"
+                   android:id="@+id/IV3"
+                   android:layout_marginLeft="15dp"
+                   />
+        <ImageView android:layout_width="60dp" android:layout_height="60dp"
+                   android:scaleType="fitXY"
+                   android:id="@+id/IV4"
+                   android:layout_marginLeft="15dp"
+                   />
+    </LinearLayout>
+</LinearLayout>

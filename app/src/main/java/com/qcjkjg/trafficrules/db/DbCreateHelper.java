@@ -81,6 +81,7 @@ public class DbCreateHelper {
         }
     }
 
+    //专项加强(功能分类)
     public List<Subject>  getSubjectList(String examType,String subClass,String type){
         SQLiteDatabase db =openDatabase(context);
         List<Subject> subjectList=new ArrayList<Subject>();
@@ -119,6 +120,84 @@ public class DbCreateHelper {
         }
         return subjectList;
     }
+    //专项加强(文字 图片)flag:true 带图
+    public List<Subject>  getSubjectListPicture(String examType,boolean flag){
+        SQLiteDatabase db =openDatabase(context);
+        List<Subject> subjectList=new ArrayList<Subject>();
+        Cursor cursor =null;
+        if(flag){
+            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is not null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+        }else {
+            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+        }
+        while (cursor.moveToNext()) {
+            Subject subject=new Subject();
+            subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
+            subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
+            subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
+            subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
+            subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
+            subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
+            subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
+            subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
+            subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+            subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
+            subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
+            subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
+            subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
+            subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
+            subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
+            subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            if(flag){
+                subject.setSubClass("图片题");
+            }else{
+                subject.setSubClass("文字题");
+            }
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subjectList.add(subject);
+        }
+        return subjectList;
+    }
+
+    //专项加强(单选 多选 判断)2:单选3:多选1:判断
+    public List<Subject>  getSubjectListType(String examType,int flag){
+        SQLiteDatabase db =openDatabase(context);
+        List<Subject> subjectList=new ArrayList<Subject>();
+        Cursor cursor =null;
+        cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_type=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,flag+""});
+        while (cursor.moveToNext()) {
+            Subject subject=new Subject();
+            subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
+            subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
+            subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
+            subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
+            subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
+            subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
+            subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
+            subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
+            subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+            subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
+            subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
+            subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
+            subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
+            subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
+            subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
+            subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            if(1==flag){
+                subject.setSubClass("判断题");
+            }else if(2==flag){
+                subject.setSubClass("单选题");
+            } else {
+                subject.setSubClass("多选题");
+            }
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subjectList.add(subject);
+        }
+        return subjectList;
+    }
+
 
     //查询收藏题目
     public List<Subject>  getSubjectCollectList(String examType,List<String> list){
