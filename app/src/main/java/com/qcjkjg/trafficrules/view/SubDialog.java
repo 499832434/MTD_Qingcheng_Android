@@ -150,6 +150,19 @@ public class SubDialog extends Dialog {
         });
     }
     private List<SubjectSelect> query(){
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
+            List<String> list=((AnswerActivity)context).getNoRecordList();
+            if(list.size()>0){
+                for(int i=0;i<list.size();i++){
+                    SubjectSelect subjectSelect=new SubjectSelect();
+                    subjectSelect.setSubId(Integer.parseInt(list.get(i).split("-")[0]));
+                    subjectSelect.setAnswerStatus(Integer.parseInt(list.get(i).split("-")[2]));
+                    subjectSelectList.add(subjectSelect);
+                }
+            }
+            return subjectSelectList;
+        }
+
         SubjectSelect subjectSelect=new SubjectSelect();
         if("subclass".equals(type)){
             subjectSelect.setClassAnswer(subjectList.get(0).getSubClass());
@@ -159,19 +172,20 @@ public class SubDialog extends Dialog {
             subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectList.get(0).getSubVip());
-        }else if("subcollectchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
-            subjectSelect.setCollectAnswer("0");
-        }else if("subcollectall".equals(type)){
-            subjectSelect.setChapterAnswer("0");
-            subjectSelect.setCollectAnswer("0");
-        }else if("suberrorchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
-            subjectSelect.setErrorAnswer("0");
-        }else if("suberrorall".equals(type)){
-            subjectSelect.setChapterAnswer("0");
-            subjectSelect.setErrorAnswer("0");
         }
+//        else if("subcollectchapter".equals(type)){
+//            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("subcollectall".equals(type)){
+//            subjectSelect.setChapterAnswer("0");
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("suberrorchapter".equals(type)){
+//            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
+//            subjectSelect.setErrorAnswer("0");
+//        }else if("suberrorall".equals(type)){
+//            subjectSelect.setChapterAnswer("0");
+//            subjectSelect.setErrorAnswer("0");
+//        }
         DbHelper db=new DbHelper(context);
         return db.queryWholeSub(subjectSelect);
     }

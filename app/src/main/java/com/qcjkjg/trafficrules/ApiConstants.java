@@ -23,4 +23,6 @@ public interface ApiConstants {
     String SIGN_MY_REPLY_API="http://47.92.112.59:2017/ireply";//我的回复
     String SIGN_REPLY_ME_API="http://47.92.112.59:2017/replyme";//回复我的
     String UPDATE_USER_INFO_API="http://47.92.112.59:2017/updateuserinfo";//修改用户信息
+    String ADLIST_API="http://47.92.112.59:2017/adlist";//获取广告
+    String ADCONTENT_DETAIL_API="http://47.92.112.59:2017/adcontent";//广告详情
 }

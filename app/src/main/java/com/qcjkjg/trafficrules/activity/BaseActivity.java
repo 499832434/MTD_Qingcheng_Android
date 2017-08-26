@@ -34,13 +34,18 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
+import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.utils.StatusBarColorCompat;
+import com.qcjkjg.trafficrules.utils.ViewFactory;
+import com.qcjkjg.trafficrules.vo.Advert;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.ReplyInfo;
 import de.greenrobot.event.EventBus;
+import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -55,6 +60,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -79,14 +85,14 @@ public class BaseActivity extends AppCompatActivity {
     private ProgressDialog pd;
     private AlertDialog dialog;
     private EditText contentET;
-    private TextView num1TV,num2TV;
+    private TextView num1TV, num2TV;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
     }
 
-    private void initData(){
+    private void initData() {
         pd = new ProgressDialog(BaseActivity.this);
         pd.setMessage("请稍候...");
         pd.setCanceledOnTouchOutside(false);
@@ -111,13 +117,13 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 隐藏键盘
      */
-    public  void hiddenSoftInput() {
-        InputMethodManager manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    public void hiddenSoftInput() {
+        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public void toast(Context context,String str){
-        if(!TextUtils.isEmpty(str)){
+    public void toast(Context context, String str) {
+        if (!TextUtils.isEmpty(str)) {
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
         }
     }
@@ -126,10 +132,10 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 初始化post的内容
      *
-     * @return  HttpPost
+     * @return HttpPost
      */
     public HttpPost iniHttpPost(List<BasicNameValuePair> texts,
-                                 HashMap<File, String> files,String url) {
+                                HashMap<File, String> files, String url) {
         ContentType contentType = ContentType.create("text/plain", Charset.forName("UTF-8"));
         HttpPost httpPost = new HttpPost(url);
         MultipartEntityBuilder create = MultipartEntityBuilder.create();
@@ -137,7 +143,7 @@ public class BaseActivity extends AppCompatActivity {
         if (texts != null && texts.size() > 0) {
             for (BasicNameValuePair iterable_element : texts) {
                 create.addTextBody(iterable_element.getName(),
-                        iterable_element.getValue(),contentType);
+                        iterable_element.getValue(), contentType);
             }
         }
         // 二进制的发送，文件
@@ -171,16 +177,19 @@ public class BaseActivity extends AppCompatActivity {
         }
         return defaultHttpClient;
 
-    };
+    }
+
+    ;
+
     /**
      * 关闭连接
      */
-    public void closeConnect(){
-        if(defaultHttpClient!=null){
+    public void closeConnect() {
+        if (defaultHttpClient != null) {
             ClientConnectionManager connectionManager = defaultHttpClient.getConnectionManager();
-            if(connectionManager!=null)
+            if (connectionManager != null)
                 connectionManager.shutdown();
-            defaultHttpClient=null;
+            defaultHttpClient = null;
         }
     }
 
@@ -188,7 +197,7 @@ public class BaseActivity extends AppCompatActivity {
      * 记录用户的登录信息
      */
 
-    public void loginInfo(String name,String phone,String avatar,String isvip,String platform){
+    public void loginInfo(String name, String phone, String avatar, String isvip, String platform) {
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_NAME_KEY, name);
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, phone);
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, avatar);
@@ -200,19 +209,19 @@ public class BaseActivity extends AppCompatActivity {
      * 判断用户是否登录
      */
 
-    public boolean getUserIsLogin(){
-        String phone=PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, "");
-        if(TextUtils.isEmpty(phone)){
+    public boolean getUserIsLogin() {
+        String phone = PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, "");
+        if (TextUtils.isEmpty(phone)) {
             return false;
         }
-        return  true;
+        return true;
     }
 
     /**
      * 获取用户的登录信息
      */
-    public String getUserInfo(int flag){
-        switch (flag){
+    public String getUserInfo(int flag) {
+        switch (flag) {
             case 0:
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_NAME_KEY, "");
             case 1:
@@ -228,7 +237,7 @@ public class BaseActivity extends AppCompatActivity {
             case 6://收藏题目
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_COLLECT_SUB_KEY, "");
         }
-        return  "";
+        return "";
     }
 
 
@@ -238,7 +247,7 @@ public class BaseActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("signMain",response);
+                        Log.e("signMain", response);
                         try {
                             JSONObject jo = new JSONObject(response);
                             if (jo.has("code")) {
@@ -269,6 +278,57 @@ public class BaseActivity extends AppCompatActivity {
         };
         Volley.newRequestQueue(BaseActivity.this).add(req);
     }
+
+    //获取广告
+    public void adlist(final String flag,final CycleViewPager cycleViewPager) {
+        final String url = ApiConstants.ADLIST_API;
+        StringRequest req = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        Log.e("adlist", response);
+                        try {
+                            List<Advert> list = new ArrayList<Advert>();
+                            JSONObject jo = new JSONObject(response);
+                            if (jo.has("code")) {
+                                if ("0".equalsIgnoreCase(jo.getString("code"))) {
+                                    JSONArray infoArr = jo.getJSONArray("info");
+                                    for (int i = 0; i < infoArr.length(); i++) {
+                                        JSONObject obj = infoArr.getJSONObject(i);
+                                        Advert advert = new Advert();
+                                        advert.setaId(obj.getInt("ad_id"));
+                                        advert.setTitleUrl(obj.getString("title_url"));
+                                        list.add(advert);
+                                    }
+
+                                    if(list.size()>0){
+                                        setAdvertImageView(cycleViewPager,list);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("aaa",e.toString());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                //POST 参数
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("ad_type", flag);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(BaseActivity.this).add(req);
+    }
+
+
 
 
     public void getNetWorkPicture(String url,ImageView imageView){
@@ -478,4 +538,54 @@ public class BaseActivity extends AppCompatActivity {
         }.start();
     }
 
+    private void setAdvertImageView(CycleViewPager cycleViewPager,final List<Advert> list) {
+        cycleViewPager.setVisibility(View.VISIBLE);
+        List<View> views=new ArrayList<View>();
+        ImageView view1 = ViewFactory.getView(this);
+        view1.setId(list.size() - 1);
+        getNetWorkPicture(list.get(list.size() - 1).getTitleUrl(), view1);
+        views.add(view1);
+        view1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
+                intent.putExtra("id",list.get(view.getId()).getaId());
+                intent.putExtra("flag","advert");
+                startActivity(intent);
+//                Log.e("zzz", list.get((Integer) view.getTag()));
+            }
+        });
+        for (int i = 0; i < list.size(); i++) {
+            ImageView view3 = ViewFactory.getView(this);
+            view3.setId(i);
+            getNetWorkPicture(list.get(i).getTitleUrl(), view3);
+            views.add(view3);
+            view3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    Log.e("zzz", list.get((Integer) view.getTag()));
+                    Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
+                    intent.putExtra("id",list.get(view.getId()).getaId());
+                    intent.putExtra("flag","advert");
+                    startActivity(intent);
+                }
+            });
+        }
+        ImageView view2 = ViewFactory.getView(this);
+        view2.setId(0);
+        getNetWorkPicture(list.get(0).getTitleUrl(), view2);
+        views.add(view2);
+        view2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Log.e("zzz", list.get((Integer) view.getTag()));
+                Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
+                intent.putExtra("id",list.get(view.getId()).getaId());
+                intent.putExtra("flag","advert");
+                startActivity(intent);
+            }
+        });
+
+        cycleViewPager.setData(views, true, true, 5000);
+    }
 }

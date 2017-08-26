@@ -80,9 +80,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 switch (flag){
                     case 0:
                         Intent intent = new Intent(BaseListViewActivity.this, SignupContentActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(MainActivity.SINGUPTAG, signList.get(i));
-                        intent.putExtras(bundle);
+                        intent.putExtra("id", signList.get(i).getNewsId());
+                        intent.putExtra("flag","news");
                         startActivity(intent);
                         break;
                     case 1:

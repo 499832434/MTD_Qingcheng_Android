@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.*;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
@@ -17,6 +18,7 @@ import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
+import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class ExamOneFragment extends Fragment{
     private final static String FRAGMENT_TYPE = "fragmentType";
     protected MainActivity mActivity;
     private int seqNum=0,moniNum=0;
+    private CycleViewPager cycleViewPager;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +56,19 @@ public class ExamOneFragment extends Fragment{
 
     private void initView(){
         fragmentType = getArguments().getInt(FRAGMENT_TYPE);
+
+
+        cycleViewPager= (CycleViewPager) currentView.findViewById(R.id.cycleViewPager);
+        cycleViewPager.setIndicatorCenter();
+        cycleViewPager.setIndicatorsSpace(10);
+        cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
+
+        if(fragmentType==1){
+            ((BaseActivity)mActivity).adlist("1", cycleViewPager);
+        }else {
+            ((BaseActivity)mActivity).adlist("4", cycleViewPager);
+        }
+
         if(fragmentType==1){
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科一考规");
         }else{

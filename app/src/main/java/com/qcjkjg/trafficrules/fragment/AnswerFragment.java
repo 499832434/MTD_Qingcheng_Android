@@ -355,11 +355,23 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     }
 
     private void add(int flag){
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
+            List<String> list=((AnswerActivity)mActivity).getNoRecordList();
+            String str="";
+            if (0 == flag) {//0:正确
+                str = subjectFlag.getSubId() + "-" + checkedStr + "-1";
+            } else {
+                str = subjectFlag.getSubId() + "-" + checkedStr + "-2";
+            }
+            list.add(str);
+            ((AnswerActivity)mActivity).setNoRecordList(list);
+            return;
+        }
         SubjectSelect subjectSelect=new SubjectSelect();
         subjectSelect.setSubType(Integer.parseInt(fragmentType));
         subjectSelect.setSubId(Integer.parseInt(subjectFlag.getSubId()));
         subjectSelect.setAnswerNum(1);
-        if(0==flag){
+        if(0==flag){//0:正确
             subjectSelect.setErrorNum(0);
             subjectSelect.setAnswerStatus(1);
         }else{
@@ -375,24 +387,39 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
-        }else if("subcollectchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-            subjectSelect.setCollectAnswer("0");
-        }else if("subcollectall".equals(type)){
-            subjectSelect.setChapterAnswer("0");
-            subjectSelect.setCollectAnswer("0");
-        }else if("suberrorchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-            subjectSelect.setErrorAnswer("0");
-        }else if("suberrorall".equals(type)){
-            subjectSelect.setChapterAnswer("0");
-            subjectSelect.setErrorAnswer("0");
         }
+//        else if("subcollectchapter".equals(type)){
+//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("subcollectall".equals(type)){
+//            subjectSelect.setChapterAnswer("0");
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("suberrorchapter".equals(type)){
+//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+//            subjectSelect.setErrorAnswer("0");
+//        }else if("suberrorall".equals(type)){
+//            subjectSelect.setChapterAnswer("0");
+//            subjectSelect.setErrorAnswer("0");
+//        }
         DbHelper db=new DbHelper(mActivity);
         db.addSub(subjectSelect);
     }
 
     private SubjectSelect query(){
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
+            SubjectSelect subjectSelect=new SubjectSelect();
+            List<String> list=((AnswerActivity)mActivity).getNoRecordList();
+            if(list.size()>0){
+                for(int i=0;i<list.size();i++){
+                    if(subjectFlag.getSubId().equals(list.get(i).split("-")[0])){
+                        subjectSelect.setAnswerChoice(list.get(i).split("-")[1]);
+                        break;
+                    }
+                }
+            }
+            return subjectSelect;
+        }
+
         SubjectSelect subjectSelect=new SubjectSelect();
         subjectSelect.setSubType(Integer.parseInt(fragmentType));
         subjectSelect.setSubId(Integer.parseInt(subjectFlag.getSubId()));
@@ -404,19 +431,20 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
-        }else if("subcollectchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-            subjectSelect.setCollectAnswer("0");
-        }else if("subcollectall".equals(type)){
-            subjectSelect.setChapterAnswer("0");
-            subjectSelect.setCollectAnswer("0");
-        }else if("suberrorchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-            subjectSelect.setErrorAnswer("0");
-        }else if("suberrorall".equals(type)){
-            subjectSelect.setChapterAnswer("0");
-            subjectSelect.setErrorAnswer("0");
         }
+//        else if("subcollectchapter".equals(type)){
+//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("subcollectall".equals(type)){
+//            subjectSelect.setChapterAnswer("0");
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("suberrorchapter".equals(type)){
+//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+//            subjectSelect.setErrorAnswer("0");
+//        }else if("suberrorall".equals(type)){
+//            subjectSelect.setChapterAnswer("0");
+//            subjectSelect.setErrorAnswer("0");
+//        }
         DbHelper db=new DbHelper(mActivity);
         return db.querySub(subjectSelect);
     }

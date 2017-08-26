@@ -23,10 +23,8 @@ import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
-import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
-import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.SignupAdapter;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
@@ -79,9 +77,8 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(mActivity, SignupContentActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(MainActivity.SINGUPTAG, signList.get(i));
-                intent.putExtras(bundle);
+                intent.putExtra("id", signList.get(i).getNewsId());
+                intent.putExtra("flag","news");
                 startActivity(intent);
             }
         });
@@ -99,7 +96,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
     /**
      * 网络请求
      */
-    private void request(final String newsid) {
+    private void request(final String page) {
         if (!NetworkUtils.isNetworkAvailable(mActivity)) {
             return;
         }
@@ -112,7 +109,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                if(TextUtils.isEmpty(newsid)){
+                                if(TextUtils.isEmpty(page)){
                                     signList.clear();
                                 }
                                 JSONArray infoArr=jsonObject.getJSONArray("info");
@@ -122,6 +119,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
                                     signup.setNewsId(obj.getInt("news_id"));
                                     signup.setTitle(obj.getString("title"));
                                     signup.setPictureUrl(obj.getString("img_url"));
+                                    signup.setPage(obj.getString("pubtime"));
                                     signup.setPubtime(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
                                     signList.add(signup);
                                 }
@@ -147,10 +145,10 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                if(!TextUtils.isEmpty(newsid)){
-                    params.put("news_id", newsid);
+                if(!TextUtils.isEmpty(page)){
+                    params.put("pubtime", page);
                 }
-//                params.put("page_count", "2");
+                params.put("page_count", "1");
                 params.put("type", "0");
                 params.put("sign", InitApp.initApp.getSig(params));
                 return params;
@@ -169,7 +167,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
     public void onLoadMore() {
         swipeToLoadLayout.setLoadingMore(false);
         if(signList.size()>0){
-            request(signList.get(signList.size()-1).getNewsId()+"");
+            request(signList.get(signList.size()-1).getPage() + "");
         }
     }
 

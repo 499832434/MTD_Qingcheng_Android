@@ -106,9 +106,8 @@ public class QingChenIntentService extends GTIntentService {
                     Signup sign=new Signup();
                     sign.setNewsId(jo.getInt("news_id"));
                     Intent intent = new Intent(context, SignupContentActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(MainActivity.SINGUPTAG, sign);
-                    intent.putExtras(bundle);
+                    intent.putExtra("id", jo.getInt("news_id"));
+                    intent.putExtra("flag","news");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     PendingIntent pendingIntent =PendingIntent.getActivity(context, 0, intent, 0);
                     builder1.setContentIntent(pendingIntent);

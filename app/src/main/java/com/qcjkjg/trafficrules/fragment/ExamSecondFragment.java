@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 /**
  * Created by zongshuo on 2017/8/16.
@@ -19,6 +21,7 @@ public class ExamSecondFragment extends Fragment{
     private int fragmentType = 2;
     private final static String FRAGMENT_TYPE = "fragmentType";
     protected MainActivity mActivity;
+    private CycleViewPager cycleViewPager;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +40,18 @@ public class ExamSecondFragment extends Fragment{
 
     private void initView(){
         fragmentType = getArguments().getInt(FRAGMENT_TYPE);
+
+        cycleViewPager= (CycleViewPager) currentView.findViewById(R.id.cycleViewPager);
+        cycleViewPager.setIndicatorCenter();
+        cycleViewPager.setIndicatorsSpace(10);
+        cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
+
+        if(fragmentType==2){
+            ((BaseActivity)mActivity).adlist("2", cycleViewPager);
+        }else {
+            ((BaseActivity)mActivity).adlist("3", cycleViewPager);
+        }
+
         if(fragmentType==2){
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科二考规");
         }else{

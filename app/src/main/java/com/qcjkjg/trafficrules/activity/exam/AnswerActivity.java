@@ -21,6 +21,7 @@ import com.qcjkjg.trafficrules.adapter.AnswerGridAdapter;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.fragment.AnswerFragment;
+import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.SubDialog;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
@@ -47,6 +48,7 @@ public class AnswerActivity extends BaseActivity{
     private int fragmentPositon;//第几个fragment
     private String type="";
     public Boolean nodoneFlag=true;//未做练习是否开始作答
+    private List<String> noRecordList=new ArrayList<String>();//答题结果记录到list
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,12 +114,21 @@ public class AnswerActivity extends BaseActivity{
             fragments.add(AnswerFragment.newInstance(i,subjectList.get(i),type,fragmentType));
         }
 
-        wholeRight=queryWholeNum(true);
-        wholeWrong=queryWholeNum(false);
+        if((!"subcollectchapter".equals(type))||(!"subcollectall".equals(type))||(!"suberrorchapter".equals(type))||(!"suberrorall".equals(type))){
+            wholeRight=queryWholeNum(true);
+            wholeWrong=queryWholeNum(false);
+        }
+
 
     }
 
     private void initView(){
+        ((CustomTitleBar)findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         collectIV= (ImageView) findViewById(R.id.collectIV);
         collectIV.setOnClickListener(new View.OnClickListener() {
@@ -211,23 +222,24 @@ public class AnswerActivity extends BaseActivity{
         }else if("subvip".equals(type)){
             String subvip=getIntent().getStringExtra("subvip");
             subjectSelect.setVipAnswer(subvip);
-        }else if("subcollectchapter".equals(type)){
-            String subcollectchapter=getIntent().getStringExtra("subcollectchapter");
-            subjectSelect.setChapterAnswer(subcollectchapter);
-            subjectSelect.setCollectAnswer("0");
-        }else if("subcollectall".equals(type)){
-            String subcollectall=getIntent().getStringExtra("subcollectall");
-            subjectSelect.setChapterAnswer(subcollectall);
-            subjectSelect.setCollectAnswer("0");
-        }else if("suberrorchapter".equals(type)){
-            String suberrorchapter=getIntent().getStringExtra("suberrorchapter");
-            subjectSelect.setChapterAnswer(suberrorchapter);
-            subjectSelect.setErrorAnswer("0");
-        }else if("suberrorall".equals(type)){
-            String suberrorall=getIntent().getStringExtra("suberrorall");
-            subjectSelect.setChapterAnswer(suberrorall);
-            subjectSelect.setErrorAnswer("0");
         }
+//        else if("subcollectchapter".equals(type)){
+//            String subcollectchapter=getIntent().getStringExtra("subcollectchapter");
+//            subjectSelect.setChapterAnswer(subcollectchapter);
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("subcollectall".equals(type)){
+//            String subcollectall=getIntent().getStringExtra("subcollectall");
+//            subjectSelect.setChapterAnswer(subcollectall);
+//            subjectSelect.setCollectAnswer("0");
+//        }else if("suberrorchapter".equals(type)){
+//            String suberrorchapter=getIntent().getStringExtra("suberrorchapter");
+//            subjectSelect.setChapterAnswer(suberrorchapter);
+//            subjectSelect.setErrorAnswer("0");
+//        }else if("suberrorall".equals(type)){
+//            String suberrorall=getIntent().getStringExtra("suberrorall");
+//            subjectSelect.setChapterAnswer(suberrorall);
+//            subjectSelect.setErrorAnswer("0");
+//        }
         if(flag){
             subjectSelect.setAnswerStatus(1);
         }else{
@@ -319,4 +331,13 @@ public class AnswerActivity extends BaseActivity{
 //        rightTV.setText(wholeRight+"");
 //        wrongTV.setText(wholeWrong+"");
 //    }
+
+
+    public List<String> getNoRecordList() {
+        return noRecordList;
+    }
+
+    public void setNoRecordList(List<String> noRecordList) {
+        this.noRecordList = noRecordList;
+    }
 }

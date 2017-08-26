@@ -8,6 +8,7 @@
         <me.codeboy.android.cycleviewpager.CycleViewPager
                 android:id="@+id/cycleViewPager"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="148dp"/>
         <LinearLayout android:layout_width="match_parent"
                       android:orientation="horizontal"

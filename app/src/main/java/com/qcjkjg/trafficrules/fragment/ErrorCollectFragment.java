@@ -93,13 +93,13 @@ public class ErrorCollectFragment extends Fragment{
                     Intent intent=new Intent(mActivity, AnswerActivity.class);
                     intent.putExtra("fragmentType",fragmentType);
                     intent.putExtra("type","subcollectall");
-                    intent.putExtra("subcollectall","0");
+//                    intent.putExtra("subcollectall","0");
                     startActivity(intent);
                 }else{
                     Intent intent=new Intent(mActivity, AnswerActivity.class);
                     intent.putExtra("fragmentType",fragmentType);
                     intent.putExtra("type","suberrorall");
-                    intent.putExtra("suberrorall","0");
+//                    intent.putExtra("suberrorall","0");
                     startActivity(intent);
                 }
 

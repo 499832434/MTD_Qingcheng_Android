@@ -55,7 +55,7 @@ public class ExamFragment extends Fragment{
         tabLayout.setTabTextColors(Color.parseColor("#666666"), Color.parseColor("#3fb7f3"));//设置tab上文字的颜色，第一个参数表示没有选中状态下的文字颜色，第二个参数表示选中后的文字颜色
         //tabLayout.setSelectedIndicatorColor(Color.parseColor("#0ddcff"));//设置tab选中的底部的指示条的颜色
         viewPager = (ViewPager) currentView.findViewById(R.id.paraViewPager);
-        //viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
 
 
         //给viewPager设置适配器

@@ -15,6 +15,7 @@ public class Signup implements Parcelable {
     private String pubtime;
     private String pictureUrl;
     private String abstractStr;
+    private String page;//分页用
 
 
     public String getAbstractStr() {
@@ -65,10 +66,20 @@ public class Signup implements Parcelable {
         this.content = content;
     }
 
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
+
+
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -78,6 +89,7 @@ public class Signup implements Parcelable {
         parcel.writeInt(newsId);
         parcel.writeString(pictureUrl);
         parcel.writeString(abstractStr);
+        parcel.writeString(page);
     }
 
 
@@ -94,6 +106,7 @@ public class Signup implements Parcelable {
             signup.setNewsId(source.readInt());
             signup.setPictureUrl(source.readString());
             signup.setAbstractStr(source.readString());
+            signup.setPage(source.readString());
             return signup;
         }
 

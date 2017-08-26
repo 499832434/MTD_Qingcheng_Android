@@ -38,16 +38,23 @@ import java.util.Map;
 public class SignupContentActivity extends BaseActivity{
     private WebView wv;
     private View mProgressBar;
-    private Signup signup;
+    private int id;
+    private String flag;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_content);
 
-        signup=getIntent().getParcelableExtra(MainActivity.SINGUPTAG);
+        id=getIntent().getIntExtra("id",0);
+        flag=getIntent().getStringExtra("flag");
         initView();
-        initData();
+        if("news".equals(flag)){
+            initData();
+        }else if("advert".equals(flag)){
+            initAdvertData();
+        }
+
 
     }
     private void initView(){
@@ -152,8 +159,59 @@ public class SignupContentActivity extends BaseActivity{
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("news_id", signup.getNewsId()+"");
+                params.put("news_id", id+"");
                 params.put("sign", InitApp.initApp.getSig(params));
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+
+    private void initAdvertData(){
+
+        if (!NetworkUtils.isNetworkAvailable(SignupContentActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.ADCONTENT_DETAIL_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("signupDetailRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                mProgressBar.setVisibility(View.GONE);
+                                JSONArray array=jsonObject.getJSONArray("info");
+                                JSONObject obj=array.getJSONObject(0);
+                                String content=obj.getString("content");
+                                Log.e("content",content);
+                                String contentStr = reformatContent1(content);
+                                ((TextView)findViewById(R.id.titleTV)).setText(obj.getString("title"));
+                                ((TextView)findViewById(R.id.timeTV)).setText(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
+                                ((TextView)findViewById(R.id.cntTV)).setText("浏览量:"+obj.getString("view_cnt"));
+                                final String mimeType = "text/html";
+                                final String encoding = "UTF-8";
+                                wv.loadDataWithBaseURL("http://47.92.112.59:2017/", contentStr, mimeType, encoding, "");
+                            }else{
+                                Toast.makeText(SignupContentActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("ad_id", id+"");
                 return params;
             }
         };

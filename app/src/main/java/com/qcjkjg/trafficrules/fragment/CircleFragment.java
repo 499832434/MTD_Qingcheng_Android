@@ -18,6 +18,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
@@ -84,7 +85,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
         circleLV= (ListView) currentView.findViewById(R.id.swipe_target);
-//        circleLV.addHeaderView(view);
+        circleLV.addHeaderView(view);
         messageAdapter=new CircleListAdapter(mActivity, messageList);
         circleLV.setAdapter(messageAdapter);
         cycleViewPager= (CycleViewPager) view.findViewById(R.id.cycleViewPager);
@@ -92,6 +93,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         cycleViewPager.setIndicatorsSpace(10);
         cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
 
+        ((BaseActivity)mActivity).adlist("0",cycleViewPager);
 
         swipeToLoadLayout.post(new Runnable() {
             @Override

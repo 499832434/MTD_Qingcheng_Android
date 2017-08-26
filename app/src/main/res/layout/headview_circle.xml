@@ -5,6 +5,7 @@
               android:layout_height="match_parent">
     <me.codeboy.android.cycleviewpager.CycleViewPager
             android:id="@+id/cycleViewPager"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="148dp"/>
 </LinearLayout>
