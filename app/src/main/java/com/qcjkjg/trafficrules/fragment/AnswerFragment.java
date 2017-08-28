@@ -345,15 +345,20 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     }
 
     private void getPicture(String path,ImageView imageView){
-        if(!TextUtils.isEmpty(path)){
-            String subPic="a"+path.substring(0, path.length() - 4);
-            int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
-            Drawable drawable=getResources().getDrawable(id);
-            imageView.setImageDrawable(drawable);
-            imageView.setVisibility(View.VISIBLE);
-        }else{
+        try{
+            if(!TextUtils.isEmpty(path)){
+                String subPic="a"+path.substring(0, path.length() - 4);
+                int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
+                Drawable drawable=getResources().getDrawable(id);
+                imageView.setImageDrawable(drawable);
+                imageView.setVisibility(View.VISIBLE);
+            }else{
+                imageView.setVisibility(View.GONE);
+            }
+        }catch (Exception e){
             imageView.setVisibility(View.GONE);
         }
+
     }
 
     private void setNoClick(){

@@ -36,10 +36,41 @@ public class VipActivity extends BaseActivity{
 
     private void initData(){
         Resources res =getResources();
-        String[] array=res.getStringArray(R.array.vip);
-        list= Arrays.asList(array);
+        String[] array1=res.getStringArray(R.array.vip1);
+        String[] array2=res.getStringArray(R.array.vip2);
 
         fragmentType=getIntent().getStringExtra("fragmentType");
+        if("1".equals(getUserInfo(5))){
+            if("1".equals(fragmentType)){
+                list= Arrays.asList(array1);
+            }else{
+                list= Arrays.asList(array2);
+            }
+        }else if("3".equals(getUserInfo(5))){
+            if("1".equals(fragmentType)){
+                List<String> list1 = Arrays.asList(array1);
+                list= new ArrayList(list1);
+                list.add("8.客车专项-vip客车专项");
+            }else{
+                list= Arrays.asList(array2);
+            }
+        }else if("2".equals(getUserInfo(5))){
+            if("1".equals(fragmentType)){
+                List<String> list1 = Arrays.asList(array1);
+                list= new ArrayList(list1);
+                list.add("8.货车专项-vip货车专项");
+            }else{
+                list= Arrays.asList(array2);
+            }
+        }else {
+            if("1".equals(fragmentType)){
+                list.add("1.摩托专项-vip摩托1");
+                list.add("2.摩托专项-vip摩托2");
+                list.add("3.摩托专项-vip摩托3");
+            }else{
+                list.add("1.摩托专项-vip摩托");
+            }
+        }
     }
 
     private void initView(){

@@ -5,9 +5,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.adapter.SettingQuestionAdapter;
+import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class SettingQuestionActivity extends BaseActivity implements View.OnClic
 
     private List<View> list=new ArrayList<View>();
     private RelativeLayout xiaocheRL,huocheRL,kecheRL,motuocheRL;
+    private int flag=1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,17 @@ public class SettingQuestionActivity extends BaseActivity implements View.OnClic
         list.add(huocheRL);
         list.add(kecheRL);
         list.add(motuocheRL);
+        findViewById(R.id.commitTV).setOnClickListener(this);
+
+        if("1".equals(getUserInfo(5))){
+            xiaocheRL.performClick();
+        }else if("2".equals(getUserInfo(5))){
+            huocheRL.performClick();
+        }else if("3".equals(getUserInfo(5))){
+            kecheRL.performClick();
+        }else {
+            motuocheRL.performClick();
+        }
     }
 
     @Override
@@ -49,15 +63,24 @@ public class SettingQuestionActivity extends BaseActivity implements View.OnClic
         switch (view.getId()){
             case R.id.xiaocheRL:
                 setStatus(0);
+                flag=1;
                  break;
             case R.id.huocheRL:
                 setStatus(1);
+                flag=2;
                 break;
             case R.id.kecheRL:
                 setStatus(2);
+                flag=3;
                 break;
             case R.id.motuocheRL:
                 setStatus(3);
+                flag=4;
+                break;
+            case R.id.commitTV:
+                PrefUtils.putString(SettingQuestionActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CAR_TYPE_KEY, flag+"");
+                toast(SettingQuestionActivity.this,"设置成功");
+                finish();
                 break;
         }
     }

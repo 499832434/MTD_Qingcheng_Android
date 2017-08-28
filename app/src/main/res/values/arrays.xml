@@ -45,12 +45,22 @@
         <item>摩托车安全文明驾驶-212</item>
     </string-array>
 
-    <string-array name="vip">
-        <item>1.经编技巧题库(一)-VIP2</item>
-        <item>2.经编技巧题库(二)-VIP3</item>
-        <item>3.经编技巧题库(三)-VIP4</item>
-        <item>4.经编技巧题库(四)-VIP5</item>
-        <item>5.经编技巧题库(五)-VIP6</item>
-        <item>6.经编技巧题库(六)-VIP7</item>
+    <string-array name="vip1">
+        <item>1.经编技巧题库(一)-VIP1</item>
+        <item>2.经编技巧题库(二)-VIP2</item>
+        <item>3.经编技巧题库(三)-VIP3</item>
+        <item>4.经编技巧题库(四)-VIP4</item>
+        <item>5.经编技巧题库(五)-VIP5</item>
+        <item>6.经编技巧题库(六)-VIP6</item>
+        <item>7.经编技巧题库(七)-VIP7</item>
+    </string-array>
+    <string-array name="vip2">
+        <item>1.经编技巧题库(一)-vip1</item>
+        <item>2.经编技巧题库(二)-vip2</item>
+        <item>3.经编技巧题库(三)-vip3</item>
+        <item>4.经编技巧题库(四)-vip4</item>
+        <item>5.经编技巧题库(五)-vip5</item>
+        <item>6.经编技巧题库(六)-vip6</item>
+        <item>7.经编技巧题库(七)-vip7</item>
     </string-array>
 </resources>
