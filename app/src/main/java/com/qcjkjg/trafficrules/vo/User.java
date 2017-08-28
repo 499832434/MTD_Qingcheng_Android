@@ -12,6 +12,8 @@ public class User implements Parcelable {
     private String platformType;//登录类型
     private String avatar;//头像
     private String nickName;//昵称
+    private String result;//分数
+    private String minutes;//用时
 
     public String getOpenid() {
         return openid;
@@ -53,6 +55,22 @@ public class User implements Parcelable {
         this.nickName = nickName;
     }
 
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(String minutes) {
+        this.minutes = minutes;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,6 +83,8 @@ public class User implements Parcelable {
         parcel.writeString(platformType);
         parcel.writeString(avatar);
         parcel.writeString(nickName);
+        parcel.writeString(result);
+        parcel.writeString(minutes);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Creator(){
@@ -79,6 +99,8 @@ public class User implements Parcelable {
             user.setPlatformType(source.readString());
             user.setAvatar(source.readString());
             user.setNickName(source.readString());
+            user.setResult(source.readString());
+            user.setMinutes(source.readString());
             return user;
         }
 

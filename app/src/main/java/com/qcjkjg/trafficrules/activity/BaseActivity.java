@@ -237,6 +237,10 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CAR_TYPE_KEY, "1");
             case 6://收藏题目
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_COLLECT_SUB_KEY, "");
+            case 7://省
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, "山东省");
+            case 8://市
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY, "淄博市");
         }
         return "";
     }

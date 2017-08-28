@@ -148,6 +148,7 @@
                       android:drawableTop="@drawable/ic_chengji"
                       android:textColor="#333333"
                       android:text="成绩排行"
+                      android:id="@+id/scoreTV"
                       android:drawablePadding="5dp"
                       android:textSize="16sp"
                       android:layout_height="wrap_content"/>

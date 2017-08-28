@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="#ffffff"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="48dp"
+                    android:id="@+id/RL"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_height="48dp">
+        <ImageView android:layout_width="48dp"
+                   android:src="@drawable/ic_gold"
+                   android:id="@+id/rankIV"
+                   android:visibility="gone"
+                   android:layout_centerVertical="true"
+                   android:scaleType="centerInside"
+                   android:layout_height="48dp"/>
+        <TextView android:layout_width="48dp"
+                  android:layout_height="48dp"
+                  android:text=""
+                  android:gravity="center"
+                  android:visibility="gone"
+                  android:id="@+id/rankTV"
+                  android:layout_centerVertical="true"
+                  android:textSize="16sp"
+                  android:textColor="#333333"
+                />
+    </RelativeLayout>
+
+    <com.qcjkjg.trafficrules.view.CircleImageView
+            android:layout_width="48dp"
+            android:id="@+id/avtarCIV"
+            android:layout_toRightOf="@+id/RL"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_height="48dp"/>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_toRightOf="@+id/avtarCIV"
+                  android:layout_centerVertical="true"
+                  android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:textSize="16sp"
+                  android:id="@+id/nickTV"
+                  android:textColor="#333333"
+                  android:text="夏天的"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="wrap_content"
+                  android:textSize="16sp"
+                  android:id="@+id/scoreTV"
+                  android:layout_marginTop="3dp"
+                  android:textColor="#999999"
+                  android:text="100分"
+                  android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="00:03:24"
+              android:id="@+id/timeTV"
+              android:layout_centerVertical="true"
+              android:textSize="18sp"
+              android:layout_marginRight="15dp"
+              android:layout_alignParentRight="true"
+              android:textColor="#ffba3b"
+            />
+</RelativeLayout>

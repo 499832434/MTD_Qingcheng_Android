@@ -87,14 +87,23 @@ public class DbCreateHelper {
         List<Subject> subjectList=new ArrayList<Subject>();
         Cursor cursor =null;
         if("subseq".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? order by sub_id", new String[]{examType});
         }else if("subclass".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_class=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_class=? order by sub_id", new String[]{examType,subClass});
         }else if("subchapter".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_chapter=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_chapter=? order by sub_id", new String[]{examType,subClass});
         }else if("subvip".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and vip=? order by vip_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and vip=? order by vip_id", new String[]{examType,subClass});
         }
+//        if("subseq".equals(type)){
+//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+//        }else if("subclass".equals(type)){
+//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_class=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
+//        }else if("subchapter".equals(type)){
+//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_chapter=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
+//        }else if("subvip".equals(type)){
+//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and vip=? order by vip_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
+//        }
         while (cursor.moveToNext()) {
             Subject subject=new Subject();
             subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
@@ -125,10 +134,15 @@ public class DbCreateHelper {
         SQLiteDatabase db =openDatabase(context);
         List<Subject> subjectList=new ArrayList<Subject>();
         Cursor cursor =null;
+//        if(flag){
+//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is not null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+//        }else {
+//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+//        }
         if(flag){
-            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is not null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic is not null order by sub_id", new String[]{examType});
         }else {
-            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic is null order by sub_id", new String[]{examType});
         }
         while (cursor.moveToNext()) {
             Subject subject=new Subject();
@@ -165,7 +179,8 @@ public class DbCreateHelper {
         SQLiteDatabase db =openDatabase(context);
         List<Subject> subjectList=new ArrayList<Subject>();
         Cursor cursor =null;
-        cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_type=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,flag+""});
+//        cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_type=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,flag+""});
+        cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_type=? order by sub_id", new String[]{examType,flag+""});
         while (cursor.moveToNext()) {
             Subject subject=new Subject();
             subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
@@ -205,7 +220,8 @@ public class DbCreateHelper {
         SQLiteDatabase db =openDatabase(context);
         List<Subject> subjectList=new ArrayList<Subject>();
         Cursor cursor =null;
-        cursor=db.rawQuery("select * from tiku where "+String.format(" car_type=? and exam_type=? and sub_id  IN %s order by sub_id",str),new String[]{((BaseActivity)context).getUserInfo(5),examType});
+//        cursor=db.rawQuery("select * from tiku where "+String.format(" car_type=? and exam_type=? and sub_id  IN %s order by sub_id",str),new String[]{((BaseActivity)context).getUserInfo(5),examType});
+        cursor=db.rawQuery("select * from tiku where car_type like "+getCarType()+" and "+String.format("exam_type=? and sub_id  IN %s order by sub_id",str),new String[]{examType});
         while (cursor.moveToNext()) {
             Subject subject=new Subject();
             subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
@@ -238,8 +254,8 @@ public class DbCreateHelper {
         SQLiteDatabase db =openDatabase(context);
         List<Subject> subjectList=new ArrayList<Subject>();
         Cursor cursor =null;
-//        cursor=db.query("tiku",new String[]{"sub_id","sub_type","sub_title","sub_pic","a","b","c","d","answer","sub_infos","info_pic","error_num","star","dtjq","jqyy","vip_pic"},String.format(" car_type=? and exam_type=? and sub_id NOT IN %s",str),new String[]{((BaseActivity)context).getUserInfo(5),examType}, null,null,"sub_id asc",null);
-        cursor=db.rawQuery("select * from tiku where "+String.format(" car_type=? and exam_type=? and sub_id NOT IN %s order by sub_id",str),new String[]{((BaseActivity)context).getUserInfo(5),examType});
+//        cursor=db.rawQuery("select * from tiku where "+String.format(" car_type=? and exam_type=? and sub_id NOT IN %s order by sub_id",str),new String[]{((BaseActivity)context).getUserInfo(5),examType});
+        cursor=db.rawQuery("select * from tiku where car_type like "+getCarType()+" and "+String.format("exam_type=? and sub_id NOT IN %s order by sub_id",str),new String[]{examType});
         while (cursor.moveToNext()) {
             Subject subject=new Subject();
             subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
@@ -278,4 +294,17 @@ public class DbCreateHelper {
         return argsBuilder.toString();
     }
 
+    private String getCarType(){
+        String str="";
+        if("1".equals(((BaseActivity)context).getUserInfo(5))){
+            str="'%1%'";
+        }else if("2".equals(((BaseActivity)context).getUserInfo(5))){
+            str="'%2%'";
+        }else if("3".equals(((BaseActivity)context).getUserInfo(5))){
+            str="'%3%'";
+        }else if("4".equals(((BaseActivity)context).getUserInfo(5))){
+            str="'%4%'";
+        }
+        return str;
+    }
 }

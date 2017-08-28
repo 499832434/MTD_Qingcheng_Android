@@ -25,4 +25,5 @@ public interface ApiConstants {
     String UPDATE_USER_INFO_API="http://47.92.112.59:2017/updateuserinfo";//修改用户信息
     String ADLIST_API="http://47.92.112.59:2017/adlist";//获取广告
     String ADCONTENT_DETAIL_API="http://47.92.112.59:2017/adcontent";//广告详情
+    String GET_EXAM_RANK_API="http://47.92.112.59:2017/getexamrank";//排行榜
 }

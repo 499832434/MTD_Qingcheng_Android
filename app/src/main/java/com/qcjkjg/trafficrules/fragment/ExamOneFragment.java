@@ -51,12 +51,12 @@ public class ExamOneFragment extends Fragment{
     }
 
     private void initData(){
+        fragmentType = getArguments().getInt(FRAGMENT_TYPE);
         DbCreateHelper helper=new DbCreateHelper(mActivity);
         seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
     }
 
     private void initView(){
-        fragmentType = getArguments().getInt(FRAGMENT_TYPE);
 
 
         cycleViewPager= (CycleViewPager) currentView.findViewById(R.id.cycleViewPager);
@@ -78,6 +78,12 @@ public class ExamOneFragment extends Fragment{
 
         ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
 
+        currentView.findViewById(R.id.scoreTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mActivity,RankActivity.class));
+            }
+        });
         currentView.findViewById(R.id.aboutTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +95,10 @@ public class ExamOneFragment extends Fragment{
         currentView.findViewById(R.id.seqAnswerLL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(0==seqNum){
+                    mActivity.toast(mActivity,"暂无题目");
+                    return;
+                }
                 Intent intent = new Intent(mActivity, AnswerActivity.class);
                 intent.putExtra("fragmentType", fragmentType + "");
                 intent.putExtra("type", "subseq");

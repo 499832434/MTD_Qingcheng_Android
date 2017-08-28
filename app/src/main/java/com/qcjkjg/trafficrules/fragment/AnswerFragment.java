@@ -147,7 +147,15 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         ((TextView)currentView.findViewById(R.id.subTypeTV)).setText(subType);
         ((TextView)currentView.findViewById(R.id.subTitleTV)).setText("                " + subjectFlag.getSubTitle());
 
-        getPicture(subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
+        if(TextUtils.isEmpty(subjectFlag.getSubPic())){
+            ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+        }else{
+            if(subjectFlag.getSubPic().indexOf("jpg")!=-1){
+                getPicture(subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
+            }else{
+
+            }
+        }
 
         ((TextView)currentView.findViewById(R.id.aTV)).setText(subjectFlag.getSubA());
         ((TextView)currentView.findViewById(R.id.bTV)).setText(subjectFlag.getSubB());
