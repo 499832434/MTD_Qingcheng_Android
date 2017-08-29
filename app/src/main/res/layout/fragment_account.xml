@@ -6,8 +6,8 @@
                   android:orientation="vertical"
                   android:layout_height="match_parent">
         <RelativeLayout android:layout_width="match_parent"
-                        android:background="#cccccc"
-                        android:layout_height="150dp">
+                        android:background="@drawable/ic_account_top"
+                        android:layout_height="180dp">
             <RelativeLayout android:layout_width="80dp"
                             android:id="@+id/loginRL"
                           android:layout_centerInParent="true"

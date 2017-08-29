@@ -33,6 +33,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private final static String SUBJECT = "Subject";
     private final static String TYPE = "type";
     private final static String FRAGMENTTYPE = "fragmentType";
+    private final static String HISTORYSCORE = "historyscore";
     private int positionFlag=0;//第几题
     private Subject subjectFlag;
     private String fragmentType;//科目几
@@ -58,13 +59,14 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         return currentView;
     }
 
-    public static AnswerFragment newInstance(int position,Parcelable subject,String type,String fragmentType) {
+    public static AnswerFragment newInstance(int position,Parcelable subject,String type,String fragmentType,String historyscore) {
         AnswerFragment fr = new AnswerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(POSITION, position);
         bundle.putParcelable(SUBJECT, subject);
         bundle.putString(TYPE, type);
         bundle.putString(FRAGMENTTYPE, fragmentType);
+        bundle.putString(HISTORYSCORE, historyscore);
         fr.setArguments(bundle);
         return fr;
     }
@@ -218,6 +220,9 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             }
         }
 
+        if("historyscore".equals(type)){
+            setNoClick();
+        }
 
 
     }
@@ -421,6 +426,20 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             }
             return subjectSelect;
         }
+        if("historyscore".equals(type)){
+            SubjectSelect subjectSelect=new SubjectSelect();
+            String historyscore=getArguments().getString(HISTORYSCORE);
+            if(!TextUtils.isEmpty(historyscore)){
+                for(int i=0;i<historyscore.split(",").length;i++){
+                    if(subjectFlag.getSubId().equals(historyscore.split(",")[i].split("-")[0])){
+                        subjectSelect.setAnswerChoice(historyscore.split(",")[i].split("-")[1]);
+                        break;
+                    }
+                }
+
+            }
+            return subjectSelect;
+        }
 
         SubjectSelect subjectSelect=new SubjectSelect();
         subjectSelect.setSubType(Integer.parseInt(fragmentType));
@@ -455,9 +474,9 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
 
     private void setError(){
-        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
-            return;
-        }
+//        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
+//            return;
+//        }
         DbHelper db=new DbHelper(mActivity);
         db.addCollectSub(false,subjectFlag.getSubId(),fragmentType,subjectFlag.getSubChapter());
     }

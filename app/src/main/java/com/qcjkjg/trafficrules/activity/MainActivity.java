@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,6 +36,7 @@ import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.CustomViewPager;
 import com.umeng.socialize.UMShareAPI;
+import com.zaaach.citypicker.CityPickerActivity;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class MainActivity extends BaseActivity {
     public CustomViewPager masterViewPager;
     public static String SINGUPTAG = "singup";
     public CircleFragment circleFragment;
-
+    private static final int REQUEST_CODE_PICK_CITY = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,9 @@ public class MainActivity extends BaseActivity {
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();
         sign();
+
+        startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
+                REQUEST_CODE_PICK_CITY);
 
     }
 
@@ -196,7 +201,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
+            if (data != null){
+                String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
+                Toast.makeText(MainActivity.this,city,Toast.LENGTH_SHORT).show();
+            }
+        }
         UMShareAPI.get(MainActivity.this).onActivityResult(requestCode, resultCode, data);
     }
 

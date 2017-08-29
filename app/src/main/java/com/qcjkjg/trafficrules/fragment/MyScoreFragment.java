@@ -1,14 +1,19 @@
 package com.qcjkjg.trafficrules.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.activity.exam.RankActivity;
 import com.qcjkjg.trafficrules.adapter.ExamScoreAdapter;
 import com.qcjkjg.trafficrules.db.DbHelper;
@@ -50,14 +55,49 @@ public class MyScoreFragment extends Fragment{
         DbHelper db=new DbHelper(mActivity);
         Log.e("fragmentType2",fragmentType);
         list=db.selectExamScore(fragmentType);
-        for(int i=0;i<list.size();i++){
-            Log.e("aaa", list.get(i).getDate());
-        }
     }
     private void initView(){
         scoreMLV= (MyListView) currentView.findViewById(R.id.scoreMLV);
         adapter=new ExamScoreAdapter(mActivity,list);
         scoreMLV.setAdapter(adapter);
+        scoreMLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                ExamScore examScore=list.get(position);
+//                List<String> subList=new ArrayList<String>();
+//                for(int i=0;i<examScore.getSubs().split(",").length;i++){
+//                    subList.add(examScore.getSubs().split(",")[i]);
+//                }
+                Intent intent=new Intent(mActivity, AnswerActivity.class);
+                intent.putExtra("fragmentType",fragmentType);
+                intent.putExtra("type","historyscore");
+                intent.putExtra("answer",examScore.getAnswer());
+                intent.putExtra("subs",examScore.getSubs());
+                startActivity(intent);
+
+            }
+        });
+
+        if(list.size()>0){
+            ((TextView)currentView.findViewById(R.id.timeTV)).setText(list.size()+"次");
+            int want=0;
+            if(list.size()<=3){
+                for(int i=0;i<list.size();i++){
+                    want=want+Integer.parseInt(list.get(i).getScore());
+                }
+                want=want/list.size();
+            }else{
+                want=(Integer.parseInt(list.get(0).getScore())+ Integer.parseInt(list.get(1).getScore())+
+                        Integer.parseInt(list.get(2).getScore()))/3;
+            }
+            ((TextView)currentView.findViewById(R.id.wantTV)).setText(want+"分");
+            int avger=0;
+            for(int i=0;i<list.size();i++){
+                avger=avger+Integer.parseInt(list.get(i).getScore());
+            }
+            avger=avger/list.size();
+            ((TextView)currentView.findViewById(R.id.avgertimeTV)).setText(avger+"分");
+        }
 
     }
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import com.qcjkjg.trafficrules.R;
@@ -28,14 +29,14 @@ public class SubDialog extends Dialog {
     private Context context;
     private GridView subGV;
     private List<Subject> subjectList=new ArrayList<Subject>();
-    private String collectFlag,rightStr,wrongStr,numStr;
+    private String collectFlag,rightStr,wrongStr,numStr,historyscore;
     private int fragmentPositon;
 
 
     private List<SubjectSelect> subjectSelectList=new ArrayList<SubjectSelect>();
     private String type;
 
-    public SubDialog(Context context, int themeResId,List<Subject> subjectList,String collectFlag,String rightStr,String wrongStr,String numStr,int fragmentPositon,String type) {
+    public SubDialog(Context context, int themeResId,List<Subject> subjectList,String collectFlag,String rightStr,String wrongStr,String numStr,int fragmentPositon,String type,String historyscore) {
         super(context, themeResId);
         this.context=context;
         this.subjectList=subjectList;
@@ -45,6 +46,7 @@ public class SubDialog extends Dialog {
         this.numStr=numStr;
         this.fragmentPositon=fragmentPositon;
         this.type=type;
+        this.historyscore=historyscore;
     }
 
     @Override
@@ -97,7 +99,7 @@ public class SubDialog extends Dialog {
             collectIV.setTag("1");//取消收藏
         }
 
-        if("submoni1".equals(type)){
+        if("submoni1".equals(type)||"submoni2".equals(type)){
             ((ImageView)findViewById(R.id.collectIV)).setImageResource(R.drawable.ic_validation);
             ((TextView)findViewById(R.id.collectTV)).setText("交卷");
             ((ImageView)findViewById(R.id.collectIV)).setOnClickListener(new View.OnClickListener() {
@@ -181,7 +183,18 @@ public class SubDialog extends Dialog {
             }
             return subjectSelectList;
         }
-
+        if("historyscore".equals(type)){
+            List<String> list=((AnswerActivity)context).getNoRecordList();
+            if(!TextUtils.isEmpty(historyscore)){
+                for(int i=0;i<historyscore.split(",").length;i++){
+                    SubjectSelect subjectSelect=new SubjectSelect();
+                    subjectSelect.setSubId(Integer.parseInt(historyscore.split(",")[i].split("-")[0]));
+                    subjectSelect.setAnswerStatus(Integer.parseInt(historyscore.split(",")[i].split("-")[2]));
+                    subjectSelectList.add(subjectSelect);
+                }
+            }
+            return subjectSelectList;
+        }
         SubjectSelect subjectSelect=new SubjectSelect();
         if("subclass".equals(type)){
             subjectSelect.setClassAnswer(subjectList.get(0).getSubClass());
