@@ -120,6 +120,10 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
+        <activity android:name=".activity.exam.MockExamActivity"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
         <activity android:name=".activity.account.MyMoneyActivity"
                   android:screenOrientation="portrait"
                 >

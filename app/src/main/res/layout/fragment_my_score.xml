@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:background="#cccccc"
+                        android:layout_height="200dp">
+            <RelativeLayout android:layout_width="match_parent"
+                            android:id="@+id/loginRL"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content">
+
+                <com.qcjkjg.trafficrules.view.CircleImageView
+                        android:layout_width="60dp"
+                        android:src="@drawable/ic_male"
+                        android:id="@+id/accountIV"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="fitXY"
+                        android:layout_height="60dp"/>
+                <TextView android:layout_width="wrap_content"
+                          android:textColor="#ffffff"
+                          android:text="点击登录"
+                          android:id="@+id/accountTV"
+                          android:layout_below="@+id/accountIV"
+                          android:layout_centerHorizontal="true"
+                          android:layout_marginTop="15dp"
+                          android:textSize="18sp"
+                          android:layout_height="wrap_content"/>
+                <LinearLayout android:layout_width="match_parent"
+                              android:orientation="horizontal"
+                              android:padding="10dp"
+                              android:layout_alignParentBottom="true"
+                              android:layout_height="wrap_content">
+                    <LinearLayout android:layout_width="0dp"
+                                  android:layout_weight="1"
+                                  android:gravity="center"
+                                  android:orientation="vertical"
+                                  android:layout_height="wrap_content">
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="#ffffff"
+                                  android:textSize="16sp"
+                                  android:gravity="center_horizontal"
+                                  android:text="5次"/>
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:gravity="center_horizontal"
+                                  android:layout_marginTop="5dp"
+                                  android:textColor="#ffffff"
+                                  android:textSize="16sp"
+                                  android:text="考试次数"/>
+                    </LinearLayout>
+                    <View android:layout_width="0.5dp"
+                          android:layout_height="match_parent"
+                          android:background="#ffffff"/>
+                    <LinearLayout android:layout_width="0dp"
+                                  android:layout_weight="1"
+                                  android:gravity="center"
+                                  android:orientation="vertical"
+                                  android:layout_height="wrap_content">
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="#ffffff"
+                                  android:textSize="16sp"
+                                  android:gravity="center_horizontal"
+                                  android:text="5次"/>
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:gravity="center_horizontal"
+                                  android:textColor="#ffffff"
+                                  android:layout_marginTop="5dp"
+                                  android:textSize="16sp"
+                                  android:text="平均成绩"/>
+                    </LinearLayout>
+                    <View android:layout_width="0.5dp"
+                          android:layout_height="match_parent"
+                          android:background="#ffffff"/>
+                    <LinearLayout android:layout_width="0dp"
+                                  android:layout_weight="1"
+                                  android:gravity="center"
+                                  android:orientation="vertical"
+                                  android:layout_height="wrap_content">
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="#ffffff"
+                                  android:textSize="16sp"
+                                  android:gravity="center_horizontal"
+                                  android:text="5次"/>
+                        <TextView android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:gravity="center_horizontal"
+                                  android:textColor="#ffffff"
+                                  android:textSize="16sp"
+                                  android:layout_marginTop="5dp"
+                                  android:text="成绩预测"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="60dp">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_marginLeft="15dp"
+                      android:textSize="16sp"
+                      android:text="快速提高成绩,您需要"
+                      android:textColor="#666666"
+                      android:gravity="center_vertical"
+                      android:layout_height="match_parent"
+                    />
+            <TextView android:layout_width="100dp"
+                      android:layout_height="35dp"
+                      android:gravity="center"
+                      android:text="马上考试"
+                      android:layout_centerVertical="true"
+                      android:background="@drawable/ic_bg_login_button"
+                      android:layout_alignParentRight="true"
+                      android:layout_marginRight="15dp"
+                      android:textColor="#ffffff"
+                      android:textSize="16sp"/>
+        </RelativeLayout>
+        <View android:layout_width="match_parent"
+              android:layout_height="10dp"
+              android:background="#F2F2F2"
+                />
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:paddingBottom="10dp"
+                      android:paddingTop="10dp"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="0dp"
+                      android:layout_weight="1"
+                      android:padding="10dp"
+                      android:drawableTop="@drawable/ic_chankancuoti"
+                      android:drawablePadding="10dp"
+                      android:textColor="#333333"
+                      android:text="查看错题"
+                      android:id="@+id/moneyTV"
+                      android:textSize="16sp"
+                      android:gravity="center_horizontal"
+                      android:layout_height="match_parent"/>
+            <TextView android:layout_width="0dp"
+                      android:layout_weight="1"
+                      android:padding="10dp"
+                      android:drawablePadding="10dp"
+                      android:id="@+id/questionTV"
+                      android:drawableTop="@drawable/ic_weizuolianxi"
+                      android:textColor="#333333"
+                      android:text="未做练习"
+                      android:textSize="16sp"
+                      android:gravity="center_horizontal"
+                      android:layout_height="match_parent"/>
+            <TextView android:layout_width="0dp"
+                      android:layout_weight="1"
+                      android:padding="10dp"
+                      android:id="@+id/aboutTV"
+                      android:drawableTop="@drawable/ic_vipzunxiang"
+                      android:textColor="#333333"
+                      android:text="VIP尊享"
+                      android:drawablePadding="10dp"
+                      android:textSize="16sp"
+                      android:gravity="center_horizontal"
+                      android:layout_height="match_parent"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent"
+              android:layout_height="10dp"
+              android:background="#F2F2F2"
+                />
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="48dp">
+            <View android:layout_width="60dp"
+                  android:layout_height="1dp"
+                  android:layout_toLeftOf="@+id/tv"
+                  android:layout_centerVertical="true"
+                  android:background="#999999"/>
+            <TextView android:layout_width="wrap_content"
+                      android:textColor="#999999"
+                      android:text="历史成绩"
+                      android:id="@+id/tv"
+                      android:layout_centerInParent="true"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginRight="10dp"
+                      android:textSize="14sp"
+                      android:layout_height="wrap_content"/>
+            <View android:layout_width="60dp"
+                  android:layout_height="1dp"
+                  android:layout_centerVertical="true"
+                  android:layout_toRightOf="@+id/tv"
+                  android:background="#999999"/>
+        </RelativeLayout>
+
+        <com.qcjkjg.trafficrules.view.MyListView
+                android:id="@+id/scoreMLV"
+                android:dividerHeight="0.5dp"
+                android:divider="@color/title_line_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+        </com.qcjkjg.trafficrules.view.MyListView>
+    </LinearLayout>
+
+</ScrollView>

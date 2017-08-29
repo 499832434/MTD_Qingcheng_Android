@@ -606,4 +606,13 @@ public class BaseActivity extends AppCompatActivity {
             imageView.setVisibility(View.GONE);
         }
     }
+
+    public String getTime(long time){
+        Date dat=new Date(time);
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(dat);
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("mm:ss");
+        String sb=format.format(gc.getTime());
+        return sb;
+    }
 }

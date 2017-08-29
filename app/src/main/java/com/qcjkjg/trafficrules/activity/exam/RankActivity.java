@@ -6,14 +6,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
-import com.qcjkjg.trafficrules.fragment.ErrorCollectFragment;
-import com.qcjkjg.trafficrules.fragment.ExamOneFragment;
-import com.qcjkjg.trafficrules.fragment.ExamSecondFragment;
-import com.qcjkjg.trafficrules.fragment.RankFragment;
+import com.qcjkjg.trafficrules.fragment.*;
 import com.qcjkjg.trafficrules.view.CustomViewPager;
 
 import java.util.ArrayList;
@@ -26,6 +24,7 @@ public class RankActivity extends BaseActivity{
     private CustomViewPager viewPager;
     public List<Fragment> fragments;
     private TextView rankTV,scoreTV;
+    private String fragmentType;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +33,7 @@ public class RankActivity extends BaseActivity{
     }
 
     private void initView(){
+        fragmentType=getIntent().getStringExtra("type");
         findViewById(R.id.backIV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +63,7 @@ public class RankActivity extends BaseActivity{
 
         fragments=new ArrayList<Fragment>();
         fragments.add(new RankFragment());
-        fragments.add(new RankFragment());
+        fragments.add(MyScoreFragment.newInstance(fragmentType));
 
 
         viewPager = (CustomViewPager) findViewById(R.id.paraViewPager);
@@ -108,4 +108,5 @@ public class RankActivity extends BaseActivity{
         });
 
     }
+
 }

@@ -177,6 +177,7 @@
                           android:layout_centerInParent="true"
                           android:orientation="vertical"
                           android:gravity="center"
+                          android:id="@+id/moniLL"
                           android:background="@drawable/ic_green"
                           android:layout_height="wrap_content">
                 <TextView android:layout_width="wrap_content"

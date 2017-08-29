@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
+import com.qcjkjg.trafficrules.vo.ExamScore;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 
 import java.util.ArrayList;
@@ -57,7 +58,17 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [car_id] INTEGER DEFAULT 1, " +//车型id
                     "  [sub_type] INTEGER DEFAULT 1, " +//科目
                     "  [chapter_answer] varchar(10) DEFAULT '-1', " +//章节
-                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);"
+                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);",
+
+            "CREATE TABLE IF NOT EXISTS [exam_result] (" +
+                    "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
+                    "  [user_id] varchar(10) , " +//用户
+                    "  [time] varchar(10) , " +//用时
+                    "  [score] varchar(10), " +//分数
+                    "  [date] varchar(10), " +//答题日期
+                    "  [answer] text, "+//答案
+                    "  [subs] text, " +//题号
+                    "  [sub_type] INTEGER DEFAULT 1) " //科目
 
     };
 
@@ -98,7 +109,17 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [sub_id] INTEGER , " +//题目id
                     "  [car_id] INTEGER DEFAULT 1, " +//车型id
                     "  [sub_type] INTEGER DEFAULT 1, " +//科目
-                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);"
+                    "  CONSTRAINT [Constraint_On_Unique_News] UNIQUE([user_id], [sub_id],[car_id],[sub_type]) ON CONFLICT IGNORE);",
+
+            "CREATE TABLE IF NOT EXISTS [exam_result] (" +
+                    "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
+                    "  [user_id] varchar(10) , " +//用户
+                    "  [time] varchar(10) , " +//用时
+                    "  [score] varchar(10), " +//分数
+                    "  [date] varchar(10), " +//日期
+                    "  [answer] text, "+//答案
+                    "  [subs] text, " +//题号
+                    "  [sub_type] INTEGER DEFAULT 1) " //科目
     };
 
     private Context ctx;
@@ -200,7 +221,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             }
             return cursor.getCount();
         } catch (Exception e) {
-            return cursor.getCount();
+            return 0;
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -219,7 +240,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             }
             return cursor.getCount();
         } catch (Exception e) {
-            return cursor.getCount();
+            return 0;
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -239,7 +260,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             }
             return cursor.getCount();
         } catch (Exception e) {
-            return cursor.getCount();
+            return 0;
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -303,7 +324,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             }
             return cursor.moveToFirst();
         } catch (Exception e) {
-            return cursor.moveToFirst();
+            return false;
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -423,6 +444,64 @@ public class DbHelper extends AbstractDatabaseHelper {
             return list;
         } catch (Exception e) {
             return list;
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+
+
+    //添加考试记录
+    public final void addExamScore(ExamScore examScore,String fragmentType) {
+        try {
+            this.open(this.ctx);
+            this.mDb.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("user_id", ((BaseActivity)ctx).getUserInfo(1));
+            values.put("time", examScore.getTime());
+            values.put("score", examScore.getScore());
+            values.put("date",examScore.getDate());
+            values.put("answer", examScore.getAnswer());
+            values.put("subs",examScore.getSubs());
+            values.put("sub_type",fragmentType);
+
+            this.mDb.insert("exam_result", null, values);
+            this.mDb.setTransactionSuccessful();
+        } catch (Exception e) {
+
+        } finally {
+            try {
+                this.mDb.endTransaction();
+            } catch (Exception e) {
+
+            }
+            this.close();
+        }
+    }
+
+    //查询考试记录
+    public final List<ExamScore> selectExamScore(String fragmentType) {
+        Cursor cursor = null;
+        try {
+            List<ExamScore> list=new ArrayList<ExamScore>();
+            this.open(this.ctx);
+            cursor = this.mDb.rawQuery("select * from exam_result where user_id=? and sub_type=? order by date desc", new String[]{((BaseActivity) ctx).getUserInfo(1),fragmentType});
+            while (cursor.moveToNext()) {
+                ExamScore examScore=new ExamScore();
+                examScore.setTime(cursor.getString(cursor.getColumnIndex("time")));
+                Log.e("eeee", cursor.getString(cursor.getColumnIndex("time")));
+                examScore.setScore(cursor.getString(cursor.getColumnIndex("score")));
+                examScore.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                examScore.setAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+                examScore.setSubs(cursor.getString(cursor.getColumnIndex("subs")));
+                list.add(examScore);
+            }
+            return list;
+        } catch (Exception e) {
+            Log.e("eee",e.toString());
+            return new ArrayList<ExamScore>();
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();

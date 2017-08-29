@@ -87,12 +87,31 @@ public class SubDialog extends Dialog {
                 }
             }
         });
+
+
         if("0".equals(collectFlag)){
             collectIV.setImageResource(R.drawable.ic_stars);
             collectIV.setTag("0");//收藏
         }else{
             collectIV.setImageResource(R.drawable.ic_stars_n);
             collectIV.setTag("1");//取消收藏
+        }
+
+        if("submoni1".equals(type)){
+            ((ImageView)findViewById(R.id.collectIV)).setImageResource(R.drawable.ic_validation);
+            ((TextView)findViewById(R.id.collectTV)).setText("交卷");
+            ((ImageView)findViewById(R.id.collectIV)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            ((TextView)findViewById(R.id.collectTV)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
 
         ((TextView)findViewById(R.id.rightTV)).setText(rightStr);
@@ -150,7 +169,7 @@ public class SubDialog extends Dialog {
         });
     }
     private List<SubjectSelect> query(){
-        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
             List<String> list=((AnswerActivity)context).getNoRecordList();
             if(list.size()>0){
                 for(int i=0;i<list.size();i++){
@@ -173,19 +192,6 @@ public class SubDialog extends Dialog {
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectList.get(0).getSubVip());
         }
-//        else if("subcollectchapter".equals(type)){
-//            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("subcollectall".equals(type)){
-//            subjectSelect.setChapterAnswer("0");
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("suberrorchapter".equals(type)){
-//            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
-//            subjectSelect.setErrorAnswer("0");
-//        }else if("suberrorall".equals(type)){
-//            subjectSelect.setChapterAnswer("0");
-//            subjectSelect.setErrorAnswer("0");
-//        }
         DbHelper db=new DbHelper(context);
         return db.queryWholeSub(subjectSelect);
     }

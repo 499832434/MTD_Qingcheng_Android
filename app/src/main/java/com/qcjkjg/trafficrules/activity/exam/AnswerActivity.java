@@ -3,15 +3,14 @@ package com.qcjkjg.trafficrules.activity.exam;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,15 +22,13 @@ import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.fragment.AnswerFragment;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.SubDialog;
+import com.qcjkjg.trafficrules.vo.ExamScore;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zongshuo on 2017/8/17.
@@ -49,6 +46,8 @@ public class AnswerActivity extends BaseActivity{
     private String type="";
     public Boolean nodoneFlag=true;//未做练习是否开始作答
     private List<String> noRecordList=new ArrayList<String>();//答题结果记录到list
+    private String time="00:00";
+    private long useTime=45*60*1000;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +55,8 @@ public class AnswerActivity extends BaseActivity{
 
         initData();
         initView();
-
         getCollectStatus(0);
+
     }
 
     private void initData(){
@@ -118,6 +117,11 @@ public class AnswerActivity extends BaseActivity{
             if(list.size()!=0){
                 subjectList=helper.getSubjectCollectList(fragmentType, list);
             }
+        }else if("submoni1".equals(type)){
+            subjectList=helper.getMoniSubjectList1(fragmentType);
+        }else if("submoni2".equals(type)){
+            List<String> list= queryNoDone();
+            subjectList=helper.getMoniSubjectList2(list,fragmentType+"");
         }
 
 
@@ -127,7 +131,7 @@ public class AnswerActivity extends BaseActivity{
             fragments.add(AnswerFragment.newInstance(i,subjectList.get(i),type,fragmentType));
         }
 
-        if((!"subcollectchapter".equals(type))||(!"subcollectall".equals(type))||(!"suberrorchapter".equals(type))||(!"suberrorall".equals(type))){
+        if((!"subcollectchapter".equals(type))||(!"subcollectall".equals(type))||(!"suberrorchapter".equals(type))||(!"suberrorall".equals(type))||(!"submoni1".equals(type))||(!"submoni2".equals(type))){
             wholeRight=queryWholeNum(true);
             wholeWrong=queryWholeNum(false);
         }
@@ -144,16 +148,50 @@ public class AnswerActivity extends BaseActivity{
         });
 
         collectIV= (ImageView) findViewById(R.id.collectIV);
-        collectIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if("1".equals(collectIV.getTag())){
-                    setCollectIV(true,subjectList.get(fragmentPositon).getSubId());
-                }else{
-                    setCollectIV(false,subjectList.get(fragmentPositon).getSubId());
+        if("submoni1".equals(type)||"submoni2".equals(type)){
+            ((ImageView)findViewById(R.id.collectIV)).setImageResource(R.drawable.ic_validation);
+            ((TextView)findViewById(R.id.collectTV)).setText("交卷");
+            ((ImageView)findViewById(R.id.collectIV)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAssignDialog();
                 }
-            }
-        });
+            });
+            ((TextView)findViewById(R.id.collectTV)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAssignDialog();
+                }
+            });
+            CountDownTimer timer = new CountDownTimer(45*60*1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    time=getTime(millisUntilFinished);
+                    useTime=millisUntilFinished;
+                    ((CustomTitleBar)findViewById(R.id.customTitleBar)).setTitleTextView("倒计时:  "+getTime(millisUntilFinished));
+                }
+
+                @Override
+                public void onFinish() {
+                    time="00:00";
+                }
+            };
+            timer.start();
+        }else{
+            collectIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if("1".equals(collectIV.getTag())){
+                        setCollectIV(true,subjectList.get(fragmentPositon).getSubId());
+                    }else{
+                        setCollectIV(false,subjectList.get(fragmentPositon).getSubId());
+                    }
+                }
+            });
+        }
+
+
+
 
 
         numFlagTV= (TextView) findViewById(R.id.numFlagTV);
@@ -236,23 +274,6 @@ public class AnswerActivity extends BaseActivity{
             String subvip=getIntent().getStringExtra("subvip");
             subjectSelect.setVipAnswer(subvip);
         }
-//        else if("subcollectchapter".equals(type)){
-//            String subcollectchapter=getIntent().getStringExtra("subcollectchapter");
-//            subjectSelect.setChapterAnswer(subcollectchapter);
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("subcollectall".equals(type)){
-//            String subcollectall=getIntent().getStringExtra("subcollectall");
-//            subjectSelect.setChapterAnswer(subcollectall);
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("suberrorchapter".equals(type)){
-//            String suberrorchapter=getIntent().getStringExtra("suberrorchapter");
-//            subjectSelect.setChapterAnswer(suberrorchapter);
-//            subjectSelect.setErrorAnswer("0");
-//        }else if("suberrorall".equals(type)){
-//            String suberrorall=getIntent().getStringExtra("suberrorall");
-//            subjectSelect.setChapterAnswer(suberrorall);
-//            subjectSelect.setErrorAnswer("0");
-//        }
         if(flag){
             subjectSelect.setAnswerStatus(1);
         }else{
@@ -292,6 +313,9 @@ public class AnswerActivity extends BaseActivity{
 
     public void getCollectStatus(int position){
         fragmentPositon=position;
+        if("submoni1".equals(type)||"submoni2".equals(type)){
+            return;
+        }
         DbHelper db=new DbHelper(AnswerActivity.this);
         boolean flag=db.selectCollectSub(true,subjectList.get(position).getSubId(),fragmentType);
         if(flag){
@@ -352,5 +376,81 @@ public class AnswerActivity extends BaseActivity{
 
     public void setNoRecordList(List<String> noRecordList) {
         this.noRecordList = noRecordList;
+    }
+
+
+
+    private void showAssignDialog() {
+        final Dialog dialog  = new Dialog(this, R.style.cartdialog);
+        View view= LayoutInflater.from(this).inflate(R.layout.dialog_assign,null);
+        if(wholeRight>=90){
+            ((TextView)view.findViewById(R.id.resultTV)).setText("合格");
+        }else{
+            ((TextView)view.findViewById(R.id.resultTV)).setText("不合格");
+        }
+        view.findViewById(R.id.closeIV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.goonTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.commitTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommitExamScore();
+                dialog.dismiss();
+                finish();
+            }
+        });
+        ((TextView)view.findViewById(R.id.errorTV)).setText(Html.fromHtml("您已答错<font color='#ea0f1e'>" + wholeWrong + "</font>题"));
+        ((TextView)view.findViewById(R.id.scoreTV)).setText(Html.fromHtml("考试得分<font color='#ea0f1e'>"+wholeRight+"</font>分"));
+        dialog.setContentView(view);
+        Window window = dialog.getWindow();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+        dialog.show();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.gravity = Gravity.CENTER;
+        params.dimAmount = 0.5f;
+        window.setAttributes(params);
+    }
+
+    private void CommitExamScore(){
+        ExamScore examScore=new ExamScore();
+        examScore.setScore(wholeRight + "");
+        examScore.setDate(new Date().getTime() + "");
+        if(noRecordList.size()>0){
+            StringBuffer sb=new StringBuffer();
+            for(int i=0;i<noRecordList.size();i++){
+                sb.append(noRecordList.get(i));
+                if (i < noRecordList.size() - 1) {
+                    sb.append(",");
+                }
+            }
+            examScore.setAnswer(sb.toString());
+        }else{
+            examScore.setAnswer("");
+        }
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<subjectList.size();i++) {
+            sb.append(subjectList.get(i).getSubId());
+            if (i < subjectList.size() - 1) {
+                sb.append(",");
+            }
+        }
+        examScore.setSubs(sb.toString());
+        long time3=45*60*1000-useTime;
+        String time2=getTime(time3);
+        examScore.setTime(time2);
+        DbHelper db=new DbHelper(AnswerActivity.this);
+        db.addExamScore(examScore,fragmentType);
     }
 }

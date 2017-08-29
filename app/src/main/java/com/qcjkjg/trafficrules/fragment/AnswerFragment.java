@@ -369,7 +369,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     }
 
     private void add(int flag){
-        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
+        Log.e("eee",type);
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
             List<String> list=((AnswerActivity)mActivity).getNoRecordList();
             String str="";
             if (0 == flag) {//0:正确
@@ -402,25 +403,12 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
         }
-//        else if("subcollectchapter".equals(type)){
-//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("subcollectall".equals(type)){
-//            subjectSelect.setChapterAnswer("0");
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("suberrorchapter".equals(type)){
-//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-//            subjectSelect.setErrorAnswer("0");
-//        }else if("suberrorall".equals(type)){
-//            subjectSelect.setChapterAnswer("0");
-//            subjectSelect.setErrorAnswer("0");
-//        }
         DbHelper db=new DbHelper(mActivity);
         db.addSub(subjectSelect);
     }
 
     private SubjectSelect query(){
-        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
             SubjectSelect subjectSelect=new SubjectSelect();
             List<String> list=((AnswerActivity)mActivity).getNoRecordList();
             if(list.size()>0){
@@ -446,19 +434,6 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
         }
-//        else if("subcollectchapter".equals(type)){
-//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("subcollectall".equals(type)){
-//            subjectSelect.setChapterAnswer("0");
-//            subjectSelect.setCollectAnswer("0");
-//        }else if("suberrorchapter".equals(type)){
-//            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
-//            subjectSelect.setErrorAnswer("0");
-//        }else if("suberrorall".equals(type)){
-//            subjectSelect.setChapterAnswer("0");
-//            subjectSelect.setErrorAnswer("0");
-//        }
         DbHelper db=new DbHelper(mActivity);
         return db.querySub(subjectSelect);
     }
@@ -480,7 +455,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
 
     private void setError(){
-        if("suberrorchapter".equals(type)||"suberrorall".equals(type)){
+        if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
             return;
         }
         DbHelper db=new DbHelper(mActivity);

@@ -280,6 +280,68 @@ public class DbCreateHelper {
 
     }
 
+
+    //全真模拟
+    public List<Subject>  getMoniSubjectList1(String examType){
+        SQLiteDatabase db =openDatabase(context);
+        List<Subject> subjectList=new ArrayList<Subject>();
+        Cursor cursor =null;
+        cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? order by random() limit 100", new String[]{examType});
+        while (cursor.moveToNext()) {
+            Subject subject=new Subject();
+            subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
+            subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
+            subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
+            subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
+            subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
+            subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
+            subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
+            subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
+            subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+            subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
+            subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
+            subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
+            subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
+            subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
+            subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
+            subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subjectList.add(subject);
+        }
+        return subjectList;
+
+    }
+
+    //优先选做未选题
+    public List<Subject>  getMoniSubjectList2(List<String> list,String examType){
+        String str=argsArrayToString(list);
+        SQLiteDatabase db =openDatabase(context);
+        List<Subject> subjectList=new ArrayList<Subject>();
+        Cursor cursor =null;
+        cursor=db.rawQuery("select * from tiku where car_type like "+getCarType()+" and "+String.format("exam_type=? and sub_id NOT IN %s ",str)+" order by random() limit 100",new String[]{examType});
+        while (cursor.moveToNext()) {
+            Subject subject=new Subject();
+            subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
+            subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
+            subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
+            subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
+            subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
+            subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
+            subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
+            subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
+            subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+            subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
+            subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
+            subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
+            subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
+            subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
+            subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
+            subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subjectList.add(subject);
+        }
+        return subjectList;
+
+    }
+
     private String argsArrayToString(List<String> args) {
         StringBuilder argsBuilder = new StringBuilder();
         argsBuilder.append("(");
