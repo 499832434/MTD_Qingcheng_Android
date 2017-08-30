@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
-import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
-import com.qcjkjg.trafficrules.activity.exam.RankActivity;
+import com.qcjkjg.trafficrules.activity.exam.*;
 import com.qcjkjg.trafficrules.adapter.ExamScoreAdapter;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.view.MyListView;
@@ -99,6 +98,43 @@ public class MyScoreFragment extends Fragment{
             ((TextView)currentView.findViewById(R.id.avgertimeTV)).setText(avger+"分");
         }
 
+        currentView.findViewById(R.id.moniTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, MockExamActivity.class);
+                intent.putExtra("fragmentType", fragmentType + "");
+                startActivity(intent);
+            }
+        });
+
+        currentView.findViewById(R.id.cuotiTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, ErrorCollectActivity.class);
+                intent.putExtra("fragmentType", fragmentType + "");
+                startActivity(intent);
+            }
+        });
+
+        currentView.findViewById(R.id.weizuoTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(mActivity, AnswerActivity.class);
+                intent.putExtra("fragmentType",fragmentType+"");
+                intent.putExtra("type","subnodone");
+                startActivity(intent);
+
+            }
+        });
+
+        currentView.findViewById(R.id.vipTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, VipActivity.class);
+                intent.putExtra("fragmentType", fragmentType + "");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -88,7 +88,6 @@ public class BaseActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText contentET;
     private TextView num1TV, num2TV;
-    public static MediaPlayer mediaPlayer = new MediaPlayer();
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -600,10 +599,9 @@ public class BaseActivity extends AppCompatActivity {
 
     public void getLocalPicture(String path,ImageView imageView){
         if(!TextUtils.isEmpty(path)){
-            String subPic=path.substring(0, path.length() - 4);
-            int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
-            Drawable drawable=getResources().getDrawable(id);
-            imageView.setImageDrawable(drawable);
+            String url="file:///android_asset/" + path;
+            Log.e("url",url);
+            getNetWorkPicture(url,imageView);
             imageView.setVisibility(View.VISIBLE);
         }else{
             imageView.setVisibility(View.GONE);
@@ -619,19 +617,4 @@ public class BaseActivity extends AppCompatActivity {
         return sb;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mediaPlayer!=null){
-            mediaPlayer.pause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mediaPlayer!=null){
-            mediaPlayer.release();
-        }
-    }
 }

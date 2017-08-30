@@ -160,6 +160,7 @@
                       android:drawableTop="@drawable/ic_gongkenanti"
                       android:textColor="#333333"
                       android:text="攻克难题"
+                      android:id="@+id/nantiTV"
                       android:textSize="16sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"

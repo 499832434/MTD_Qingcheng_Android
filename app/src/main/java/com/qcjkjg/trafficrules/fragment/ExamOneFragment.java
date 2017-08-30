@@ -81,7 +81,7 @@ public class ExamOneFragment extends Fragment{
         currentView.findViewById(R.id.scoreTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(mActivity,RankActivity.class);
+                Intent intent = new Intent(mActivity, RankActivity.class);
                 intent.putExtra("type", fragmentType + "");
                 startActivity(intent);
             }
@@ -113,6 +113,15 @@ public class ExamOneFragment extends Fragment{
                 Intent intent = new Intent(mActivity, AnswerActivity.class);
                 intent.putExtra("fragmentType", fragmentType + "");
                 intent.putExtra("type", "submemory");
+                startActivity(intent);
+            }
+        });
+        currentView.findViewById(R.id.nantiTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, AnswerActivity.class);
+                intent.putExtra("fragmentType", fragmentType + "");
+                intent.putExtra("type", "subnanti");
                 startActivity(intent);
             }
         });

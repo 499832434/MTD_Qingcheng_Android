@@ -3,6 +3,7 @@ package com.qcjkjg.trafficrules.fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -14,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.db.DbHelper;
+import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 
@@ -52,6 +55,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private SubjectSelect subjectSelect;//数据库中题目信息
     private int answerNum=0,errorNum=0;
     private List<String> moreList=new ArrayList<String>();//多选选项
+    private MediaPlayer mediaPlayer;
+    private VideoView animationVV;
 
     @Nullable
     @Override
@@ -150,15 +155,32 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }
 
         ((TextView)currentView.findViewById(R.id.subTypeTV)).setText(subType);
-        ((TextView)currentView.findViewById(R.id.subTitleTV)).setText("                " + subjectFlag.getSubTitle());
+        ((TextView)currentView.findViewById(R.id.subTitleTV)).setText("                " + subjectFlag.getSubTitle().toString().trim());
 
+        animationVV= (VideoView) currentView.findViewById(R.id.animationVV);
         if(TextUtils.isEmpty(subjectFlag.getSubPic())){
             ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+            animationVV.setVisibility(View.GONE);
         }else{
             if(subjectFlag.getSubPic().indexOf("jpg")!=-1){
-                getPicture(subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
-            }else{
-
+                animationVV.setVisibility(View.GONE);
+                mActivity.getLocalPicture(subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
+//                String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
+//                Log.e("aaaa2",subjectFlag.getSubPic()+"=="+uri);
+//                mActivity.getNetWorkPicture("file:///android_asset/a"+subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
+            }else if(subjectFlag.getSubPic().indexOf("mp4")!=-1){
+                ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+                String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
+                Log.e("aaaa1",uri);
+                animationVV.setVideoURI(Uri.parse(uri));
+                animationVV.start();
+                animationVV.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.start();
+                        mp.setLooping(true);
+                    }
+                });
             }
         }
 
@@ -227,6 +249,11 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             setNoClick();
         }
 
+        soundTV= (TextView) currentView.findViewById(R.id.soundTV);
+        if(TextUtils.isEmpty(subjectFlag.getVipSound())){
+            currentView.findViewById(R.id.soundLL).setVisibility(View.GONE);
+            currentView.findViewById(R.id.soundLL1).setVisibility(View.GONE);
+        }
         currentView.findViewById(R.id.soundLL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,17 +274,41 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 //                        }
 //                    });
 //                }
+                if (!NetworkUtils.isNetworkAvailable(mActivity)) {
+                    mActivity.toast(mActivity,"无网络连接");
+                    return;
+                }
+                Log.e("yyyy",subjectFlag.getVipSound()+"==");
+                if(mediaPlayer!=null&&mediaPlayer.isPlaying()){
+                    mediaPlayer.release();
+                    mediaPlayer=null;
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_play);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    soundTV.setCompoundDrawables(drawable, null, null, null);
+                    soundTV.setText("播放语音");
+                    return;
+                }
+                mediaPlayer = new MediaPlayer();
                 try {
-                    mActivity.mediaPlayer.setDataSource(ApiConstants.SOUND_BASE_API+subjectFlag.getVipSound());
-                    mActivity.mediaPlayer.prepare();
-                    mActivity.mediaPlayer.start();
+                    mediaPlayer.setDataSource(ApiConstants.SOUND_BASE_API+subjectFlag.getVipSound());
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                    soundTV.setText("停止播放");
+                    Drawable drawable= getResources().getDrawable(R.drawable.ic_stop);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    soundTV.setCompoundDrawables(drawable, null, null, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                mActivity.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        mp.release();
+                        mediaPlayer.release();
+                        mediaPlayer=null;
+                        Drawable drawable= getResources().getDrawable(R.drawable.ic_play);
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                        soundTV.setCompoundDrawables(drawable,null,null,null);
+                        soundTV.setText("播放语音");
                     }
                 });
             }
@@ -368,14 +419,14 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             ((TextView)currentView.findViewById(R.id.subInfosTV)).setText(subjectFlag.getSubInfos());
             ((TextView)currentView.findViewById(R.id.subInfosTV)).setVisibility(View.VISIBLE);
         }
-        getPicture(subjectFlag.getSubInfoPic(), ((ImageView) currentView.findViewById(R.id.infoPicIV)));
+        mActivity.getLocalPicture(subjectFlag.getSubInfoPic(), ((ImageView) currentView.findViewById(R.id.infoPicIV)));
         ((TextView)currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
         if(!mActivity.getUserInfo(3).equals("0")){
             if(!TextUtils.isEmpty(subjectFlag.getVipInfos())){
                 ((TextView)currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
                 ((TextView)currentView.findViewById(R.id.vipTV)).setVisibility(View.VISIBLE);
             }
-            getPicture(subjectFlag.getVipPic(), ((ImageView) currentView.findViewById(R.id.vipIV)));
+            mActivity.getLocalPicture(subjectFlag.getVipPic(), ((ImageView) currentView.findViewById(R.id.vipIV)));
         }
         ((TextView)currentView.findViewById(R.id.myErrorTV)).setText("共做过" + answerNum + "次,做错" + errorNum + "次");
     }
@@ -388,22 +439,22 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void getPicture(String path,ImageView imageView){
-        try{
-            if(!TextUtils.isEmpty(path)){
-                String subPic="a"+path.substring(0, path.length() - 4);
-                int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
-                Drawable drawable=getResources().getDrawable(id);
-                imageView.setImageDrawable(drawable);
-                imageView.setVisibility(View.VISIBLE);
-            }else{
-                imageView.setVisibility(View.GONE);
-            }
-        }catch (Exception e){
-            imageView.setVisibility(View.GONE);
-        }
-
-    }
+//    private void getPicture(String path,ImageView imageView){
+//        try{
+//            if(!TextUtils.isEmpty(path)){
+//                String subPic="a"+path.substring(0, path.length() - 4);
+//                int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
+//                Drawable drawable=getResources().getDrawable(id);
+//                imageView.setImageDrawable(drawable);
+//                imageView.setVisibility(View.VISIBLE);
+//            }else{
+//                imageView.setVisibility(View.GONE);
+//            }
+//        }catch (Exception e){
+//            imageView.setVisibility(View.GONE);
+//        }
+//
+//    }
 
     private void setNoClick(){
         currentView.findViewById(R.id.aLL).setClickable(false);
@@ -446,6 +497,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
+        }else if("subnanti".equals(type)){
+            subjectSelect.setSeqAnswer("1");
         }
         DbHelper db=new DbHelper(mActivity);
         db.addSub(subjectSelect);
@@ -491,6 +544,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
+        }else if("subnanti".equals(type)){
+            subjectSelect.setSeqAnswer("1");
         }
         DbHelper db=new DbHelper(mActivity);
         return db.querySub(subjectSelect);
@@ -628,5 +683,19 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }
         setWorngAbcd();
         setNoClick();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try{
+            if(mediaPlayer!=null){
+                mediaPlayer.release();
+                mediaPlayer=null;
+            }
+        }catch (Exception e){
+            mediaPlayer=null;
+        }
+
     }
 }

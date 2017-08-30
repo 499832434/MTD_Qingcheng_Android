@@ -63,8 +63,8 @@ public class MainActivity extends BaseActivity {
         initView();
         sign();
 
-        startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
-                REQUEST_CODE_PICK_CITY);
+//        startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
+//                REQUEST_CODE_PICK_CITY);
 
     }
 

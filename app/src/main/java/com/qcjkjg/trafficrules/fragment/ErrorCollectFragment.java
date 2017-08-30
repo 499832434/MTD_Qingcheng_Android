@@ -64,7 +64,6 @@ public class ErrorCollectFragment extends Fragment{
         }else if("suberror".equals(type)){
             DbHelper dbHelper=new DbHelper(mActivity);
             list=dbHelper.selectCollectChapter(false,fragmentType);
-            Log.e("uuu",list.get(0));
             allList=dbHelper.selectCollectAllSubid(false,fragmentType);
         }
 

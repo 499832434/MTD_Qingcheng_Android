@@ -5,7 +5,6 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <ImageView android:layout_width="wrap_content"
-               android:src="@drawable/a0001"
                android:scaleType="fitXY"
                android:id="@+id/pictureIV"
                android:layout_margin="15dp"
