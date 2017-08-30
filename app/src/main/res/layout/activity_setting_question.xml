@@ -81,7 +81,7 @@
                                   android:textSize="14sp"
                                   android:textColor="#666666"/>
                         <ImageView android:layout_width="wrap_content"
-                                   android:src="@drawable/ic_close"
+                                   android:src="@drawable/ic_car_dui"
                                    android:scaleType="centerInside"
                                    android:visibility="visible"
                                    android:layout_alignParentBottom="true"
@@ -118,7 +118,7 @@
                                   android:textSize="14sp"
                                   android:textColor="#666666"/>
                         <ImageView android:layout_width="wrap_content"
-                                   android:src="@drawable/ic_close"
+                                   android:src="@drawable/ic_car_dui"
                                    android:scaleType="centerInside"
                                    android:visibility="gone"
                                    android:layout_alignParentBottom="true"
@@ -162,7 +162,7 @@
                                   android:textSize="14sp"
                                   android:textColor="#666666"/>
                         <ImageView android:layout_width="wrap_content"
-                                   android:src="@drawable/ic_close"
+                                   android:src="@drawable/ic_car_dui"
                                    android:scaleType="centerInside"
                                    android:visibility="gone"
                                    android:layout_alignParentBottom="true"
@@ -199,7 +199,7 @@
                                   android:textSize="14sp"
                                   android:textColor="#666666"/>
                         <ImageView android:layout_width="wrap_content"
-                                   android:src="@drawable/ic_close"
+                                   android:src="@drawable/ic_car_dui"
                                    android:scaleType="centerInside"
                                    android:visibility="gone"
                                    android:layout_alignParentBottom="true"

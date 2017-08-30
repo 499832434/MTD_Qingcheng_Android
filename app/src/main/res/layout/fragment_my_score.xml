@@ -6,7 +6,7 @@
                   android:orientation="vertical"
                   android:layout_height="match_parent">
         <RelativeLayout android:layout_width="match_parent"
-                        android:background="#cccccc"
+                        android:background="@drawable/ic_account_top"
                         android:layout_height="200dp">
             <RelativeLayout android:layout_width="match_parent"
                             android:id="@+id/loginRL"
@@ -44,6 +44,7 @@
                                   android:layout_height="wrap_content"
                                   android:textColor="#ffffff"
                                   android:textSize="16sp"
+                                  android:id="@+id/timeTV"
                                   android:gravity="center_horizontal"
                                   android:text="5次"/>
                         <TextView android:layout_width="match_parent"
@@ -66,8 +67,9 @@
                                   android:layout_height="wrap_content"
                                   android:textColor="#ffffff"
                                   android:textSize="16sp"
+                                  android:id="@+id/avgertimeTV"
                                   android:gravity="center_horizontal"
-                                  android:text="5次"/>
+                                  android:text="5分"/>
                         <TextView android:layout_width="match_parent"
                                   android:layout_height="wrap_content"
                                   android:gravity="center_horizontal"
@@ -88,8 +90,9 @@
                                   android:layout_height="wrap_content"
                                   android:textColor="#ffffff"
                                   android:textSize="16sp"
+                                  android:id="@+id/wantTV"
                                   android:gravity="center_horizontal"
-                                  android:text="5次"/>
+                                  android:text="5分"/>
                         <TextView android:layout_width="match_parent"
                                   android:layout_height="wrap_content"
                                   android:gravity="center_horizontal"

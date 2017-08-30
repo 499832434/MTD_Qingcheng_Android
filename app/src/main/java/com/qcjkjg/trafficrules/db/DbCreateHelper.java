@@ -163,6 +163,8 @@ public class DbCreateHelper {
             subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
             subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
             if(flag){
                 subject.setSubClass("图片题");
             }else{
@@ -200,6 +202,8 @@ public class DbCreateHelper {
             subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
             subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
             if(1==flag){
                 subject.setSubClass("判断题");
             }else if(2==flag){
@@ -274,6 +278,9 @@ public class DbCreateHelper {
             subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
             subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
             subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
             subjectList.add(subject);
         }
         return subjectList;
@@ -305,6 +312,9 @@ public class DbCreateHelper {
             subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
             subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
             subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
             subjectList.add(subject);
         }
         return subjectList;
@@ -336,6 +346,9 @@ public class DbCreateHelper {
             subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
             subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
             subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
             subjectList.add(subject);
         }
         return subjectList;

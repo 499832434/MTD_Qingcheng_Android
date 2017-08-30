@@ -48,6 +48,7 @@ public class AnswerActivity extends BaseActivity{
     private List<String> noRecordList=new ArrayList<String>();//答题结果记录到list
     private String time="00:00";
     private long useTime=45*60*1000;
+    private String historyscore;//历史成绩
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,6 @@ public class AnswerActivity extends BaseActivity{
             }else {
                 subjectList=helper.getSubjectList(fragmentType, subclass,"subclass");
             }
-//            subjectList=helper.getSubjectList(fragmentType,subclass,"subclass");
         }else if("subseq".equals(type)||"submemory".equals(type)){
             subjectList=helper.getSubjectList(fragmentType,"","subseq");
         }else if("subchapter".equals(type)){
@@ -122,13 +122,21 @@ public class AnswerActivity extends BaseActivity{
         }else if("submoni2".equals(type)){
             List<String> list= queryNoDone();
             subjectList=helper.getMoniSubjectList2(list,fragmentType+"");
+        }else if("historyscore".equals(type)){
+            String subs=getIntent().getStringExtra("subs");
+            historyscore=getIntent().getStringExtra("answer");
+            List<String> subList=new ArrayList<String>();
+            for(int i=0;i<subs.split(",").length;i++){
+                subList.add(subs.split(",")[i]);
+            }
+            subjectList=helper.getSubjectCollectList(fragmentType, subList);
         }
 
 
 
 
         for(int i=0;i<subjectList.size();i++){
-            fragments.add(AnswerFragment.newInstance(i,subjectList.get(i),type,fragmentType));
+            fragments.add(AnswerFragment.newInstance(i,subjectList.get(i),type,fragmentType,historyscore));
         }
 
         if((!"subcollectchapter".equals(type))||(!"subcollectall".equals(type))||(!"suberrorchapter".equals(type))||(!"suberrorall".equals(type))||(!"submoni1".equals(type))||(!"submoni2".equals(type))){
@@ -136,6 +144,22 @@ public class AnswerActivity extends BaseActivity{
             wholeWrong=queryWholeNum(false);
         }
 
+        if("historyscore".equals(type)){
+            if(!TextUtils.isEmpty(historyscore)){
+                int right=0;
+                int wrong=0;
+                for(int i=0;i<historyscore.split(",").length;i++){
+                    if("1".equals(historyscore.split(",")[i].split("-")[2])){
+                        right++;
+                    }else{
+                        wrong++;
+                    }
+                }
+                wholeRight=right;
+                wholeWrong=wrong;
+            }
+
+        }
 
     }
 
@@ -328,7 +352,7 @@ public class AnswerActivity extends BaseActivity{
     }
 
     private void showCart() {
-        SubDialog dialog  = new SubDialog(this, R.style.cartdialog,subjectList, (String) collectIV.getTag(),wholeRight+"",wholeWrong+"",numFlagTV.getText().toString(),fragmentPositon,type);
+        SubDialog dialog  = new SubDialog(this, R.style.cartdialog,subjectList, (String) collectIV.getTag(),wholeRight+"",wholeWrong+"",numFlagTV.getText().toString(),fragmentPositon,type,historyscore);
         Window window = dialog.getWindow();
         dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);
