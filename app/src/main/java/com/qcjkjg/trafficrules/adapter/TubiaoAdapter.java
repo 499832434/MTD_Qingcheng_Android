@@ -89,5 +89,4 @@ public class TubiaoAdapter extends BaseAdapter {
         private ImageView IV1,IV2,IV3,IV4;
     }
 
-
 }
