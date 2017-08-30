@@ -2,6 +2,7 @@ package com.qcjkjg.trafficrules.fragment;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -13,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -218,6 +221,42 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             }
         }
 
+
+        currentView.findViewById(R.id.soundLL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if("0".equals(mActivity.getUserInfo(3))){
+//                    mActivity.toast(mActivity,"请开通会员");
+//                }else{
+//                    try {
+//                        mActivity.mediaPlayer.setDataSource(ApiConstants.SOUND_BASE_API+subjectFlag.getVipSound());
+//                        mActivity.mediaPlayer.prepare();
+//                        mActivity.mediaPlayer.start();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    mActivity.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+//                        @Override
+//                        public void onCompletion(MediaPlayer mp) {
+//                            mp.release();
+//                        }
+//                    });
+//                }
+                try {
+                    mActivity.mediaPlayer.setDataSource(ApiConstants.SOUND_BASE_API+subjectFlag.getVipSound());
+                    mActivity.mediaPlayer.prepare();
+                    mActivity.mediaPlayer.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mActivity.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+            }
+        });
 
 
     }

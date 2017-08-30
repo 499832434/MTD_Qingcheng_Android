@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,6 +88,8 @@ public class BaseActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText contentET;
     private TextView num1TV, num2TV;
+    public static MediaPlayer mediaPlayer = new MediaPlayer();
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -614,5 +617,21 @@ public class BaseActivity extends AppCompatActivity {
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("mm:ss");
         String sb=format.format(gc.getTime());
         return sb;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mediaPlayer!=null){
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mediaPlayer!=null){
+            mediaPlayer.release();
+        }
     }
 }

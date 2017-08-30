@@ -252,6 +252,7 @@
             <LinearLayout android:layout_width="200dp"
                           android:orientation="horizontal"
                           android:gravity="center"
+                          android:id="@+id/soundLL"
                           android:layout_gravity="center_horizontal"
                           android:background="@drawable/ic_bg_play"
                           android:layout_height="40dp">
