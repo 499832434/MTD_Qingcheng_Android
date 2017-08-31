@@ -66,7 +66,6 @@ public class VideoAdapter extends BaseAdapter {
         return convertView;
     }
 
-
     public final class ViewHolder {
         private TextView subvipNameTV,subvipNumTV;
         private RelativeLayout mainRL;
