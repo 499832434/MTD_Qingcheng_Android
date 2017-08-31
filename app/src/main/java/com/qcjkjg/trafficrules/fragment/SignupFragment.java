@@ -148,7 +148,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
                 if(!TextUtils.isEmpty(page)){
                     params.put("pubtime", page);
                 }
-                params.put("page_count", "1");
+//                params.put("page_count", "1");
                 params.put("type", "0");
                 params.put("sign", InitApp.initApp.getSig(params));
                 return params;

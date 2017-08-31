@@ -83,6 +83,7 @@ public class DbCreateHelper {
 
     //专项加强(功能分类)
     public List<Subject>  getSubjectList(String examType,String subClass,String type){
+        Log.e("zzz",examType+"==="+subClass+"==="+type);
         try{
             SQLiteDatabase db =openDatabase(context);
             List<Subject> subjectList=new ArrayList<Subject>();

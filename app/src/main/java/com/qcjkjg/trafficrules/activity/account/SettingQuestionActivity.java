@@ -9,8 +9,11 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.adapter.SettingQuestionAdapter;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
+import de.greenrobot.event.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +83,7 @@ public class SettingQuestionActivity extends BaseActivity implements View.OnClic
             case R.id.commitTV:
                 PrefUtils.putString(SettingQuestionActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CAR_TYPE_KEY, flag+"");
                 toast(SettingQuestionActivity.this,"设置成功");
+                EventBus.getDefault().post(new RefreshExamNumEvent());
                 finish();
                 break;
         }

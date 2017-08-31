@@ -17,8 +17,12 @@ import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
 import com.qcjkjg.trafficrules.activity.tubiao.TubiaoActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
+import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
+import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 import java.util.List;
@@ -37,6 +41,7 @@ public class ExamOneFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentView = inflater.inflate(R.layout.fragment_exam_one, container, false);
+        EventBus.getDefault().register(this);
         initData();
         initView();
         return currentView;
@@ -52,12 +57,11 @@ public class ExamOneFragment extends Fragment{
 
     private void initData(){
         fragmentType = getArguments().getInt(FRAGMENT_TYPE);
-        DbCreateHelper helper=new DbCreateHelper(mActivity);
-        seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
     }
 
     private void initView(){
 
+        refresh();
 
         cycleViewPager= (CycleViewPager) currentView.findViewById(R.id.cycleViewPager);
         cycleViewPager.setIndicatorCenter();
@@ -76,7 +80,7 @@ public class ExamOneFragment extends Fragment{
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科四考规");
         }
 
-        ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
+
 
         currentView.findViewById(R.id.scoreTV).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,4 +190,21 @@ public class ExamOneFragment extends Fragment{
     }
 
 
+
+    public void onEvent(RefreshExamNumEvent event) {
+        refresh();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void refresh(){
+        DbCreateHelper helper=new DbCreateHelper(mActivity);
+        seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
+        ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
+        ((TextView)currentView.findViewById(R.id.moniTV)).setText("共" + seqNum + "题");
+    }
 }

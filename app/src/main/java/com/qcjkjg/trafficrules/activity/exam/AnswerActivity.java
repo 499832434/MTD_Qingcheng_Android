@@ -14,18 +14,28 @@ import android.view.*;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.qcjkjg.trafficrules.ApiConstants;
+import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.adapter.AnswerGridAdapter;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.fragment.AnswerFragment;
+import com.qcjkjg.trafficrules.net.HighRequest;
+import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.SubDialog;
 import com.qcjkjg.trafficrules.vo.ExamScore;
+import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -49,6 +59,7 @@ public class AnswerActivity extends BaseActivity{
     private String time="00:00";
     private long useTime=45*60*1000;
     private String historyscore;//历史成绩
+    private String time2;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -437,6 +448,7 @@ public class AnswerActivity extends BaseActivity{
             public void onClick(View view) {
                 CommitExamScore();
                 dialog.dismiss();
+                request();
                 finish();
             }
         });
@@ -480,9 +492,53 @@ public class AnswerActivity extends BaseActivity{
         }
         examScore.setSubs(sb.toString());
         long time3=45*60*1000-useTime;
-        String time2=getTime(time3);
+        time2=getTime(time3);
         examScore.setTime(time2);
         DbHelper db=new DbHelper(AnswerActivity.this);
         db.addExamScore(examScore,fragmentType);
+    }
+
+
+    /**
+     * 网络请求
+     */
+    private void request() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.SAVE_EXAM_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("save", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                toast(AnswerActivity.this,"成绩保存成功");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("phone",getUserInfo(1));
+                params.put("minutes",time2);
+                params.put("result",wholeRight+"");
+                params.put("city",getUserInfo(8));
+                params.put("province",getUserInfo(7));
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
     }
 }

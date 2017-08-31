@@ -172,7 +172,7 @@
         </activity>
 
         <activity android:name=".activity.web.BaseWebViewActivity"
-                  android:hardwareAccelerated="false"
+                  android:hardwareAccelerated="true"
                   android:screenOrientation="portrait"
                 >
             <intent-filter>

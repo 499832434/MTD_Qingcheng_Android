@@ -163,6 +163,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                             if (jsonObject.getString("code").equals("0")) {
                                 if(TextUtils.isEmpty(cid)){
                                     messageList.clear();
+                                    signList.clear();
                                 }
                                 JSONArray infoArr2=jsonObject.getJSONArray("notice_info");
                                 for(int i=0;i<infoArr2.length();i++){
