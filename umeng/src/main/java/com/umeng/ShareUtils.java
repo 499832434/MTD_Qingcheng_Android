@@ -10,6 +10,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+import com.umeng_social_sdk_res_lib.R;
 
 /**
  * Author     wildma
@@ -102,6 +103,7 @@ public class ShareUtils {
     public static void share(int  flag,Activity activity, UMShareListener umShareListener) {
         UMWeb  web = new UMWeb("http://www.youku.com");
         web.setTitle("zongshuo");//标题
+        web.setThumb(new UMImage(activity, R.drawable.thumb));
 //        web.setThumb(thumb);  //缩略图
         web.setDescription("wo ai ni");//描述
 
