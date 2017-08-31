@@ -10,6 +10,7 @@ import com.qcjkjg.trafficrules.adapter.SubVipAdapter;
 import com.qcjkjg.trafficrules.adapter.SubchapterAdapter;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.Subject;
+import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +26,8 @@ public class VipActivity extends BaseActivity{
     private int fragmentPositon;//第几个fragment
     private List<Subject> subjectList=new ArrayList<Subject>();
     private String fragmentType;
+    private CycleViewPager cycleViewPager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,5 +87,14 @@ public class VipActivity extends BaseActivity{
         vipLV= (ListView) findViewById(R.id.vipLV);
         adapter=new SubVipAdapter(VipActivity.this,list,fragmentType);
         vipLV.setAdapter(adapter);
+
+        cycleViewPager= (CycleViewPager)findViewById(R.id.cycleViewPager);
+        cycleViewPager.setIndicatorCenter();
+        cycleViewPager.setIndicatorsSpace(10);
+        cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
+        adlist("5", cycleViewPager);
+
+
+        setShareView(findViewById(R.id.shareLL));
     }
 }

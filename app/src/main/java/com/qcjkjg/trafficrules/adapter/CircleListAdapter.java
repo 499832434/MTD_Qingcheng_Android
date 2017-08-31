@@ -65,6 +65,7 @@ public class CircleListAdapter extends BaseAdapter {
             holder.pictureIV = (CircleImageView) convertView.findViewById(R.id.pictureIV);
             holder.pictureMGL = (MyGridLayout) convertView.findViewById(R.id.pictureMGL);
             holder.nameTV = (TextView) convertView.findViewById(R.id.nameTV);
+            holder.topTV = (TextView) convertView.findViewById(R.id.topTV);
             holder.contentTV = (TextView) convertView.findViewById(R.id.contentTV);
             holder.timeTV = (TextView) convertView.findViewById(R.id.timeTV);
             holder.leaveTV = (TextView) convertView.findViewById(R.id.leaveTV);
@@ -93,6 +94,11 @@ public class CircleListAdapter extends BaseAdapter {
         } else {
             holder.fabulousIV.setImageResource(R.drawable.ic_praise_n);
             holder.fabulousIV.setTag(0);
+        }
+        if(mData.get(position).getTopFlag()==1){
+            holder.topTV.setVisibility(View.VISIBLE);
+        }else{
+            holder.topTV.setVisibility(View.GONE);
         }
         holder.nameTV.setText(info.getNickName());
         holder.timeTV.setText(info.getCreateTime());
@@ -139,7 +145,7 @@ public class CircleListAdapter extends BaseAdapter {
     public final class ViewHolder {
         private CircleImageView pictureIV;
         private TextView nameTV;
-        private TextView contentTV;
+        private TextView contentTV,topTV;
         private TextView timeTV;
         public TextView leaveTV;
         public TextView fabulousTV;

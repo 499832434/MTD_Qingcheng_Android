@@ -44,7 +44,7 @@ public class BindPhoneActivity extends BaseActivity{
     private TimesUtils timesUtils=null;
     private String flag="";//1:手机号登录 0:第三方登录
     private EventHandler eventHandler;
-    private String phone="";
+    private String phone="",phone_code="";
     private User user;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class BindPhoneActivity extends BaseActivity{
         if("0".equals(flag)){
             user=getIntent().getParcelableExtra(LoginActivity.LOGINFLAG);
         }
+        phone_code=getClip();
         initView();
     }
 
@@ -81,20 +82,6 @@ public class BindPhoneActivity extends BaseActivity{
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(BindPhoneActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-//                    //定义需要匹配的正则表达式的规则
-//                    String REGEX_MOBILE_SIMPLE = "[1][358]\\d{9}";
-//                    //把正则表达式的规则编译成模板
-//                    Pattern pattern = Pattern.compile(REGEX_MOBILE_SIMPLE);
-//                    //把需要匹配的字符给模板匹配，获得匹配器
-//                    Matcher matcher = pattern.matcher(phone);
-//                    // 通过匹配器查找是否有该字符，不可重复调用重复调用matcher.find()
-//                    if (matcher.find()) {//匹配手机号是否存在
-//                        timesUtils = new TimesUtils(60000, 1000, verificationCodeTV, BindPhoneActivity.this);
-//                        timesUtils.start();
-//                        SMSSDK.getVerificationCode("86", phone);
-//                    } else {
-//                        Toast.makeText(BindPhoneActivity.this, "手机号格式错误", Toast.LENGTH_SHORT).show();
-//                    }
                     timesUtils = new TimesUtils(60000, 1000, verificationCodeTV, BindPhoneActivity.this);
                     timesUtils.start();
                     SMSSDK.getVerificationCode("86", phone);
@@ -269,6 +256,7 @@ public class BindPhoneActivity extends BaseActivity{
                 params.put("client_id", PrefUtils.getString(BindPhoneActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, ""));
                 params.put("phone", phone);
                 params.put("device_type", InitApp.DEVICE_TYPE);
+                params.put("from_code", phone_code);
                 return params;
             }
         };

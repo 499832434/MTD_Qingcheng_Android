@@ -21,7 +21,15 @@ public class MessageInfo implements Parcelable {
     private String avatar;
     private int zanId;
     private List<String> pricturlList=new ArrayList<String>();
+    private int topFlag;//0:不置顶1:置顶
 
+    public int getTopFlag() {
+        return topFlag;
+    }
+
+    public void setTopFlag(int topFlag) {
+        this.topFlag = topFlag;
+    }
 
     public int getZanId() {
         return zanId;
@@ -129,6 +137,7 @@ public class MessageInfo implements Parcelable {
         parcel.writeStringList(pricturlList);
         parcel.writeInt(isZan);
         parcel.writeInt(zanId);
+        parcel.writeInt(topFlag);
     }
 
 
@@ -150,6 +159,7 @@ public class MessageInfo implements Parcelable {
             messageInfo.setPricturlList(source.createStringArrayList());
             messageInfo.setIsZan(source.readInt());
             messageInfo.setZanId(source.readInt());
+            messageInfo.setTopFlag(source.readInt());
             return messageInfo;
         }
 

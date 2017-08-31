@@ -175,6 +175,8 @@ public class ExamOneFragment extends Fragment{
                 startActivity(intent);
             }
         });
+
+        mActivity.setShareView(currentView.findViewById(R.id.shareLL));
     }
 
     @Override

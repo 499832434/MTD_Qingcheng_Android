@@ -36,12 +36,13 @@ import java.util.Map;
  */
 public class LoginActivity extends BaseActivity{
     private String TAG = this.getClass().getSimpleName();
-    public static String LOGINFLAG = "loginflag";
+    public static String LOGINFLAG = "loginflag",phone_code;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_login);
         setContentView(R.layout.activity_login);
+        phone_code=getClip();
         initView();
     }
 
@@ -197,6 +198,7 @@ public class LoginActivity extends BaseActivity{
                 params.put("platform_type", platformType);
                 params.put("client_id", PrefUtils.getString(LoginActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, ""));
                 params.put("device_type", InitApp.DEVICE_TYPE);
+                params.put("from_code", phone_code);
                 return params;
             }
         };

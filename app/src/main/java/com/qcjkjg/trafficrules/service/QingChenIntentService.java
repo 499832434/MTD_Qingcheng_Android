@@ -158,9 +158,9 @@ public class QingChenIntentService extends GTIntentService {
 //                            Log.e("signService",response);
                             if (jo.has("code")) {
                                 if ("0".equalsIgnoreCase(jo.getString("code"))) {
-                                    Toast.makeText(context,"个推sevice签到",Toast.LENGTH_SHORT).show();
                                     PrefUtils.putBoolean(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY_FLAG, true);
                                     PrefUtils.putString(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, jo.getString("is_vip"));
+                                    PrefUtils.putString(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_CODE, jo.getString("phone_code"));
                                 } else {
                                     PrefUtils.putBoolean(context, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY_FLAG, false);
                                 }

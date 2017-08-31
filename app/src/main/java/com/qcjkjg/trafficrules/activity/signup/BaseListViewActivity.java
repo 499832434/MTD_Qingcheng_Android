@@ -96,7 +96,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
         switch (flag){
             case 0:
                 ((CustomTitleBar) findViewById(R.id.customTitleBar)).setTitleTextView("系统消息");
-                adapter0=new SystemMessageAdapter(BaseListViewActivity.this,signList);
+                adapter0=new SystemMessageAdapter(BaseListViewActivity.this,signList,true);
                 listView.setAdapter(adapter0);
                 break;
             case 1:

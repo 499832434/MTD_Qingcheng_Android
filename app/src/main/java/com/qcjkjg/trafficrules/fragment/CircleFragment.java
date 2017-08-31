@@ -23,13 +23,17 @@ import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.circle.PublishCircleInfoActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
+import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.adapter.CircleListAdapter;
+import com.qcjkjg.trafficrules.adapter.SystemMessageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.DateUtils;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
+import com.qcjkjg.trafficrules.view.MyListView;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
+import com.qcjkjg.trafficrules.vo.Signup;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.json.JSONArray;
@@ -46,9 +50,11 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     private View currentView = null;
     protected MainActivity mActivity;
     private CycleViewPager cycleViewPager;
-    private ListView circleLV;
+    private MyListView circleLV,systemLV;
     private List<MessageInfo> messageList=new ArrayList<MessageInfo>();
+    private List<Signup> signList=new ArrayList<Signup>();//0:系统消息
     private CircleListAdapter messageAdapter;
+    private SystemMessageAdapter systemMessageAdapter;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     public static String CIRCLEFLAG = "circleflag";
     private SwipeToLoadLayout swipeToLoadLayout;
@@ -73,27 +79,40 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         currentView.findViewById(R.id.publishIV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mActivity.getUserIsLogin()){
+                if (mActivity.getUserIsLogin()) {
                     startActivity(new Intent(mActivity, PublishCircleInfoActivity.class));
-                }else {
+                } else {
                     startActivity(new Intent(mActivity, LoginActivity.class));
                 }
             }
         });
-        View view=LayoutInflater.from(mActivity).inflate(R.layout.headview_circle,null);
         swipeToLoadLayout = (SwipeToLoadLayout) currentView.findViewById(R.id.swipeToLoadLayout);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
-        circleLV= (ListView) currentView.findViewById(R.id.swipe_target);
-        circleLV.addHeaderView(view);
+
+        circleLV= (MyListView) currentView.findViewById(R.id.circleLV);
         messageAdapter=new CircleListAdapter(mActivity, messageList);
         circleLV.setAdapter(messageAdapter);
-        cycleViewPager= (CycleViewPager) view.findViewById(R.id.cycleViewPager);
+
+        systemLV= (MyListView) currentView.findViewById(R.id.systemLV);
+        systemMessageAdapter=new SystemMessageAdapter(mActivity, signList,false);
+        systemLV.setAdapter(systemMessageAdapter);
+        systemLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(mActivity, SignupContentActivity.class);
+                intent.putExtra("id", signList.get(i).getNewsId());
+                intent.putExtra("flag", "news");
+                startActivity(intent);
+            }
+        });
+
+        cycleViewPager= (CycleViewPager) currentView.findViewById(R.id.cycleViewPager);
         cycleViewPager.setIndicatorCenter();
         cycleViewPager.setIndicatorsSpace(10);
         cycleViewPager.setIndicatorBackground(R.drawable.ic_image_unselected, R.drawable.ic_image_selected);
 
-        ((BaseActivity)mActivity).adlist("0",cycleViewPager);
+        ((BaseActivity)mActivity).adlist("0", cycleViewPager);
 
         swipeToLoadLayout.post(new Runnable() {
             @Override
@@ -102,7 +121,8 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
             }
         });
 
-
+        ((ScrollView)currentView.findViewById(R.id.swipe_target)).smoothScrollTo(0, 20);
+        ((ScrollView)currentView.findViewById(R.id.swipe_target)).setFocusable(true);
     }
 
     @Override
@@ -122,67 +142,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     @Override
     public void onRefresh() {
         request("");
-//        swipeToLoadLayout.postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                list.clear();
-//                list.add("http://pic12.nipic.com/20101225/2696160_091326670000_2.jpg");
-//                list.add("http://img10.3lian.com/c1/newpic/10/15/45.jpg");
-//                list.add("http://bztzl.com/uploads/allimg/150609/16445U345-2.jpg");
-//                list.add("http://bizhi.zhuoku.com/2009/02/0222/Ferrari/Ferrari75.jpg");
-//                views.clear();
-//                ImageView view1=ViewFactory.getView(mActivity);
-//                view1.setTag(list.size()-1);
-//                Picasso.with(mActivity).load(list.get(list.size()-1)).into(view1);
-//                views.add(view1);
-//                view1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Log.e("zzz", list.get((Integer) view.getTag()));
-//                    }
-//                });
-//                for(int i=0;i<list.size();i++){
-//                    ImageView view3=ViewFactory.getView(mActivity);
-//                    view3.setTag(i);
-//                    Picasso.with(mActivity).load(list.get(i)).into(view3);
-//                    views.add(view3);
-//                    view3.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            Log.e("zzz", list.get((Integer) view.getTag()));
-//                        }
-//                    });
-//                }
-//                ImageView view2=ViewFactory.getView(mActivity);
-//                view2.setTag(0);
-//                Picasso.with(mActivity).load(list.get(0)).into(view2);
-//                views.add(view2);
-//                view2.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Log.e("zzz", list.get((Integer) view.getTag()));
-//                    }
-//                });
-//
-//                cycleViewPager.setData(views, true, true, 3000);
-//                swipeToLoadLayout.setRefreshing(false);
-//            }
-//        },3000);
-
-
     }
-
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (swipeToLoadLayout.isRefreshing()) {
-//            swipeToLoadLayout.setRefreshing(false);
-//        }
-//        if (swipeToLoadLayout.isLoadingMore()) {
-//            swipeToLoadLayout.setLoadingMore(false);
-//        }
-//    }
 
 
     /**
@@ -204,6 +164,43 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                                 if(TextUtils.isEmpty(cid)){
                                     messageList.clear();
                                 }
+                                JSONArray infoArr2=jsonObject.getJSONArray("notice_info");
+                                for(int i=0;i<infoArr2.length();i++){
+                                    JSONObject obj=infoArr2.getJSONObject(i);
+                                    Signup signup=new Signup();
+                                    signup.setNewsId(obj.getInt("news_id"));
+                                    signup.setTitle(obj.getString("title"));
+                                    signup.setAbstractStr(obj.getString("abstract"));
+                                    signup.setPictureUrl(obj.getString("img_url"));
+                                    signup.setPubtime(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
+                                    signList.add(signup);
+                                }
+                                if(signList.size()>0){
+                                    systemMessageAdapter.notifyDataSetChanged();
+                                }
+
+                                JSONArray infoArr1=jsonObject.getJSONArray("circle_top_info");
+                                for(int i=0;i<infoArr1.length();i++){
+                                    JSONObject obj1=infoArr1.getJSONObject(i);
+                                    MessageInfo info=new MessageInfo();
+                                    info.setCid(obj1.getInt("c_id"));
+                                    info.setReplyCnt(obj1.getInt("reply_cnt"));
+                                    info.setNickName(obj1.getString("nick_name"));
+                                    info.setContent(obj1.getString("content"));
+                                    info.setPhone(obj1.getString("phone"));
+                                    info.setCreateTime(DateUtils.getInterval(obj1.getLong("create_time")));
+                                    info.setZanCnt(obj1.getInt("zan_cnt"));
+                                    info.setAvatar(obj1.getString("avatar"));
+                                    info.setIsZan(obj1.getInt("is_zan"));
+                                    info.setTopFlag(1);
+                                    List<String> imagesList=new ArrayList<String>();
+                                    JSONArray array=obj1.getJSONArray("images");
+                                    for(int j=0;j<array.length();j++){
+                                        imagesList.add((String) array.get(j));
+                                    }
+                                    info.setPricturlList(imagesList);
+                                    messageList.add(info);
+                                }
                                 JSONArray infoArr=jsonObject.getJSONArray("info");
                                 for(int i=0;i<infoArr.length();i++){
                                     JSONObject obj=infoArr.getJSONObject(i);
@@ -217,6 +214,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                                     info.setZanCnt(obj.getInt("zan_cnt"));
                                     info.setAvatar(obj.getString("avatar"));
                                     info.setIsZan(obj.getInt("is_zan"));
+                                    info.setTopFlag(0);
                                     List<String> imagesList=new ArrayList<String>();
                                     JSONArray array=obj.getJSONArray("images");
                                     for(int j=0;j<array.length();j++){
@@ -258,7 +256,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                     params.put("phone", mActivity.getUserInfo(1));
                 }
 //                params.put("belong_area", "120");
-//                params.put("page_count", "2");
+//                params.put("page_count", "1");
                 return params;
             }
         };

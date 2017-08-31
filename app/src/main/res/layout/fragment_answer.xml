@@ -107,12 +107,16 @@
                       android:textSize="16sp"/>
         </LinearLayout>
 
-        <Button android:layout_width="wrap_content"
+        <Button android:layout_width="200dp"
                 android:text="确认答案"
                 android:id="@+id/makeB"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_bg_login_button"
+                android:textColor="#ffffff"
                 android:visibility="gone"
                 android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"/>
+                android:layout_height="40dp"/>
         <LinearLayout android:layout_width="match_parent"
                       android:orientation="vertical"
                       android:id="@+id/detailLL"
