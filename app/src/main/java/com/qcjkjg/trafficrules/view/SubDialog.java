@@ -204,6 +204,8 @@ public class SubDialog extends Dialog {
             subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectList.get(0).getSubVip());
+        }else if("subnanti".equals(type)){
+            subjectSelect.setSeqAnswer("1");
         }
         DbHelper db=new DbHelper(context);
         return db.queryWholeSub(subjectSelect);

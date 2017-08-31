@@ -58,14 +58,5 @@ public class SubClassActivity extends BaseActivity{
         subclassGV= (GridView) findViewById(R.id.subclassGV);
         adapter=new SubclassGridAdapter(SubClassActivity.this,list,fragmentType);
         subclassGV.setAdapter(adapter);
-//        subclassGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent=new Intent(SubClassActivity.this, AnswerActivity.class);
-//                intent.putExtra("fragmentType",fragmentType);
-//                intent.putExtra("type","subclass");
-//                startActivity(intent);
-//            }
-//        });
     }
 }

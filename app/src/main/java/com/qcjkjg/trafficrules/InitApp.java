@@ -47,6 +47,7 @@ public class InitApp extends Application{
     public static final String USER_COLLECT_SUB_KEY = "USER_COLLECT_SUB_KEY";//收藏题目
     public static final String USER_PROVINCE_KEY = "USER_COLLECT_SUB_KEY";//省
     public static final String USER_CITY_KEY = "USER_COLLECT_SUB_KEY";//市
+    public static final String USER_PHONE_CODE = "USER_PHONE_CODE";
 
 
 
@@ -90,7 +91,7 @@ public class InitApp extends Application{
     }
 
     private void initUmeng(){
-        Config.DEBUG=false;
+        Config.DEBUG=true;
         UMShareAPI.get(this);
 //        PlatformConfig.setWeixin("", "");
 //        PlatformConfig.setQQZone("1106277938","FVCOAjS49n9P53UN");
@@ -98,9 +99,10 @@ public class InitApp extends Application{
         //微信
         PlatformConfig.setWeixin("wxd2a8a6d807625124", "8798b3a08be04f6cf493dd907e1ffa01");
         //新浪微博(第三个参数为回调地址)
-        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
+//        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setSinaWeibo("3566099207", "6960dfc3805f1967b773ed812bc43b14","http://sns.whalecloud.com/sina2/callback");
         //QQ
-        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        PlatformConfig.setQQZone("1106277938", "FVCOAjS49n9P53UN");
     }
 
     public void initUserPref() {

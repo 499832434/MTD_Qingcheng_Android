@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -36,13 +37,12 @@ import java.util.Map;
 public class BaseWebViewActivity extends BaseActivity{
     private WebView wv;
     private View mProgressBar;
-    private Signup signup;
+    private String url = "";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_webview);
 
-        signup=getIntent().getParcelableExtra(MainActivity.SINGUPTAG);
         initView();
         initData();
 
@@ -101,95 +101,20 @@ public class BaseWebViewActivity extends BaseActivity{
         });
     }
 
-
     private void initData(){
-
-        if (!NetworkUtils.isNetworkAvailable(BaseWebViewActivity.this)) {
-            return;
-        }
-
-        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.SIGN_UP_DETAIL_API,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e("signupDetailRe", response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if (jsonObject.getString("code").equals("0")) {
-                                mProgressBar.setVisibility(View.GONE);
-                                JSONArray array=jsonObject.getJSONArray("info");
-                                JSONObject obj=array.getJSONObject(0);
-                                String content=obj.getString("content");
-                                String contentStr = reformatContent1(content);
-                                final String mimeType = "text/html";
-                                final String encoding = "UTF-8";
-                                wv.loadDataWithBaseURL("http://47.92.112.59:2017/", contentStr, mimeType, encoding, "");
-                            }else{
-                                Toast.makeText(BaseWebViewActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put("news_id", signup.getNewsId()+"");
-                Log.e("news_id", signup.getNewsId()+"");
-                params.put("sign", InitApp.initApp.getSig(params));
-                return params;
-            }
-        };
-        InitApp.initApp.addToRequestQueue(request);
+        url = getIntent().getExtras().getString("url");
+        wv.loadUrl(url);
     }
 
-    private String reformatContent1(String content) {
-        StringBuilder titleStr = new StringBuilder();
 
-        titleStr.append("<html><body>");
-        titleStr.append(content);
-        titleStr.append("</body></html>");
+    public boolean onKeyDown(int keyCode ,KeyEvent keyEvent){
+        if(keyCode==keyEvent.KEYCODE_BACK){//监听返回键，如果可以后退就后退
+            if(wv.canGoBack()){
+                wv.goBack();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, keyEvent);
 
-        return titleStr.toString();
-    }
-    private String reformatContent(String content) {
-        StringBuilder titleStr = new StringBuilder();
-
-        titleStr.append("<html><meta content=\"telephone=no\" name=\"format-detection\" /><head><style>\n").append("body {margin-left:auto; margin-right:auto; word-break:break-all;}\n")
-                .append(".about_we {\n" +
-                        "            margin-top: 20px;\n" +
-                        "            color:#393939;\n" +
-                        "            width: 100%;\n" +
-                        "            height: 30px;\n" +
-                        "            line-height: 30px;\n" +
-                        "            background-color: #F3F3F3;\n" +
-                        "            font-size: 18px;\n" +
-                        "            text-indent: 6px;\n" +
-                        "        }\n" +
-                        "        .red-line {\n" +
-                        "            float: left;\n" +
-                        "            height: 16px;\n" +
-                        "            width: 4px;\n" +
-                        "            margin-top: 6px;\n" +
-                        "            margin-left: 8px;\n" +
-                        "            background-color: #F4756F;\n" +
-                        "        }")
-                .append(".scrolldiv {width:100%;overflow:scroll;-webkit-overflow-scrolling: touch}\n")
-                .append("::-webkit-scrollbar {width: 0px;height: 4px;}\n")
-                .append("::-webkit-scrollbar-thumb {border-radius: 8px;background-color: #000;border: 2px solid #666;}\n")
-                .append("::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);}\n")
-                .append("</style>\n</head>")
-                .append("<body><div style='height:auto;width:auto;padding:0;margin:0'>");
-        titleStr.append(content).append("</div>");
-        titleStr.append("</body></html>");
-
-        return titleStr.toString();
     }
 }

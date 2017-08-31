@@ -233,7 +233,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <!--这里的scheme是qq分享要用的，100424468为自己申请的appid，真实项目中需要替换-->
-                <data android:scheme="tencent100424468"/>
+                <data android:scheme="tencent1106277938"/>
             </intent-filter>
         </activity>
         <activity
@@ -250,7 +250,7 @@
 
         <meta-data
                 android:name="UMENG_APPKEY"
-                android:value="561cae6ae0f55abd990035bf">
+                android:value="5963101082b63509a1000844">
         </meta-data>
         <!--友盟-->
 

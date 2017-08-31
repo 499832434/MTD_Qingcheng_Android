@@ -68,9 +68,11 @@ public class AnswerActivity extends BaseActivity{
         if("subclass".equals(type)){
             String subclass=getIntent().getStringExtra("subclass");
             if("文字题".equals(subclass)){
-                subjectList=helper.getSubjectListPicture(fragmentType,false);
+                subjectList=helper.getSubjectListPicture(fragmentType,0);
             }else if("图片题".equals(subclass)){
-                subjectList=helper.getSubjectListPicture(fragmentType,true);
+                subjectList=helper.getSubjectListPicture(fragmentType,1);
+            }else if("动画题".equals(subclass)){
+                subjectList=helper.getSubjectListPicture(fragmentType,2);
             }else if("单选题".equals(subclass)){
                 subjectList=helper.getSubjectListType(fragmentType,2);
             }else if("多选题".equals(subclass)){
@@ -130,6 +132,8 @@ public class AnswerActivity extends BaseActivity{
                 subList.add(subs.split(",")[i]);
             }
             subjectList=helper.getSubjectCollectList(fragmentType, subList);
+        }else if("subnanti".equals(type)){
+            subjectList=helper.getNantiSubjectList(fragmentType);
         }
 
 
@@ -170,7 +174,9 @@ public class AnswerActivity extends BaseActivity{
                 finish();
             }
         });
-
+        if("historyscore".equals(type)){
+            ((CustomTitleBar)findViewById(R.id.customTitleBar)).setTitleTextView("考试记录");
+        }
         collectIV= (ImageView) findViewById(R.id.collectIV);
         if("submoni1".equals(type)||"submoni2".equals(type)){
             ((ImageView)findViewById(R.id.collectIV)).setImageResource(R.drawable.ic_validation);
@@ -297,6 +303,8 @@ public class AnswerActivity extends BaseActivity{
         }else if("subvip".equals(type)){
             String subvip=getIntent().getStringExtra("subvip");
             subjectSelect.setVipAnswer(subvip);
+        }else if("subnanti".equals(type)){
+            subjectSelect.setSeqAnswer("1");
         }
         if(flag){
             subjectSelect.setAnswerStatus(1);

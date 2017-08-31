@@ -22,11 +22,13 @@ public class SystemMessageAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<Signup> mData;
     private Context context;
+    private boolean flag;
 
-    public SystemMessageAdapter(FragmentActivity context, List<Signup> data) {
+    public SystemMessageAdapter(FragmentActivity context, List<Signup> data,boolean flag) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
+        this.flag=flag;
     }
 
     @Override
@@ -58,7 +60,12 @@ public class SystemMessageAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.timeTV.setText(mData.get(position).getPubtime());
+        if(flag){
+            holder.timeTV.setText(mData.get(position).getPubtime());
+            holder.timeTV.setVisibility(View.VISIBLE);
+        }else {
+            holder.timeTV.setVisibility(View.GONE);
+        }
         holder.abstractTV.setText(mData.get(position).getAbstractStr());
         holder.titleTV.setText(mData.get(position).getTitle());
         if(!TextUtils.isEmpty(mData.get(position).getPictureUrl())){

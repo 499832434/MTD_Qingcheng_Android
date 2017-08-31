@@ -20,13 +20,31 @@
                   android:layout_marginLeft="10dp"
                   android:layout_toRightOf="@+id/pictureIV"
                   android:layout_height="wrap_content">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="彼岸花开"
-                  android:id="@+id/nameTV"
-                  android:textSize="15sp"
-                  android:textColor="#666666"
-                />
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="彼岸花开"
+                      android:id="@+id/nameTV"
+                      android:layout_centerVertical="true"
+                      android:textSize="15sp"
+                      android:textColor="#666666"
+                    />
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="置顶"
+                      android:visibility="gone"
+                      android:paddingRight="5dp"
+                      android:paddingLeft="5dp"
+                      android:layout_centerVertical="true"
+                      android:layout_alignParentRight="true"
+                      android:background="@drawable/ic_bg_login_button"
+                      android:id="@+id/topTV"
+                      android:textSize="12sp"
+                      android:textColor="#ffffff"
+                    />
+        </RelativeLayout>
+
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"

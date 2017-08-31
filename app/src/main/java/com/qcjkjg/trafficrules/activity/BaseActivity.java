@@ -5,12 +5,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.ClipboardManager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
@@ -45,6 +48,10 @@ import com.qcjkjg.trafficrules.utils.ViewFactory;
 import com.qcjkjg.trafficrules.vo.Advert;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.ReplyInfo;
+import com.umeng.ShareUtils;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.apache.http.HttpEntity;
@@ -87,6 +94,7 @@ public class BaseActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText contentET;
     private TextView num1TV, num2TV;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +215,16 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 清除用户的登录信息
+     */
+    public void clearInfo() {
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_NAME_KEY, "");
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, "");
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, "");
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, "0");
+        PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, "");
+    }
+    /**
      * 判断用户是否登录
      */
 
@@ -241,6 +259,10 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, "山东省");
             case 8://市
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY, "淄博市");
+            case 9:
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_CODE, "");
+            case 10://0:QQ 1:WEIXIN
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, "");
         }
         return "";
     }
@@ -257,7 +279,8 @@ public class BaseActivity extends AppCompatActivity {
                             JSONObject jo = new JSONObject(response);
                             if (jo.has("code")) {
                                 if ("0".equalsIgnoreCase(jo.getString("code"))) {
-//                                    Toast.makeText(BaseActivity.this,"mainActivity签到",Toast.LENGTH_SHORT).show();
+                                    PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, jo.getString("is_vip"));
+                                    PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_CODE, jo.getString("phone_code"));
                                 }
                             }
                         } catch (Exception e) {
@@ -291,7 +314,7 @@ public class BaseActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        Log.e("adlist", response);
+                        Log.e("adlist", response);
                         try {
                             List<Advert> list = new ArrayList<Advert>();
                             JSONObject jo = new JSONObject(response);
@@ -301,13 +324,18 @@ public class BaseActivity extends AppCompatActivity {
                                     for (int i = 0; i < infoArr.length(); i++) {
                                         JSONObject obj = infoArr.getJSONObject(i);
                                         Advert advert = new Advert();
+                                        advert.setUrl(obj.getString("url"));
                                         advert.setaId(obj.getInt("ad_id"));
                                         advert.setTitleUrl(obj.getString("title_url"));
+                                        advert.setType(obj.getString("to_type"));
                                         list.add(advert);
                                     }
 
                                     if(list.size()>0){
                                         setAdvertImageView(cycleViewPager,list);
+                                        cycleViewPager.setVisibility(View.VISIBLE);
+                                    }else {
+                                        cycleViewPager.setVisibility(View.GONE);
                                     }
                                 }
                             }
@@ -462,6 +490,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(BaseActivity.this).onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
@@ -553,11 +582,19 @@ public class BaseActivity extends AppCompatActivity {
         view1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
-                intent.putExtra("id",list.get(view.getId()).getaId());
-                intent.putExtra("flag","advert");
-                startActivity(intent);
-//                Log.e("zzz", list.get((Integer) view.getTag()));
+                if("0".equals(list.get(view.getId()).getType())){
+                    Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
+                    intent.putExtra("id",list.get(view.getId()).getaId());
+                    intent.putExtra("flag","advert");
+                    startActivity(intent);
+                }else if("1".equals(list.get(view.getId()).getType())){
+                    Intent intent=new Intent(BaseActivity.this, BaseWebViewActivity.class);
+                    intent.putExtra("url",list.get(view.getId()).getUrl());
+                    startActivity(intent);
+                }else{
+
+                }
+
             }
         });
         for (int i = 0; i < list.size(); i++) {
@@ -568,11 +605,18 @@ public class BaseActivity extends AppCompatActivity {
             view3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Log.e("zzz", list.get((Integer) view.getTag()));
-                    Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
-                    intent.putExtra("id",list.get(view.getId()).getaId());
-                    intent.putExtra("flag","advert");
-                    startActivity(intent);
+                    if("0".equals(list.get(view.getId()).getType())){
+                        Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
+                        intent.putExtra("id",list.get(view.getId()).getaId());
+                        intent.putExtra("flag","advert");
+                        startActivity(intent);
+                    }else if("1".equals(list.get(view.getId()).getType())){
+                        Intent intent=new Intent(BaseActivity.this, BaseWebViewActivity.class);
+                        intent.putExtra("url",list.get(view.getId()).getUrl());
+                        startActivity(intent);
+                    }else{
+
+                    }
                 }
             });
         }
@@ -583,11 +627,18 @@ public class BaseActivity extends AppCompatActivity {
         view2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Log.e("zzz", list.get((Integer) view.getTag()));
-                Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
-                intent.putExtra("id",list.get(view.getId()).getaId());
-                intent.putExtra("flag","advert");
-                startActivity(intent);
+                if("0".equals(list.get(view.getId()).getType())){
+                    Intent intent=new Intent(BaseActivity.this, SignupContentActivity.class);
+                    intent.putExtra("id",list.get(view.getId()).getaId());
+                    intent.putExtra("flag","advert");
+                    startActivity(intent);
+                }else if("1".equals(list.get(view.getId()).getType())){
+                    Intent intent=new Intent(BaseActivity.this, BaseWebViewActivity.class);
+                    intent.putExtra("url",list.get(view.getId()).getUrl());
+                    startActivity(intent);
+                }else{
+
+                }
             }
         });
 
@@ -597,10 +648,9 @@ public class BaseActivity extends AppCompatActivity {
 
     public void getLocalPicture(String path,ImageView imageView){
         if(!TextUtils.isEmpty(path)){
-            String subPic=path.substring(0, path.length() - 4);
-            int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
-            Drawable drawable=getResources().getDrawable(id);
-            imageView.setImageDrawable(drawable);
+            String url="file:///android_asset/" + path;
+            Log.e("url",url);
+            getNetWorkPicture(url,imageView);
             imageView.setVisibility(View.VISIBLE);
         }else{
             imageView.setVisibility(View.GONE);
@@ -615,4 +665,82 @@ public class BaseActivity extends AppCompatActivity {
         String sb=format.format(gc.getTime());
         return sb;
     }
+
+
+    public String getClip(){
+        ClipboardManager clipboardManager=(ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+        String str=clipboardManager.getText().toString();
+        if(!TextUtils.isEmpty(str)){
+            if(str.indexOf("inviter")!=-1){
+                str=str.split("=")[1];
+            }else{
+                str="";
+            }
+        }
+        return str;
+    }
+
+    public void loginout(final SHARE_MEDIA platform){
+        clearInfo();
+        UMShareAPI.get(this).deleteOauth(BaseActivity.this, platform,new UMAuthListener(){
+
+            @Override
+            public void onStart(SHARE_MEDIA share_media) {
+
+            }
+
+            @Override
+            public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                String showText = "解除" + platform.toString() + "平台授权成功";
+                Toast.makeText(BaseActivity.this, showText, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onCancel(SHARE_MEDIA share_media, int i) {
+
+            }
+        });
+    }
+
+    public void setShareView(View view){
+        String str="马上分享,获<font color='#ff506d'>双重现金</font>奖励";
+        ((TextView)view.findViewById(R.id.bottomTV)).setText(Html.fromHtml(str));
+        view.findViewById(R.id.weixinTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtils.share(1,BaseActivity.this,null);
+            }
+        });
+        view.findViewById(R.id.pengyouquanTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtils.share(2,BaseActivity.this,null);
+            }
+        });
+        view.findViewById(R.id.qqTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtils.share(3,BaseActivity.this,null);
+            }
+        });
+        view.findViewById(R.id.qqzoneTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtils.share(4, BaseActivity.this, null);
+            }
+        });
+        view.findViewById(R.id.weiboTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtils.share(5, BaseActivity.this, null);
+            }
+        });
+    }
+
+
 }

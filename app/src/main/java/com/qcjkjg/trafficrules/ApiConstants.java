@@ -4,6 +4,8 @@ package com.qcjkjg.trafficrules;
  * Created by zongshuo on 2017/7/21.
  */
 public interface ApiConstants {
+    String SOUND_BASE_API="http://47.92.112.59/audio/";//语音
+
     String SIGN_UP_LIST_API="http://47.92.112.59:2017/newslist";//报名列表
     String SIGN_UP_DETAIL_API="http://47.92.112.59:2017/newscontent";//报名列表详情
     String PUBLISH_CIRCLE_INFO_API="http://47.92.112.59:2017/releasec";//考友圈发布

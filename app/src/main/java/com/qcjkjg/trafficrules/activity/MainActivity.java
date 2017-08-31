@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -63,8 +64,10 @@ public class MainActivity extends BaseActivity {
         initView();
         sign();
 
-        startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
-                REQUEST_CODE_PICK_CITY);
+
+
+//        startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
+//                REQUEST_CODE_PICK_CITY);
 
     }
 

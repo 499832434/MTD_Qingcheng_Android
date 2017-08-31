@@ -19,6 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:swipe_style="classic"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
             >
 
         <include
@@ -26,13 +28,42 @@
                 layout="@layout/layout_google_hook_header"/>
 
 
-        <ListView android:layout_width="match_parent"
-                  android:id="@+id/swipe_target"
-                  android:divider="#e1e1e1"
-                  android:dividerHeight="0.3dp"
-                  android:layout_height="match_parent">
 
-        </ListView>
+
+        <ScrollView android:layout_width="match_parent"
+                    android:id="@+id/swipe_target"
+                    android:fillViewport="true"
+                    android:layout_height="match_parent">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:orientation="vertical"
+                          android:layout_height="match_parent">
+                <me.codeboy.android.cycleviewpager.CycleViewPager
+                        android:id="@+id/cycleViewPager"
+                        android:visibility="visible"
+                        android:layout_below="@+id/customTitleBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="148dp"/>
+                <com.qcjkjg.trafficrules.view.MyListView
+                        android:layout_width="match_parent"
+                        android:id="@+id/systemLV"
+                        android:divider="#e1e1e1"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:dividerHeight="0.3dp"
+                        android:layout_height="match_parent">
+                </com.qcjkjg.trafficrules.view.MyListView>
+                <com.qcjkjg.trafficrules.view.MyListView
+                        android:layout_width="match_parent"
+                          android:id="@+id/circleLV"
+                          android:divider="#e1e1e1"
+                          android:dividerHeight="0.3dp"
+                          android:layout_height="match_parent">
+
+                </com.qcjkjg.trafficrules.view.MyListView>
+            </LinearLayout>
+
+        </ScrollView>
 
         <include
                 android:id="@id/swipe_load_more_footer"

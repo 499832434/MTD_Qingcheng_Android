@@ -516,6 +516,7 @@ public class CircleDetailActivity extends BaseActivity implements OnRefreshListe
                 if(getUserIsLogin()){
                     params.put("phone", getUserInfo(1));
                 }
+                Log.e("phone",getUserInfo(1));
                 return params;
             }
         };

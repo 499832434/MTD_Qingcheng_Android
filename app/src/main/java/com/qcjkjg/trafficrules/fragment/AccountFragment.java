@@ -23,6 +23,8 @@ import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 /**
  * Created by zongshuo on 2017/7/31.
@@ -54,28 +56,26 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         currentView.findViewById(R.id.moneyTV).setOnClickListener(this);
         currentView.findViewById(R.id.messageLL).setOnClickListener(this);
 
-        String str="马上分享,获<font color='#ff506d'>双重现金</font>奖励";
-        ((TextView)currentView.findViewById(R.id.bottomTV)).setText(Html.fromHtml(str));
+        currentView.findViewById(R.id.logoutRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ("0".equals(mActivity.getUserInfo(10))) {
+                    mActivity.loginout(SHARE_MEDIA.QQ);
+                } else {
+                    mActivity.loginout(SHARE_MEDIA.WEIXIN);
+                }
+                getLoginStatus();
+            }
+        });
+
+        mActivity.setShareView(currentView.findViewById(R.id.shareLL));
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mActivity.getUserIsLogin()){
-            if(!TextUtils.isEmpty(mActivity.getUserInfo(0))){
-                accountTV.setText(mActivity.getUserInfo(0));
-            }
-            if(!TextUtils.isEmpty(mActivity.getUserInfo(2))){
-                ((BaseActivity)mActivity).getNetWorkPicture(mActivity.getUserInfo(2), accountIV);
-            }
-            if(!TextUtils.isEmpty(mActivity.getUserInfo(3))){
-                if("0".equals(mActivity.getUserInfo(3))){
-                    vipIV.setImageResource(R.drawable.ic_vip_n);
-                }else{
-                    vipIV.setImageResource(R.drawable.ic_vip_s);
-                }
-            }
-        }
+        getLoginStatus();
     }
 
     @Override
@@ -113,5 +113,31 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.mActivity= (MainActivity)context;
+    }
+
+    private void getLoginStatus(){
+        if(mActivity.getUserIsLogin()){
+            currentView.findViewById(R.id.logoutRL).setVisibility(View.VISIBLE);
+            vipIV.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(mActivity.getUserInfo(0))){
+                accountTV.setText(mActivity.getUserInfo(0));
+            }
+            if(!TextUtils.isEmpty(mActivity.getUserInfo(2))){
+                ((BaseActivity) mActivity).getNetWorkPicture(mActivity.getUserInfo(2), accountIV);
+            }
+            if(!TextUtils.isEmpty(mActivity.getUserInfo(3))){
+                if("0".equals(mActivity.getUserInfo(3))){
+                    vipIV.setImageResource(R.drawable.ic_vip_n);
+                }else{
+                    vipIV.setImageResource(R.drawable.ic_vip_s);
+                }
+            }
+        }else{
+            vipIV.setVisibility(View.GONE);
+            currentView.findViewById(R.id.logoutRL).setVisibility(View.GONE);
+            accountTV.setText("点击登录");
+            accountIV.setImageResource(R.drawable.ic_male);
+            vipIV.setImageResource(R.drawable.ic_vip_n);
+        }
     }
 }

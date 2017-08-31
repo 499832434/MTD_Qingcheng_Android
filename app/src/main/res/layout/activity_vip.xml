@@ -13,12 +13,27 @@
     <ScrollView android:layout_width="match_parent"
                 android:scrollbars="none"
                 android:layout_height="wrap_content">
-        <com.qcjkjg.trafficrules.view.MyListView
-                android:layout_width="match_parent"
-                android:id="@+id/vipLV"
-                android:divider="@null"
-                android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content">
+            <me.codeboy.android.cycleviewpager.CycleViewPager
+                    android:id="@+id/cycleViewPager"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="148dp"/>
+            <View android:layout_width="match_parent"
+                  android:layout_height="10dp"
+                  android:background="#F2F2F2"
+                    />
+            <com.qcjkjg.trafficrules.view.MyListView
+                    android:layout_width="match_parent"
+                    android:id="@+id/vipLV"
+                    android:divider="@null"
+                    android:layout_height="wrap_content">
 
-        </com.qcjkjg.trafficrules.view.MyListView>
+            </com.qcjkjg.trafficrules.view.MyListView>
+            <include layout="@layout/base_share"/>
+        </LinearLayout>
+
     </ScrollView>
 </LinearLayout>

@@ -56,12 +56,12 @@ public class MessageMainActivity extends BaseActivity{
         findViewById(R.id.themeRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MessageMainActivity.this, BaseListViewActivity.class);
-                intent.putExtra("flag", 1);
-                startActivity(intent);
-//                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
-//                        , Defaultcontent.text, Defaultcontent.imageurl,   R.drawable.ic_qq, null
-//                );
+//                Intent intent = new Intent(MessageMainActivity.this, BaseListViewActivity.class);
+//                intent.putExtra("flag", 1);
+//                startActivity(intent);
+                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
+                        , Defaultcontent.text, Defaultcontent.imageurl,   R.drawable.ic_qq, null
+                );
             }
         });
         findViewById(R.id.replyRL).setOnClickListener(new View.OnClickListener() {

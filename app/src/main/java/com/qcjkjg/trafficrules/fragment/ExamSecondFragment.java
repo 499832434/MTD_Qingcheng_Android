@@ -13,7 +13,12 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.tubiao.TubiaoActivity;
+import com.qcjkjg.trafficrules.view.MyListView;
+import com.qcjkjg.trafficrules.vo.Video;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zongshuo on 2017/8/16.
@@ -24,6 +29,8 @@ public class ExamSecondFragment extends Fragment{
     private final static String FRAGMENT_TYPE = "fragmentType";
     protected MainActivity mActivity;
     private CycleViewPager cycleViewPager;
+    private MyListView videoMLV;
+    private List<Video> list=new ArrayList<Video>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,6 +75,8 @@ public class ExamSecondFragment extends Fragment{
                 startActivity(intent);
             }
         });
+
+        mActivity.setShareView(currentView.findViewById(R.id.shareLL));
     }
 
     @Override

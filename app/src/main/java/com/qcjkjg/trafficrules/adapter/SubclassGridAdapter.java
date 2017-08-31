@@ -81,9 +81,9 @@ public class SubclassGridAdapter extends BaseAdapter {
         DbCreateHelper helper=new DbCreateHelper(context);
         subjectList=new ArrayList<Subject>();
         if("文字题".equals(mData.get(position))){
-            subjectList=helper.getSubjectListPicture(fragmentType,false);
+            subjectList=helper.getSubjectListPicture(fragmentType,0);
         }else if("图片题".equals(mData.get(position))){
-            subjectList=helper.getSubjectListPicture(fragmentType,true);
+            subjectList=helper.getSubjectListPicture(fragmentType,1);
         }else if("单选题".equals(mData.get(position))){
             subjectList=helper.getSubjectListType(fragmentType,2);
         }else if("多选题".equals(mData.get(position))){

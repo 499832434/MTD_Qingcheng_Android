@@ -83,54 +83,49 @@ public class DbCreateHelper {
 
     //专项加强(功能分类)
     public List<Subject>  getSubjectList(String examType,String subClass,String type){
-        SQLiteDatabase db =openDatabase(context);
-        List<Subject> subjectList=new ArrayList<Subject>();
-        Cursor cursor =null;
-        if("subseq".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? order by sub_id", new String[]{examType});
-        }else if("subclass".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_class=? order by sub_id", new String[]{examType,subClass});
-        }else if("subchapter".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_chapter=? order by sub_id", new String[]{examType,subClass});
-        }else if("subvip".equals(type)){
-            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and vip=? order by vip_id", new String[]{examType,subClass});
+        try{
+            SQLiteDatabase db =openDatabase(context);
+            List<Subject> subjectList=new ArrayList<Subject>();
+            Cursor cursor =null;
+            if("subseq".equals(type)){
+                cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? order by sub_id", new String[]{examType});
+            }else if("subclass".equals(type)){
+                cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_class=? order by sub_id", new String[]{examType,subClass});
+            }else if("subchapter".equals(type)){
+                cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_chapter=? order by sub_id", new String[]{examType,subClass});
+            }else if("subvip".equals(type)){
+                cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and vip=? order by vip_id", new String[]{examType,subClass});
+            }
+            while (cursor.moveToNext()) {
+                Subject subject=new Subject();
+                subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
+                subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
+                subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
+                subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
+                subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
+                subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
+                subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
+                subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
+                subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+                subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
+                subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
+                subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
+                subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
+                subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
+                subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
+                subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+                subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+                subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+                subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+                subjectList.add(subject);
+            }
+            return subjectList;
+        }catch(Exception e){
+            return new ArrayList<Subject>();
         }
-//        if("subseq".equals(type)){
-//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
-//        }else if("subclass".equals(type)){
-//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_class=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
-//        }else if("subchapter".equals(type)){
-//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_chapter=? order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
-//        }else if("subvip".equals(type)){
-//            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and vip=? order by vip_id", new String[]{((BaseActivity)context).getUserInfo(5),examType,subClass});
-//        }
-        while (cursor.moveToNext()) {
-            Subject subject=new Subject();
-            subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
-            subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
-            subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
-            subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
-            subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
-            subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
-            subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
-            subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
-            subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
-            subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
-            subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
-            subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
-            subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
-            subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
-            subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
-            subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
-            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
-            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
-            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
-            subjectList.add(subject);
-        }
-        return subjectList;
     }
-    //专项加强(文字 图片)flag:true 带图
-    public List<Subject>  getSubjectListPicture(String examType,boolean flag){
+    //专项加强(文字 图片)0文字1带图2动画
+    public List<Subject>  getSubjectListPicture(String examType,int flag){
         SQLiteDatabase db =openDatabase(context);
         List<Subject> subjectList=new ArrayList<Subject>();
         Cursor cursor =null;
@@ -139,10 +134,12 @@ public class DbCreateHelper {
 //        }else {
 //            cursor = db.rawQuery("select * from tiku where car_type=? and exam_type=? and sub_pic is null order by sub_id", new String[]{((BaseActivity)context).getUserInfo(5),examType});
 //        }
-        if(flag){
-            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic is not null order by sub_id", new String[]{examType});
-        }else {
-            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic is null order by sub_id", new String[]{examType});
+        if(1==flag){
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic like '%jpg' order by sub_id", new String[]{examType});
+        }else if(0==flag){
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic='' order by sub_id", new String[]{examType});
+        }else if(2==flag){
+            cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_pic like '%mp4' order by sub_id", new String[]{examType});
         }
         while (cursor.moveToNext()) {
             Subject subject=new Subject();
@@ -165,10 +162,12 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
-            if(flag){
+            if(1==flag){
                 subject.setSubClass("图片题");
-            }else{
+            }else if(0==flag){
                 subject.setSubClass("文字题");
+            }else if(2==flag){
+                subject.setSubClass("动画题");
             }
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
             subjectList.add(subject);
@@ -353,6 +352,38 @@ public class DbCreateHelper {
         }
         return subjectList;
 
+    }
+
+    //攻克难题
+    public List<Subject>  getNantiSubjectList(String examType){
+        SQLiteDatabase db =openDatabase(context);
+        List<Subject> subjectList=new ArrayList<Subject>();
+        Cursor cursor =null;
+        cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? order by error_num desc limit 100", new String[]{examType});
+        while (cursor.moveToNext()) {
+            Subject subject=new Subject();
+            subject.setSubId(cursor.getString(cursor.getColumnIndex("sub_id")));
+            subject.setSubType(cursor.getString(cursor.getColumnIndex("sub_type")));
+            subject.setSubTitle(cursor.getString(cursor.getColumnIndex("sub_title")));
+            subject.setSubPic(cursor.getString(cursor.getColumnIndex("sub_pic")));
+            subject.setSubA(cursor.getString(cursor.getColumnIndex("a")));
+            subject.setSubB(cursor.getString(cursor.getColumnIndex("b")));
+            subject.setSubC(cursor.getString(cursor.getColumnIndex("c")));
+            subject.setSubD(cursor.getString(cursor.getColumnIndex("d")));
+            subject.setSubAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+            subject.setSubInfos(cursor.getString(cursor.getColumnIndex("sub_infos")));
+            subject.setSubInfoPic(cursor.getString(cursor.getColumnIndex("info_pic")));
+            subject.setErrorNum(cursor.getString(cursor.getColumnIndex("error_num")));
+            subject.setStar(cursor.getString(cursor.getColumnIndex("star")));
+            subject.setVipInfos(cursor.getString(cursor.getColumnIndex("dtjq")));
+            subject.setVipSound(cursor.getString(cursor.getColumnIndex("jqyy")));
+            subject.setVipPic(cursor.getString(cursor.getColumnIndex("vip_pic")));
+            subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
+            subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
+            subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subjectList.add(subject);
+        }
+        return subjectList;
     }
 
     private String argsArrayToString(List<String> args) {

@@ -3,6 +3,7 @@
     <string-array name="subclass">
         <item>文字题</item>
         <item>图片题</item>
+        <item>动画题</item>
         <item>判断题</item>
         <item>单选题</item>
         <item>多选题</item>
