@@ -32,4 +32,11 @@ public interface ApiConstants {
     String SAVE_EXAM_API="http://47.92.112.59:2017/saveexamres";//保存成绩
     String SCORE_LIST_API="http://47.92.112.59:2017/scorelist";//我的奖金列表
     String GET_ERRCNT_API="http://47.92.112.59:2017/geterrcnt";//获取错题数、星级
+    String VIP_PERMISSION_API="http://app.qcjkjg.com/static/html/vip.html";//VIP特权
+    String GET_ORDER_API="http://47.92.112.59:2017/getorder";//获取订单号
+    String WX_PAY_API="http://47.92.112.59:2017/wxpay";//微信支付
+    String ABOUT_API="http://app.qcjkjg.com/static/html/about.html";//VIP关于
+    String SHARE_API="http://app.qcjkjg.com/static/html/invitation_download.html?phone_code=";//分享
+    String ADD_SCORE="http://47.92.112.59:2017/addscore";//分享返积分
+
 }

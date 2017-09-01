@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
     public CustomViewPager masterViewPager;
     public static String SINGUPTAG = "singup";
     public CircleFragment circleFragment;
-    private static final int REQUEST_CODE_PICK_CITY = 0;
+    public static final int REQUEST_CODE_PICK_CITY = 0;
     public static List<String> errorList=new ArrayList<String>();
     @Override
     public void onCreate(Bundle savedInstanceState) {

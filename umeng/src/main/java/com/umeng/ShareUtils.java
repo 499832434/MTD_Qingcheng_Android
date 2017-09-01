@@ -100,12 +100,12 @@ public class ShareUtils {
                     SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
             };
 
-    public static void share(int  flag,Activity activity, UMShareListener umShareListener) {
-        UMWeb  web = new UMWeb("http://www.youku.com");
-        web.setTitle("zongshuo");//标题
-        web.setThumb(new UMImage(activity, R.drawable.thumb));
+    public static void share(int  flag,String url,Activity activity, UMShareListener umShareListener) {
+        UMWeb  web = new UMWeb(url);
+        web.setTitle("启程交规");//标题
+        web.setThumb(new UMImage(activity, R.drawable.ic_qicheng));
 //        web.setThumb(thumb);  //缩略图
-        web.setDescription("wo ai ni");//描述
+        web.setDescription("驾考新形式下的驾校的招生利器、让文盲学员都能成功学驾照的独门绝技。");//描述
 
         SHARE_MEDIA platform=null;
         switch (flag){

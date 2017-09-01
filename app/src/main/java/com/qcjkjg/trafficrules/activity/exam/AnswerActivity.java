@@ -150,7 +150,10 @@ public class AnswerActivity extends BaseActivity{
         }
 
 
-
+        if(subjectList.size()==0){
+            toast(AnswerActivity.this,"暂无题目");
+            finish();
+        }
 
         for(int i=0;i<subjectList.size();i++){
             fragments.add(AnswerFragment.newInstance(i,subjectList.get(i),type,fragmentType,historyscore));
