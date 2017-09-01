@@ -57,7 +57,6 @@ public class QingChenIntentService extends GTIntentService {
         byte[] payload = msg.getPayload();
 
 
-
         if (payload == null) {
             Log.e(TAG, "receiver payload = null");
         } else {
