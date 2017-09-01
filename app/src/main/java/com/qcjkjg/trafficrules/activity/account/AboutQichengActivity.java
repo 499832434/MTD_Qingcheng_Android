@@ -25,4 +25,5 @@ public class AboutQichengActivity extends BaseActivity{
             }
         });
     }
+
 }

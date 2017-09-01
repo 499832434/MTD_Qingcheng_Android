@@ -196,7 +196,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         SubjectSelect subjectSelect1=new SubjectSelect();
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select * from qc_sub_answer where user_id=? and sub_id=? and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubId()+"",((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
+            cursor = this.mDb.rawQuery("select * from qc_sub_answer where user_id=? and sub_id=? and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),subjectSelect.getSubId()+"",((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
             while (cursor.moveToNext()) {
                 subjectSelect1.setAnswerChoice(cursor.getString(cursor.getColumnIndex("answer_choice")));
             }
@@ -215,7 +215,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         Cursor cursor = null;
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and sub_id=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubId()+""});
+            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and sub_id=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),subjectSelect.getSubId()+""});
             while (cursor.moveToNext()) {
                 cursor.getString(cursor.getColumnIndex("sub_id"));
             }
@@ -234,7 +234,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         Cursor cursor = null;
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and sub_id=? and error_num=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubId()+"",subjectSelect.getErrorNum()+""});
+            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and sub_id=? and error_num=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),subjectSelect.getSubId()+"",subjectSelect.getErrorNum()+""});
             while (cursor.moveToNext()) {
                 cursor.getString(cursor.getColumnIndex("sub_id"));
             }
@@ -413,7 +413,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         List<SubjectSelect> subjectSelectList=new ArrayList<SubjectSelect>();
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select sub_id,answer_status from qc_sub_answer where user_id=?  and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{subjectSelect.getUserId(),((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
+            cursor = this.mDb.rawQuery("select sub_id,answer_status from qc_sub_answer where user_id=?  and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
             while (cursor.moveToNext()) {
                 SubjectSelect subjectSelect1=new SubjectSelect();
                 subjectSelect1.setSubId(cursor.getInt(cursor.getColumnIndex("sub_id")));
@@ -437,7 +437,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         List<String> list=new ArrayList<String>();
         try {
             this.open(this.ctx);
-            cursor = this.mDb.rawQuery("select distinct sub_id from qc_sub_answer where user_id=? and sub_type=? and car_id=? order by sub_id", new String[]{subjectSelect.getUserId(),subjectSelect.getSubType()+"",((BaseActivity)ctx).getUserInfo(5)});
+            cursor = this.mDb.rawQuery("select distinct sub_id from qc_sub_answer where user_id=? and sub_type=? and car_id=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),subjectSelect.getSubType()+"",((BaseActivity)ctx).getUserInfo(5)});
             while (cursor.moveToNext()) {
                 list.add(cursor.getString(cursor.getColumnIndex("sub_id")));
             }
@@ -502,6 +502,32 @@ public class DbHelper extends AbstractDatabaseHelper {
         } catch (Exception e) {
             Log.e("eee",e.toString());
             return new ArrayList<ExamScore>();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+
+    //查询考试成绩(最高分)
+    public final int selectExamScoreMax(String fragmentType) {
+        Cursor cursor = null;
+        try {
+            int max=0;
+            this.open(this.ctx);
+//            cursor = this.mDb.rawQuery("select max(score) as a from exam_result where user_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1),"1"});
+            cursor = this.mDb.rawQuery("select * from exam_result where user_id=? and sub_type=? order by score desc limit 1", new String[]{((BaseActivity) ctx).getUserInfo(1), fragmentType});
+            if(cursor.getCount()==0){
+                return -1;
+            }
+            while (cursor.moveToNext()) {
+                max=Integer.parseInt(cursor.getString(cursor.getColumnIndex("score")));
+            }
+            return max;
+        } catch (Exception e) {
+            Log.e("eee",e.toString());
+            return -1;
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();

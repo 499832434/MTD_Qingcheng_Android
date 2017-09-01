@@ -61,7 +61,7 @@
             android:allowBackup="true"
             android:icon="@mipmap/ic_qicheng"
             android:label="@string/app_name"
-            tools:replace="android:label"
+            tools:replace="android:label,android:icon"
             android:theme="@style/AppTheme">
         <provider
                 android:name="android.support.v4.content.FileProvider"
@@ -179,7 +179,7 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="mtd"/>
+                <data android:scheme="qicheng"/>
             </intent-filter>
         </activity>
         <activity android:name=".activity.signup.SignupContentActivity"
@@ -191,7 +191,7 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="mtd"/>
+                <data android:scheme="qicheng"/>
             </intent-filter>
         </activity>
         <!--友盟-->
@@ -202,6 +202,13 @@
                 android:exported="true"
                 android:screenOrientation="portrait"
                 android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- 微信支付回调activity -->
+        <activity
+                android:name=".wxapi.WXPayEntryActivity"
+                android:screenOrientation="portrait"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:exported="true">
+        </activity>
         <!--新浪微博-->
         <activity
                 android:name="com.umeng.socialize.media.WBShareCallBackActivity"
@@ -277,7 +284,7 @@
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden|adjustPan"/>
         <meta-data android:name="com.amap.api.v2.apikey"
-                   android:value="d462c5f9aac0d18405d5abafd44bc561"/>
+                   android:value="0f3ff7dbfab56e667326941324134d20"/>
 
 
     </application>

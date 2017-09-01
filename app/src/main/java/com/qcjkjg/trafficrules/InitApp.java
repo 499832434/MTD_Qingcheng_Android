@@ -91,6 +91,7 @@ public class InitApp extends Application{
         locationService = new LocationService(getApplicationContext());
     }
 
+
     private void initUmeng(){
         Config.DEBUG=true;
         UMShareAPI.get(this);

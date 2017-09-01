@@ -10,11 +10,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.text.ClipboardManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -31,20 +33,22 @@ import com.qcjkjg.trafficrules.fragment.AccountFragment;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.fragment.ExamFragment;
 import com.qcjkjg.trafficrules.fragment.SignupFragment;
+import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.service.QingChenIntentService;
 import com.qcjkjg.trafficrules.service.QingChenPushService;
 import com.qcjkjg.trafficrules.utils.DensityUtil;
+import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.CustomViewPager;
+import com.qcjkjg.trafficrules.vo.AccountMoney;
 import com.umeng.socialize.UMShareAPI;
 import com.zaaach.citypicker.CityPickerActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class MainActivity extends BaseActivity {
@@ -55,7 +59,8 @@ public class MainActivity extends BaseActivity {
     public CustomViewPager masterViewPager;
     public static String SINGUPTAG = "singup";
     public CircleFragment circleFragment;
-    private static final int REQUEST_CODE_PICK_CITY = 0;
+    public static final int REQUEST_CODE_PICK_CITY = 0;
+    public static List<String> errorList=new ArrayList<String>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,39 +75,12 @@ public class MainActivity extends BaseActivity {
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();
         sign();
+        getErrcnt();//获取错题数跟星级
 
 
     }
 
     private void initView(){
-        //打开数据库输出流
-//        DbCreateHelper s = new DbCreateHelper();
-//        SQLiteDatabase db =s.openDatabase(getApplicationContext());
-//
-//
-//        Cursor cursor = db.rawQuery("select Name,ID from areacode4 where Dep=?", new String[]{"5"});
-//        while (cursor.moveToNext()) {
-//            String name = cursor.getString(cursor.getColumnIndex("Name"));
-//            int id=cursor.getInt(cursor.getColumnIndex("ID"));
-//            firstList.add(name);
-//            List<String> secondList=new ArrayList<String>();
-//            Cursor cursor1 = db.rawQuery("select Name,ID from areacode4 where Dep=? and ParentID=?", new String[]{"6",id+""});
-//            while (cursor1.moveToNext()) {
-//                String name1 = cursor1.getString(cursor.getColumnIndex("Name"));
-//                int id1=cursor1.getInt(cursor.getColumnIndex("ID"));
-//                secondList.add(name1);
-//                Log.e("aaa",name+"===="+name1+"===="+id1);
-//            }
-//            Log.e("ssss",secondList.size()+"");
-//            map.put(name,secondList);
-//        }
-//
-//        int numbe=0;
-//        for(String key:map.keySet()){
-//            numbe+=map.get(key).size();
-//            Log.e("ccc",key+"===="+map.get(key).size()+"===="+numbe);
-//        }
-
         masterViewPager = (CustomViewPager) findViewById(R.id.masterViewPager);
         mFragmentManager = getSupportFragmentManager();
         mAdapter = new MyFragAdapter(mFragmentManager);
@@ -226,4 +204,42 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    private void getErrcnt(){
+        if (!NetworkUtils.isNetworkAvailable(MainActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.GET_ERRCNT_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("errorRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                JSONArray infoArr=jsonObject.getJSONArray("info");
+                                for(int i=0;i<infoArr.length();i++){
+                                    JSONObject obj=infoArr.getJSONObject(i);
+                                    errorList.add(obj.getString("sub_id")+","+obj.getString("stars")+","+obj.getString("err_cnt"));
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
 }

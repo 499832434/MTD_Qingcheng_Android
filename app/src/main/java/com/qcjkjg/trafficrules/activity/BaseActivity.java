@@ -38,19 +38,24 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.login.BindPhoneActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.net.HighRequest;
+import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.utils.StatusBarColorCompat;
 import com.qcjkjg.trafficrules.utils.ViewFactory;
 import com.qcjkjg.trafficrules.vo.Advert;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.ReplyInfo;
+import com.qcjkjg.trafficrules.vo.User;
 import com.umeng.ShareUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
@@ -69,6 +74,7 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -109,7 +115,7 @@ public class BaseActivity extends AppCompatActivity {
         pd.setIndeterminate(false);
 
         options = new RequestOptions()
-                .placeholder(R.drawable.item_blue)
+                .placeholder(R.drawable.aio_image_fail_round)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
@@ -259,7 +265,7 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, "山东省");
             case 8://市
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY, "淄博市");
-            case 9:
+            case 9://phone_code
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_CODE, "");
             case 10://0:QQ 1:WEIXIN
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, "");
@@ -592,6 +598,7 @@ public class BaseActivity extends AppCompatActivity {
                 }else if("1".equals(list.get(view.getId()).getType())){
                     Intent intent=new Intent(BaseActivity.this, BaseWebViewActivity.class);
                     intent.putExtra("url",list.get(view.getId()).getUrl());
+                    intent.putExtra("title","详情");
                     startActivity(intent);
                 }else{
 
@@ -615,6 +622,7 @@ public class BaseActivity extends AppCompatActivity {
                     }else if("1".equals(list.get(view.getId()).getType())){
                         Intent intent=new Intent(BaseActivity.this, BaseWebViewActivity.class);
                         intent.putExtra("url",list.get(view.getId()).getUrl());
+                        intent.putExtra("title","详情");
                         startActivity(intent);
                     }else{
 
@@ -637,6 +645,7 @@ public class BaseActivity extends AppCompatActivity {
                 }else if("1".equals(list.get(view.getId()).getType())){
                     Intent intent=new Intent(BaseActivity.this, BaseWebViewActivity.class);
                     intent.putExtra("url",list.get(view.getId()).getUrl());
+                    intent.putExtra("title","详情");
                     startActivity(intent);
                 }else{
 
@@ -712,37 +721,100 @@ public class BaseActivity extends AppCompatActivity {
     public void setShareView(View view){
         String str="马上分享,获<font color='#ff506d'>双重现金</font>奖励";
         ((TextView)view.findViewById(R.id.bottomTV)).setText(Html.fromHtml(str));
+        final UMShareListener listener=new UMShareListener() {
+            @Override
+            public void onStart(SHARE_MEDIA share_media) {
+
+            }
+
+            @Override
+            public void onResult(SHARE_MEDIA share_media) {
+                Toast.makeText(BaseActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+                if(getUserIsLogin()){
+                    addScore();
+                }
+            }
+
+            @Override
+            public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            }
+
+            @Override
+            public void onCancel(SHARE_MEDIA share_media) {
+            }
+        };
+
         view.findViewById(R.id.weixinTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShareUtils.share(1,BaseActivity.this,null);
+                ShareUtils.share(1,ApiConstants.SHARE_API+getUserInfo(9),BaseActivity.this,listener);
             }
         });
         view.findViewById(R.id.pengyouquanTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShareUtils.share(2,BaseActivity.this,null);
+                ShareUtils.share(2,ApiConstants.SHARE_API+getUserInfo(9),BaseActivity.this,listener);
             }
         });
         view.findViewById(R.id.qqTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShareUtils.share(3,BaseActivity.this,null);
+                ShareUtils.share(3,ApiConstants.SHARE_API+getUserInfo(9),BaseActivity.this,listener);
             }
         });
         view.findViewById(R.id.qqzoneTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShareUtils.share(4, BaseActivity.this, null);
+                ShareUtils.share(4, ApiConstants.SHARE_API + getUserInfo(9), BaseActivity.this, listener);
             }
         });
         view.findViewById(R.id.weiboTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShareUtils.share(5, BaseActivity.this, null);
+                ShareUtils.share(5, ApiConstants.SHARE_API + getUserInfo(9), BaseActivity.this, listener);
             }
         });
     }
 
 
+    /**
+     * 网络请求
+     */
+    private void addScore() {
+        if (!NetworkUtils.isNetworkAvailable(BaseActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.ADD_SCORE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("addScoreRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+
+                            }else{
+//                                Toast.makeText(BaseActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("phone", getUserInfo(1));
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
 }

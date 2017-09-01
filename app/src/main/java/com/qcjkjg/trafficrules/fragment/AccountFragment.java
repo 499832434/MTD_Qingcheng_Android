@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
@@ -22,6 +23,7 @@ import com.qcjkjg.trafficrules.activity.account.PersonalActivity;
 import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
+import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
@@ -91,6 +93,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(mActivity, MessageMainActivity.class));
                 break;
             case R.id.moneyTV:
+                if(!mActivity.getUserIsLogin()){
+                    startActivity(new Intent(mActivity,LoginActivity.class));
+                    return;
+                }
                 startActivity(new Intent(mActivity, MyMoneyActivity.class));
                 break;
             case R.id.questionTV:
@@ -104,7 +110,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.aboutTV:
-                startActivity(new Intent(mActivity, AboutQichengActivity.class));
+                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                intent.putExtra("url", ApiConstants.ABOUT_API);
+                intent.putExtra("title","关于启程");
+                startActivity(intent);
                break;
         }
     }

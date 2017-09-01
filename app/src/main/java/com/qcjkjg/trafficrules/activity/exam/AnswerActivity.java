@@ -25,6 +25,7 @@ import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.adapter.AnswerGridAdapter;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
+import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.fragment.AnswerFragment;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
@@ -34,6 +35,7 @@ import com.qcjkjg.trafficrules.vo.ExamScore;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
+import de.greenrobot.event.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -148,7 +150,10 @@ public class AnswerActivity extends BaseActivity{
         }
 
 
-
+        if(subjectList.size()==0){
+            toast(AnswerActivity.this,"暂无题目");
+            finish();
+        }
 
         for(int i=0;i<subjectList.size();i++){
             fragments.add(AnswerFragment.newInstance(i,subjectList.get(i),type,fragmentType,historyscore));
@@ -341,11 +346,11 @@ public class AnswerActivity extends BaseActivity{
             DbHelper db=new DbHelper(AnswerActivity.this);
             if(flag){
                 db.addCollectSub(true,subId,fragmentType,subjectList.get(fragmentPositon).getSubChapter());
-                collectIV.setImageResource(R.drawable.ic_stars);
+                collectIV.setImageResource(R.drawable.ic_collection_s);
                 collectIV.setTag("0");//收藏
             }else {
                 db.delectCollectSub(true,subId,fragmentType);
-                collectIV.setImageResource(R.drawable.ic_stars_n);
+                collectIV.setImageResource(R.drawable.ic_collection_02);
                 collectIV.setTag("1");//取消收藏
             }
         }catch (Exception e){
@@ -362,10 +367,10 @@ public class AnswerActivity extends BaseActivity{
         DbHelper db=new DbHelper(AnswerActivity.this);
         boolean flag=db.selectCollectSub(true,subjectList.get(position).getSubId(),fragmentType);
         if(flag){
-            collectIV.setImageResource(R.drawable.ic_stars);
+            collectIV.setImageResource(R.drawable.ic_collection_s);
             collectIV.setTag("0");//收藏
         }else{
-            collectIV.setImageResource(R.drawable.ic_stars_n);
+            collectIV.setImageResource(R.drawable.ic_collection_02);
             collectIV.setTag("1");//未收藏
         }
     }
@@ -449,6 +454,7 @@ public class AnswerActivity extends BaseActivity{
                 CommitExamScore();
                 dialog.dismiss();
                 request();
+                EventBus.getDefault().post(new RefreshExamNumEvent());
                 finish();
             }
         });

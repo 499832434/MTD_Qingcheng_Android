@@ -9,7 +9,7 @@ import android.os.Parcelable;
 public class User implements Parcelable {
     private String openid;//三方登录id
     private String phone;//电话
-    private String platformType;//登录类型
+    private String platformType;//类型
     private String avatar;//头像
     private String nickName;//昵称
     private String result;//分数

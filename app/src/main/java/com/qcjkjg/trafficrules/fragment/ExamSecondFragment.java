@@ -109,6 +109,7 @@ public class ExamSecondFragment extends Fragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
                 intent.putExtra("url",list.get(i).getVideoUrl());
+                intent.putExtra("title","详情");
                 startActivity(intent);
             }
         });

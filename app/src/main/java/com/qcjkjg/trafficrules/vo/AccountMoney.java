@@ -5,40 +5,77 @@ package com.qcjkjg.trafficrules.vo;
  */
 public class AccountMoney {
 
-    private String avater;
-    private String title;
-    private String createTime;
-    private String money;
 
-    public String getAvater() {
-        return avater;
+    private String nickName;
+    private String phone;
+    private String score;
+    private String pubtime;
+    private String formPhone;
+    private int type;
+    private String avatar;
+    private String date;
+
+    public String getDate() {
+        return date;
     }
 
-    public void setAvater(String avater) {
-        this.avater = avater;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getMoney() {
-        return money;
+    public String getScore() {
+        return score;
     }
 
-    public void setMoney(String money) {
-        this.money = money;
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+    public String getPubtime() {
+        return pubtime;
+    }
+
+    public void setPubtime(String pubtime) {
+        this.pubtime = pubtime;
+    }
+
+    public String getFormPhone() {
+        return formPhone;
+    }
+
+    public void setFormPhone(String formPhone) {
+        this.formPhone = formPhone;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

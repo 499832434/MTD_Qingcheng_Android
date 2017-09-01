@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.*;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
 import com.qcjkjg.trafficrules.activity.tubiao.TubiaoActivity;
+import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
@@ -166,9 +168,17 @@ public class ExamOneFragment extends Fragment{
         currentView.findViewById(R.id.vipTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, VipActivity.class);
-                intent.putExtra("fragmentType", fragmentType + "");
-                startActivity(intent);
+                if("0".equals(mActivity.getUserInfo(3))){
+                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+                    intent.putExtra("fragmentType", fragmentType+ "");
+                    intent.putExtra("title","VIP特权");
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(mActivity, VipActivity.class);
+                    intent.putExtra("fragmentType", fragmentType + "");
+                    startActivity(intent);
+                }
             }
         });
         currentView.findViewById(R.id.cuotiTV).setOnClickListener(new View.OnClickListener() {
@@ -205,6 +215,14 @@ public class ExamOneFragment extends Fragment{
         DbCreateHelper helper=new DbCreateHelper(mActivity);
         seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
         ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
-        ((TextView)currentView.findViewById(R.id.moniTV)).setText("共" + seqNum + "题");
+        DbHelper helper1=new DbHelper(mActivity);
+        int score=helper1.selectExamScoreMax(fragmentType+"");
+        String str="";
+        if(score==-1){
+            str="没有成绩";
+        }else{
+            str="最高"+score+"分";
+        }
+        ((TextView) currentView.findViewById(R.id.moniTV)).setText(str);
     }
 }

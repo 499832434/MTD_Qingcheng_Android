@@ -32,6 +32,13 @@
                     android:layout_height="wrap_content">
 
             </com.qcjkjg.trafficrules.view.MyListView>
+
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ribbon_blue_01"
+                       android:scaleType="fitXY"
+                       android:layout_margin="15dp"
+                    />
             <include layout="@layout/base_share"/>
         </LinearLayout>
 
