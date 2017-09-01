@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
@@ -123,7 +124,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         starsList.add(starIV4);
         starsList.add(starIV5);
 
-        setStar();
+//        setStar();
 
 
         currentView.findViewById(R.id.aLL).setOnClickListener(this);
@@ -431,32 +432,29 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             mActivity.getLocalPicture(subjectFlag.getVipPic(), ((ImageView) currentView.findViewById(R.id.vipIV)));
         }
         ((TextView)currentView.findViewById(R.id.myErrorTV)).setText("共做过" + answerNum + "次,做错" + errorNum + "次");
+
+        try {
+            if(MainActivity.errorList.size()!=0){
+                for(int i=0;i<MainActivity.errorList.size();i++){
+                    if(subjectFlag.getSubId().equals(MainActivity.errorList.get(i).split(",")[0])){
+                        setStar(Integer.parseInt(MainActivity.errorList.get(i).split(",")[1]));
+                        ((TextView)currentView.findViewById(R.id.errorNumTV)).setText("共"+MainActivity.errorList.get(i).split(",")[2]+"人做错");
+                        break;
+                    }
+                }
+            }
+        }catch (Exception E){
+
+        }
+
     }
 
-    private void setStar() {
-        if (!TextUtils.isEmpty(subjectFlag.getStar())){
-            for(int i=0;i<Integer.parseInt(subjectFlag.getStar());i++){
-                starsList.get(i).setImageResource(R.drawable.ic_stars);
-            }
+    private void setStar(int num) {
+        for(int i=0;i<num;i++){
+            starsList.get(i).setImageResource(R.drawable.ic_stars);
         }
     }
 
-//    private void getPicture(String path,ImageView imageView){
-//        try{
-//            if(!TextUtils.isEmpty(path)){
-//                String subPic="a"+path.substring(0, path.length() - 4);
-//                int id=getResources().getIdentifier(subPic, "drawable", "com.qcjkjg.trafficrules");
-//                Drawable drawable=getResources().getDrawable(id);
-//                imageView.setImageDrawable(drawable);
-//                imageView.setVisibility(View.VISIBLE);
-//            }else{
-//                imageView.setVisibility(View.GONE);
-//            }
-//        }catch (Exception e){
-//            imageView.setVisibility(View.GONE);
-//        }
-//
-//    }
 
     private void setNoClick(){
         currentView.findViewById(R.id.aLL).setClickable(false);

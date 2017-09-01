@@ -91,6 +91,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(mActivity, MessageMainActivity.class));
                 break;
             case R.id.moneyTV:
+                if(!mActivity.getUserIsLogin()){
+                    startActivity(new Intent(mActivity,LoginActivity.class));
+                    return;
+                }
                 startActivity(new Intent(mActivity, MyMoneyActivity.class));
                 break;
             case R.id.questionTV:

@@ -92,10 +92,10 @@ public class SubDialog extends Dialog {
 
 
         if("0".equals(collectFlag)){
-            collectIV.setImageResource(R.drawable.ic_stars);
+            collectIV.setImageResource(R.drawable.ic_collection_s);
             collectIV.setTag("0");//收藏
         }else{
-            collectIV.setImageResource(R.drawable.ic_stars_n);
+            collectIV.setImageResource(R.drawable.ic_collection_02);
             collectIV.setTag("1");//取消收藏
         }
 

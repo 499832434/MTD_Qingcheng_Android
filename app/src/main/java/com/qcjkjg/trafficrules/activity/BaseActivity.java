@@ -109,7 +109,7 @@ public class BaseActivity extends AppCompatActivity {
         pd.setIndeterminate(false);
 
         options = new RequestOptions()
-                .placeholder(R.drawable.item_blue)
+                .placeholder(R.drawable.aio_image_fail_round)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 

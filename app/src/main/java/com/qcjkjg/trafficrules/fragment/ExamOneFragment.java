@@ -205,6 +205,14 @@ public class ExamOneFragment extends Fragment{
         DbCreateHelper helper=new DbCreateHelper(mActivity);
         seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
         ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
-        ((TextView)currentView.findViewById(R.id.moniTV)).setText("共" + seqNum + "题");
+        DbHelper helper1=new DbHelper(mActivity);
+        int score=helper1.selectExamScoreMax(fragmentType+"");
+        String str="";
+        if(score==-1){
+            str="没有成绩";
+        }else{
+            str="最高"+score+"分";
+        }
+        ((TextView) currentView.findViewById(R.id.moniTV)).setText(str);
     }
 }
