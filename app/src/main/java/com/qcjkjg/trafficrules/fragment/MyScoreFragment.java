@@ -11,11 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.exam.*;
+import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.adapter.ExamScoreAdapter;
 import com.qcjkjg.trafficrules.db.DbHelper;
+import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.qcjkjg.trafficrules.view.MyListView;
 import com.qcjkjg.trafficrules.vo.ExamScore;
 
@@ -33,6 +37,9 @@ public class MyScoreFragment extends Fragment{
     private MyListView scoreMLV;
     private String fragmentType;
     private final static String TYPE = "type";
+    private ImageView vipIV;
+    private TextView accountTV;
+    private CircleImageView accountIV;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +63,17 @@ public class MyScoreFragment extends Fragment{
         list=db.selectExamScore(fragmentType);
     }
     private void initView(){
+        accountIV= (CircleImageView) currentView.findViewById(R.id.accountIV);
+        accountTV= (TextView) currentView.findViewById(R.id.accountTV);
+        vipIV= (ImageView) currentView.findViewById(R.id.vipIV);
+        currentView.findViewById(R.id.loginRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!mActivity.getUserIsLogin()){
+                    startActivity(new Intent(mActivity, LoginActivity.class));
+                }
+            }
+        });
         scoreMLV= (MyListView) currentView.findViewById(R.id.scoreMLV);
         adapter=new ExamScoreAdapter(mActivity,list);
         scoreMLV.setAdapter(adapter);
@@ -63,10 +81,6 @@ public class MyScoreFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ExamScore examScore=list.get(position);
-//                List<String> subList=new ArrayList<String>();
-//                for(int i=0;i<examScore.getSubs().split(",").length;i++){
-//                    subList.add(examScore.getSubs().split(",")[i]);
-//                }
                 Intent intent=new Intent(mActivity, AnswerActivity.class);
                 intent.putExtra("fragmentType",fragmentType);
                 intent.putExtra("type","historyscore");
@@ -141,5 +155,35 @@ public class MyScoreFragment extends Fragment{
     public void onAttach(Context context) {
         super.onAttach(context);
         this.mActivity= (RankActivity)context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoginStatus();
+    }
+
+    private void getLoginStatus(){
+        if(mActivity.getUserIsLogin()){
+            vipIV.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(mActivity.getUserInfo(0))){
+                accountTV.setText(mActivity.getUserInfo(0));
+            }
+            if(!TextUtils.isEmpty(mActivity.getUserInfo(2))){
+                ((BaseActivity) mActivity).getNetWorkPicture(mActivity.getUserInfo(2), accountIV);
+            }
+            if(!TextUtils.isEmpty(mActivity.getUserInfo(3))){
+                if("0".equals(mActivity.getUserInfo(3))){
+                    vipIV.setImageResource(R.drawable.ic_vip_n);
+                }else{
+                    vipIV.setImageResource(R.drawable.ic_vip_s);
+                }
+            }
+        }else{
+            vipIV.setVisibility(View.GONE);
+            accountTV.setText("点击登录");
+            accountIV.setImageResource(R.drawable.ic_male);
+            vipIV.setImageResource(R.drawable.ic_vip_n);
+        }
     }
 }

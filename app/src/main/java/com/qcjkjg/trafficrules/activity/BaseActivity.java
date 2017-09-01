@@ -241,15 +241,15 @@ public class BaseActivity extends AppCompatActivity {
      */
     public String getUserInfo(int flag) {
         switch (flag) {
-            case 0:
+            case 0://昵称
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_NAME_KEY, "");
-            case 1:
+            case 1://电话号码
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_KEY, "");
-            case 2:
+            case 2://头像
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, "");
             case 3://0:非会员1:会员
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, "0");
-            case 4:
+            case 4://个推id
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CLIENT_ID_KEY, "");
             case 5://驾驶证类型
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CAR_TYPE_KEY, "1");
@@ -263,6 +263,8 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_CODE, "");
             case 10://0:QQ 1:WEIXIN
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, "");
+            case 11://用户是否第一次安装
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY, "yes");
         }
         return "";
     }

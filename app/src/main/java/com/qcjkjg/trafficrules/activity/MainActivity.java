@@ -25,6 +25,7 @@ import com.igexin.sdk.PushManager;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.fragment.AccountFragment;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
@@ -59,15 +60,17 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        if("yes".equals(getUserInfo(11))){
+            startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),REQUEST_CODE_PICK_CITY);
+        }
+
         PushManager.getInstance().initialize(this.getApplicationContext(), QingChenPushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), QingChenIntentService.class);
         initView();
         sign();
 
-
-
-//        startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),
-//                REQUEST_CODE_PICK_CITY);
 
     }
 
@@ -205,10 +208,19 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
+            if("yes".equals(getUserInfo(11))){
+                startActivity(new Intent(MainActivity.this, SettingQuestionActivity.class));
+            }
             if (data != null){
                 String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
-                Toast.makeText(MainActivity.this,city,Toast.LENGTH_SHORT).show();
+                if(city.indexOf("-")!=-1){
+                    PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY,city.split("-")[0]);
+                    PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY,city.split("-")[1]);
+                    PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY,"no");
+                    Toast.makeText(MainActivity.this,city,Toast.LENGTH_SHORT).show();
+                }
             }
+
         }
         UMShareAPI.get(MainActivity.this).onActivityResult(requestCode, resultCode, data);
     }

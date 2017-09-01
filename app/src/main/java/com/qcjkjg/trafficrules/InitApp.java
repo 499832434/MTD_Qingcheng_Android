@@ -48,6 +48,7 @@ public class InitApp extends Application{
     public static final String USER_PROVINCE_KEY = "USER_COLLECT_SUB_KEY";//省
     public static final String USER_CITY_KEY = "USER_COLLECT_SUB_KEY";//市
     public static final String USER_PHONE_CODE = "USER_PHONE_CODE";
+    public static final String FIRST_OPEN_KEY = "FIRST_OPEN_KEY";//判断用户是否是第一次安装
 
 
 

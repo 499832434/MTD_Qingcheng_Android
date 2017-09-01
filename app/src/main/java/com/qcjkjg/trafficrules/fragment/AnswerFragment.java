@@ -299,6 +299,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                     soundTV.setCompoundDrawables(drawable, null, null, null);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    mediaPlayer.release();
+                    mediaPlayer=null;
                 }
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     @Override

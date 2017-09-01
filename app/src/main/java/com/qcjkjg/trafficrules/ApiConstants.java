@@ -28,4 +28,6 @@ public interface ApiConstants {
     String ADLIST_API="http://47.92.112.59:2017/adlist";//获取广告
     String ADCONTENT_DETAIL_API="http://47.92.112.59:2017/adcontent";//广告详情
     String GET_EXAM_RANK_API="http://47.92.112.59:2017/getexamrank";//排行榜
+    String VIDEO_LIST_API="http://47.92.112.59:2017/videolist";//视频列表
+    String SAVE_EXAM_API="http://47.92.112.59:2017/saveexamres";//保存成绩
 }

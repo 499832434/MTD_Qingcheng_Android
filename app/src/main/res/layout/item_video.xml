@@ -2,34 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
                 android:padding="15dp"
-              android:layout_height="100dp">
+              android:layout_height="120dp">
     <LinearLayout android:layout_width="wrap_content"
                   android:orientation="vertical"
+                  android:layout_centerVertical="true"
                   android:layout_height="match_parent"
             >
         <TextView android:layout_width="wrap_content"
-                  android:layout_height="0dp"
+                  android:layout_height="30dp"
                   android:textColor="#333333"
-                  android:textSize="16sp"
+                  android:textSize="20sp"
+                  android:id="@+id/titleTV"
                   android:gravity="center"
                   android:text="倒车入库"
-                android:layout_weight="1"/>
+              />
         <TextView android:layout_width="wrap_content"
-                  android:layout_height="0dp"
+                  android:layout_height="30dp"
                   android:textColor="#999999"
                   android:textSize="16sp"
                   android:gravity="center"
+                  android:id="@+id/contentTV"
                   android:text="整个考场一个兔子性"
-                  android:layout_weight="1"/>
+                  />
         <TextView android:layout_width="wrap_content"
-                  android:layout_height="0dp"
+                  android:layout_height="30dp"
                   android:textColor="#999999"
                   android:textSize="16sp"
                   android:text="10"
+                  android:id="@+id/cntTV"
                   android:gravity="center"
                   android:drawableLeft="@drawable/ic_chakan"
                   android:drawablePadding="10dp"
-                  android:layout_weight="1"/>
+                  />
     </LinearLayout>
 
     <ImageView android:layout_width="150dp"
@@ -37,5 +41,5 @@
                android:id="@+id/pictureIV"
                android:layout_alignParentRight="true"
                android:layout_centerVertical="true"
-               android:layout_height="80dp"/>
+               android:layout_height="90dp"/>
 </RelativeLayout>

@@ -44,6 +44,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         return currentView;
     }
 
+
     private void initView(){
         accountIV= (CircleImageView) currentView.findViewById(R.id.accountIV);
         accountTV= (TextView) currentView.findViewById(R.id.accountTV);
