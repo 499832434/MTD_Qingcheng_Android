@@ -17,7 +17,6 @@ public class AboutQichengActivity extends BaseActivity{
         initView();
     }
 
-
     private void initView(){
         ((CustomTitleBar)findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,4 +25,5 @@ public class AboutQichengActivity extends BaseActivity{
             }
         });
     }
+
 }
