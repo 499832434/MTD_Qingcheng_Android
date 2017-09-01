@@ -138,4 +138,5 @@ public class MyMoneyActivity extends BaseActivity implements OnRefreshListener, 
         };
         InitApp.initApp.addToRequestQueue(request);
     }
+
 }
