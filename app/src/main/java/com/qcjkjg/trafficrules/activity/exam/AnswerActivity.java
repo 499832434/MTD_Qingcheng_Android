@@ -54,6 +54,7 @@ public class AnswerActivity extends BaseActivity{
     private TextView rightTV,wrongTV;
     private int wholeRight=0,wholeWrong=0;
     private ImageView collectIV;
+    private TextView collectTV;
     private int fragmentPositon;//第几个fragment
     private String type="";
     public Boolean nodoneFlag=true;//未做练习是否开始作答
@@ -62,6 +63,7 @@ public class AnswerActivity extends BaseActivity{
     private long useTime=45*60*1000;
     private String historyscore;//历史成绩
     private String time2;
+    private List<Integer> errorList=new ArrayList<Integer>();//记录删除的错题
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,11 +128,17 @@ public class AnswerActivity extends BaseActivity{
             if(list.size()!=0){
                 subjectList=helper.getSubjectCollectList(fragmentType, list);
             }
+            for(int i=0;i<subjectList.size();i++){
+                errorList.add(0);
+            }
         }else if("suberrorall".equals(type)){
             DbHelper dbHelper=new DbHelper(AnswerActivity.this);
             List<String> list=dbHelper.selectCollectAllSubid(false,fragmentType);
             if(list.size()!=0){
                 subjectList=helper.getSubjectCollectList(fragmentType, list);
+            }
+            for(int i=0;i<subjectList.size();i++){
+                errorList.add(0);
             }
         }else if("submoni1".equals(type)){
             subjectList=helper.getMoniSubjectList1(fragmentType);
@@ -194,16 +202,17 @@ public class AnswerActivity extends BaseActivity{
             ((CustomTitleBar)findViewById(R.id.customTitleBar)).setTitleTextView("考试记录");
         }
         collectIV= (ImageView) findViewById(R.id.collectIV);
+        collectTV= (TextView) findViewById(R.id.collectTV);
         if("submoni1".equals(type)||"submoni2".equals(type)){
-            ((ImageView)findViewById(R.id.collectIV)).setImageResource(R.drawable.ic_validation);
-            ((TextView)findViewById(R.id.collectTV)).setText("交卷");
-            ((ImageView)findViewById(R.id.collectIV)).setOnClickListener(new View.OnClickListener() {
+            collectIV.setImageResource(R.drawable.ic_validation);
+            collectTV.setText("交卷");
+            collectIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     showAssignDialog();
                 }
             });
-            ((TextView)findViewById(R.id.collectTV)).setOnClickListener(new View.OnClickListener() {
+            collectTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     showAssignDialog();
@@ -223,6 +232,21 @@ public class AnswerActivity extends BaseActivity{
                 }
             };
             timer.start();
+        }else if("suberrorchapter".equals(type)||"suberrorall".equals(type)){
+            collectIV.setImageResource(R.drawable.rtt);
+            collectTV.setText("删除");
+            collectIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   deleteError(subjectList.get(fragmentPositon).getSubId());
+                }
+            });
+            collectTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteError(subjectList.get(fragmentPositon).getSubId());
+                }
+            });
         }else{
             collectIV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -284,6 +308,9 @@ public class AnswerActivity extends BaseActivity{
             public void onPageSelected(int position) {
                 numFlagTV.setText((position + 1) + "/" + subjectList.size());
                 getCollectStatus(position);
+                if("suberrorchapter".equals(type)||"suberrorall".equals(type)){
+                    refreshDelete(position);
+                }
             }
 
             @Override
@@ -359,9 +386,25 @@ public class AnswerActivity extends BaseActivity{
 
     }
 
+    public void deleteError(String subId){
+        try{
+            if("已删除".equals(collectTV.getText())){
+                toast(AnswerActivity.this,"已删除");
+                return;
+            }
+            errorList.set(fragmentPositon,1);
+            DbHelper db=new DbHelper(AnswerActivity.this);
+            db.delectCollectSub(false,subId,fragmentType);
+            collectTV.setText("已删除");
+        }catch (Exception e){
+
+        }
+
+    }
+
     public void getCollectStatus(int position){
         fragmentPositon=position;
-        if("submoni1".equals(type)||"submoni2".equals(type)){
+        if("submoni1".equals(type)||"submoni2".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)){
             return;
         }
         DbHelper db=new DbHelper(AnswerActivity.this);
@@ -376,7 +419,7 @@ public class AnswerActivity extends BaseActivity{
     }
 
     private void showCart() {
-        SubDialog dialog  = new SubDialog(this, R.style.cartdialog,subjectList, (String) collectIV.getTag(),wholeRight+"",wholeWrong+"",numFlagTV.getText().toString(),fragmentPositon,type,historyscore);
+        SubDialog dialog  = new SubDialog(this, R.style.cartdialog,subjectList, (String) collectIV.getTag(),wholeRight+"",wholeWrong+"",numFlagTV.getText().toString(),fragmentPositon,type,historyscore,collectTV.getText().toString());
         Window window = dialog.getWindow();
         dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);
@@ -546,5 +589,13 @@ public class AnswerActivity extends BaseActivity{
             }
         };
         InitApp.initApp.addToRequestQueue(request);
+    }
+
+    private void refreshDelete(int i){
+        if(errorList.get(i)==0){
+            collectTV.setText("删除");
+        }else{
+            collectTV.setText("已删除");
+        }
     }
 }

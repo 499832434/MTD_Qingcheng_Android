@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@drawable/ic_bg_white"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <ImageView android:layout_width="40dp"
+                   android:id="@+id/closeIV"
+                   android:src="@drawable/ic_back_01"
+                   android:scaleType="centerInside"
+                   android:layout_alignParentRight="true"
+                   android:layout_height="40dp"/>
+    </RelativeLayout>
+    <ImageView android:layout_width="wrap_content"
+               android:src="@drawable/ribbon_blue"
+               android:scaleType="centerInside"
+               android:layout_gravity="center_horizontal"
+               android:layout_height="40dp"/>
+    <ImageView android:layout_width="wrap_content"
+               android:src="@drawable/ic_coupon"
+               android:layout_gravity="center_horizontal"
+               android:scaleType="centerInside"
+               android:layout_height="40dp"/>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:layout_marginRight="5dp"
+                  android:text="现价只要"
+                  android:textColor="#cccccc"
+        />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="25sp"
+                  android:text="25"
+                  android:id="@+id/moneyTV"
+                  android:textColor="@color/logout_regist_normal"
+        />
+    </LinearLayout>
+    <RelativeLayout android:layout_width="150dp"
+                    android:id="@+id/weixinLL"
+                  android:background="@drawable/ic_bg_green"
+                  android:layout_marginTop="10dp"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginBottom="10dp"
+                  android:layout_height="40dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:layout_centerInParent="true"
+                  android:gravity="center"
+                  android:drawableLeft="@drawable/ic_weixin1"
+                  android:drawablePadding="5dp"
+                  android:text="微信支付"
+                  android:textColor="#ffffff"
+        />
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_width="150dp"
+                    android:id="@+id/zhifubaoLL"
+                    android:background="@drawable/ic_bg_login_button"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="40dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:layout_centerInParent="true"
+                  android:gravity="center"
+                  android:drawableLeft="@drawable/ic_zhifubao"
+                  android:drawablePadding="5dp"
+                  android:text="支付宝支付"
+                  android:textColor="#ffffff"
+        />
+    </RelativeLayout>
+</LinearLayout>
