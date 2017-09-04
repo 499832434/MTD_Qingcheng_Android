@@ -43,6 +43,8 @@ import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.event.LoginSuccessEvent;
+import com.qcjkjg.trafficrules.event.PaySuccessEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
@@ -218,6 +220,7 @@ public class BaseActivity extends AppCompatActivity {
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_AVATAR_KEY, avatar);
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, isvip);
         PrefUtils.putString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, platform);
+        EventBus.getDefault().post(new LoginSuccessEvent());
     }
 
     /**

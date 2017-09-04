@@ -179,6 +179,11 @@ public class ExamOneFragment extends Fragment{
                     intent.putExtra("fragmentType", fragmentType + "");
                     startActivity(intent);
                 }
+//                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+//                intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+//                intent.putExtra("fragmentType", fragmentType+ "");
+//                intent.putExtra("title","VIP特权");
+//                startActivity(intent);
             }
         });
         currentView.findViewById(R.id.cuotiTV).setOnClickListener(new View.OnClickListener() {

@@ -57,15 +57,7 @@ public class ErrorCollectFragment extends Fragment{
     private void initData(){
         fragmentType = getArguments().getString(FRAGMENT_TYPE);
         type = getArguments().getString(TYPE);
-        if("subcollect".equals(type)){
-            DbHelper dbHelper=new DbHelper(mActivity);
-            list=dbHelper.selectCollectChapter(true,fragmentType);
-            allList=dbHelper.selectCollectAllSubid(true,fragmentType);
-        }else if("suberror".equals(type)){
-            DbHelper dbHelper=new DbHelper(mActivity);
-            list=dbHelper.selectCollectChapter(false,fragmentType);
-            allList=dbHelper.selectCollectAllSubid(false,fragmentType);
-        }
+
 
     }
 
@@ -81,7 +73,6 @@ public class ErrorCollectFragment extends Fragment{
         }else{
             allTV.setText("全部错题");
         }
-        numTV.setText(allList.size()+"道题");
 
         currentView.findViewById(R.id.RL).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,4 +106,26 @@ public class ErrorCollectFragment extends Fragment{
     }
 
 
+    @Override
+    public void onResume() {
+        if("subcollect".equals(type)){
+            DbHelper dbHelper=new DbHelper(mActivity);
+            list.clear();
+            list.addAll(dbHelper.selectCollectChapter(true,fragmentType));
+//            list=dbHelper.selectCollectChapter(true,fragmentType);
+            allList=dbHelper.selectCollectAllSubid(true,fragmentType);
+        }else if("suberror".equals(type)){
+            DbHelper dbHelper=new DbHelper(mActivity);
+            list.clear();
+            list.addAll(dbHelper.selectCollectChapter(false,fragmentType));
+//            list=dbHelper.selectCollectChapter(false,fragmentType);
+            allList=dbHelper.selectCollectAllSubid(false,fragmentType);
+        }
+
+
+        numTV.setText(allList.size()+"道题");
+        adapter.notifyDataSetChanged();
+        super.onResume();
+
+    }
 }

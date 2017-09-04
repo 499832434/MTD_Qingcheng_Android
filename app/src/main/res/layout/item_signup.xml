@@ -17,12 +17,14 @@
               android:textColor="#666666"
               android:layout_marginLeft="10dp"
               android:layout_toRightOf="@+id/showIV"
+              android:layout_toLeftOf="@+id/IV"
               android:text="给初学驾驶的一点建议"
               android:textSize="16sp"/>
     <ImageView android:layout_width="40dp"
                android:src="@drawable/ic_left"
                android:layout_centerVertical="true"
                android:scaleType="centerInside"
+               android:id="@+id/IV"
                android:layout_alignParentRight="true"
                android:layout_height="40dp"/>
 </RelativeLayout>

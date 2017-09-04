@@ -1,18 +1,20 @@
 package com.qcjkjg.trafficrules.activity.web;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
+import android.view.*;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.alipay.sdk.pay.util.AlipayCommonLibSignFromServerActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,6 +25,7 @@ import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.event.LoginSuccessEvent;
 import com.qcjkjg.trafficrules.event.PaySuccessEvent;
 import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
@@ -31,6 +34,7 @@ import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.AccountMoney;
 import com.qcjkjg.trafficrules.vo.Signup;
+import com.sci99.pay.activity.CashResultActivity;
 import com.wx.sdk.pay.util.WeChatPayThroughServerActivity;
 import de.greenrobot.event.EventBus;
 import org.json.JSONArray;
@@ -177,9 +181,7 @@ public class BaseWebViewActivity extends BaseActivity{
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
                                 String str=jsonObject.getJSONObject("info").getString("out_trade_no");
-                                if(!TextUtils.isEmpty(str)){
-                                    pay(str);
-                                }
+                                showAssignDialog(jsonObject.getJSONObject("info").getString("total_fee"),str);
                             }else{
                                 Toast.makeText(BaseWebViewActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
                             }
@@ -204,7 +206,7 @@ public class BaseWebViewActivity extends BaseActivity{
         InitApp.initApp.addToRequestQueue(request);
     }
 
-    private void pay(final String str) {
+    private void pay1(final String str) {
         if (!NetworkUtils.isNetworkAvailable(BaseWebViewActivity.this)) {
             return;
         }
@@ -213,7 +215,7 @@ public class BaseWebViewActivity extends BaseActivity{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("payRe", response);
+                        Log.e("payRe1", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
@@ -249,15 +251,117 @@ public class BaseWebViewActivity extends BaseActivity{
         };
         InitApp.initApp.addToRequestQueue(request);
     }
+    private void pay2(final String str) {
+        if (!NetworkUtils.isNetworkAvailable(BaseWebViewActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.ALI_PAY_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("payRe2", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                Intent intent = new Intent(BaseWebViewActivity.this, AlipayCommonLibSignFromServerActivity.class);
+//                                intent.putExtra("payInfo", jsonObject.getJSONObject("info").getString("urlstr") + "&sign=\"" + jsonObject.getJSONObject("info").getString("sign") + "\"&sign_type=\"RSA\"");
+                                intent.putExtra("payInfo",jsonObject.getString("info"));
+                                startActivityForResult(intent, 1);
+                            }else{
+                                Toast.makeText(BaseWebViewActivity.this, jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("out_trade_no", str);
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
 
     public void onEvent(PaySuccessEvent event) {
         PrefUtils.putString(BaseWebViewActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_IS_VIP_KEY, "1");
         finish();
     }
 
+    public void onEvent(LoginSuccessEvent event) {
+        if("1".equals(getUserInfo(3))){
+            finish();
+        }else{
+            getOrder();
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK) {
+            Toast.makeText(this, "支付成功", Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    private void showAssignDialog(String money,final String str) {
+        final Dialog dialog  = new Dialog(this, R.style.cartdialog);
+        View view= LayoutInflater.from(this).inflate(R.layout.dialog_pay,null);
+        view.findViewById(R.id.closeIV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(dialog!=null&&dialog.isShowing()){
+                    dialog.dismiss();
+                }
+            }
+        });
+        ((TextView)view.findViewById(R.id.moneyTV)).setText("¥"+money);
+        view.findViewById(R.id.weixinLL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(str)){
+                    toast(BaseWebViewActivity.this,"无法下单,请联系客服");
+                }else {
+                    pay1(str);
+                }
+            }
+        });
+        view.findViewById(R.id.zhifubaoLL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(str)){
+                    toast(BaseWebViewActivity.this,"无法下单,请联系客服");
+                }else {
+                    pay2(str);
+                }
+            }
+        });
+        dialog.setContentView(view);
+        Window window = dialog.getWindow();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+        dialog.show();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.gravity = Gravity.CENTER;
+        params.dimAmount = 0.5f;
+        window.setAttributes(params);
     }
 }

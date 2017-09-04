@@ -35,8 +35,9 @@ public class SubDialog extends Dialog {
 
     private List<SubjectSelect> subjectSelectList=new ArrayList<SubjectSelect>();
     private String type;
+    private String delete;//是否删除
 
-    public SubDialog(Context context, int themeResId,List<Subject> subjectList,String collectFlag,String rightStr,String wrongStr,String numStr,int fragmentPositon,String type,String historyscore) {
+    public SubDialog(Context context, int themeResId,List<Subject> subjectList,String collectFlag,String rightStr,String wrongStr,String numStr,int fragmentPositon,String type,String historyscore,String delete) {
         super(context, themeResId);
         this.context=context;
         this.subjectList=subjectList;
@@ -47,6 +48,7 @@ public class SubDialog extends Dialog {
         this.fragmentPositon=fragmentPositon;
         this.type=type;
         this.historyscore=historyscore;
+        this.delete=delete;
     }
 
     @Override
@@ -79,6 +81,7 @@ public class SubDialog extends Dialog {
             }
         });
         ImageView collectIV= (ImageView) findViewById(R.id.collectIV);
+        TextView collectTV= (TextView) findViewById(R.id.collectTV);
         collectIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,18 +103,33 @@ public class SubDialog extends Dialog {
         }
 
         if("submoni1".equals(type)||"submoni2".equals(type)){
-            ((ImageView)findViewById(R.id.collectIV)).setImageResource(R.drawable.ic_validation);
-            ((TextView)findViewById(R.id.collectTV)).setText("交卷");
-            ((ImageView)findViewById(R.id.collectIV)).setOnClickListener(new View.OnClickListener() {
+            collectIV.setImageResource(R.drawable.ic_validation);
+            collectTV.setText("交卷");
+            collectIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                 }
             });
-            ((TextView)findViewById(R.id.collectTV)).setOnClickListener(new View.OnClickListener() {
+            collectTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
+                }
+            });
+        }else if("suberrorchapter".equals(type)||"suberrorall".equals(type)){
+            collectIV.setImageResource(R.drawable.rtt);
+            collectTV.setText(delete);
+            collectIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((AnswerActivity)context).deleteError(subjectList.get(fragmentPositon).getSubId());
+                }
+            });
+            collectTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((AnswerActivity)context).deleteError(subjectList.get(fragmentPositon).getSubId());
                 }
             });
         }

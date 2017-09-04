@@ -35,6 +35,7 @@ public interface ApiConstants {
     String VIP_PERMISSION_API="http://app.qcjkjg.com/static/html/vip.html";//VIP特权
     String GET_ORDER_API="http://47.92.112.59:2017/getorder";//获取订单号
     String WX_PAY_API="http://47.92.112.59:2017/wxpay";//微信支付
+    String ALI_PAY_API="http://47.92.112.59:2017/alipay";//支付宝支付
     String ABOUT_API="http://app.qcjkjg.com/static/html/about.html";//VIP关于
     String SHARE_API="http://app.qcjkjg.com/static/html/invitation_download.html?phone_code=";//分享
     String ADD_SCORE="http://47.92.112.59:2017/addscore";//分享返积分

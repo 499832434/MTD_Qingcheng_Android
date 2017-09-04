@@ -9,6 +9,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -22,6 +23,7 @@ import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
+import com.qcjkjg.trafficrules.view.NoScrollWebView;
 import com.qcjkjg.trafficrules.vo.Signup;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +38,7 @@ import java.util.Map;
  * Created by zongshuo on 2017/7/21.
  */
 public class SignupContentActivity extends BaseActivity{
-    private WebView wv;
+    private NoScrollWebView wv;
     private View mProgressBar;
     private int id;
     private String flag;
@@ -48,6 +50,8 @@ public class SignupContentActivity extends BaseActivity{
 
         id=getIntent().getIntExtra("id",0);
         flag=getIntent().getStringExtra("flag");
+
+        Log.e("zzz",id+"==="+flag);
         initView();
         if("news".equals(flag)){
             initData();
@@ -64,7 +68,7 @@ public class SignupContentActivity extends BaseActivity{
                 finish();
             }
         });
-        wv = ((WebView) findViewById(R.id.webView));
+        wv = ((NoScrollWebView) findViewById(R.id.webView));
         WebSettings setting = wv.getSettings();
         setting.setJavaScriptEnabled(true);
 //        setting.setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -134,7 +138,7 @@ public class SignupContentActivity extends BaseActivity{
                                 JSONArray array=jsonObject.getJSONArray("info");
                                 JSONObject obj=array.getJSONObject(0);
                                 String content=obj.getString("content");
-                                Log.e("content",content);
+                                Log.e("title",id+"=="+obj.getString("title"));
                                 String contentStr = reformatContent1(content);
                                 ((TextView)findViewById(R.id.titleTV)).setText(obj.getString("title"));
                                 ((TextView)findViewById(R.id.timeTV)).setText(sdf.format(new Date(obj.getLong("pubtime") * 1000)));

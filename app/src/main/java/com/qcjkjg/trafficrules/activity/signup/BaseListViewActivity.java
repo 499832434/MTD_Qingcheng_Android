@@ -134,7 +134,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
         if(signList.size()>0){
             switch (flag){
                 case 0:
-                    request0(signList.get(signList.size() - 1).getNewsId() + "");
+                    request0(signList.get(signList.size() - 1).getPage() + "");
                     break;
                 case 1:
                     request1();
@@ -173,7 +173,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     /**
      * 网络请求
      */
-    private void request0(final String newsid) {
+    private void request0(final String page) {
         if (!NetworkUtils.isNetworkAvailable(BaseListViewActivity.this)) {
             return;
         }
@@ -186,7 +186,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.getString("code").equals("0")) {
-                                if(TextUtils.isEmpty(newsid)){
+                                if(TextUtils.isEmpty(page)){
                                     signList.clear();
                                 }
                                 JSONArray infoArr=jsonObject.getJSONArray("info");
@@ -197,6 +197,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                                     signup.setTitle(obj.getString("title"));
                                     signup.setAbstractStr(obj.getString("abstract"));
                                     signup.setPictureUrl(obj.getString("img_url"));
+                                    signup.setPage(obj.getString("pubtime"));
                                     signup.setPubtime(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
                                     signList.add(signup);
                                 }
@@ -222,8 +223,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                if(!TextUtils.isEmpty(newsid)){
-                    params.put("news_id", newsid);
+                if(!TextUtils.isEmpty(page)){
+                    params.put("pubtime", page);
                 }
                 params.put("page_count", "10");
                 params.put("type", "1");
