@@ -32,6 +32,7 @@ public class RankActivity extends BaseActivity{
         initView();
     }
 
+
     private void initView(){
         fragmentType=getIntent().getStringExtra("type");
         findViewById(R.id.backIV).setOnClickListener(new View.OnClickListener() {
