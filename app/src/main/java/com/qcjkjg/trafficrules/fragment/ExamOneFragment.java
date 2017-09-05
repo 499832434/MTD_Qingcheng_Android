@@ -89,6 +89,7 @@ public class ExamOneFragment extends Fragment{
             public void onClick(View view) {
                 Intent intent = new Intent(mActivity, RankActivity.class);
                 intent.putExtra("type", fragmentType + "");
+                intent.putExtra("name", "rank");
                 startActivity(intent);
             }
         });
@@ -96,7 +97,7 @@ public class ExamOneFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mActivity, TubiaoActivity.class);
-                intent.putExtra("type", fragmentType + "");
+                intent.putExtra("type", "1");
                 startActivity(intent);
             }
         });
@@ -168,22 +169,22 @@ public class ExamOneFragment extends Fragment{
         currentView.findViewById(R.id.vipTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if("0".equals(mActivity.getUserInfo(3))){
-                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
-                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
-                    intent.putExtra("fragmentType", fragmentType+ "");
-                    intent.putExtra("title","VIP特权");
-                    startActivity(intent);
-                }else{
-                    Intent intent = new Intent(mActivity, VipActivity.class);
-                    intent.putExtra("fragmentType", fragmentType + "");
-                    startActivity(intent);
-                }
-//                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
-//                intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
-//                intent.putExtra("fragmentType", fragmentType+ "");
-//                intent.putExtra("title","VIP特权");
-//                startActivity(intent);
+//                if("0".equals(mActivity.getUserInfo(3))){
+//                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+//                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+//                    intent.putExtra("fragmentType", fragmentType+ "");
+//                    intent.putExtra("title","VIP特权");
+//                    startActivity(intent);
+//                }else{
+//                    Intent intent = new Intent(mActivity, VipActivity.class);
+//                    intent.putExtra("fragmentType", fragmentType + "");
+//                    startActivity(intent);
+//                }
+                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+                intent.putExtra("fragmentType", fragmentType+ "");
+                intent.putExtra("title","VIP特权");
+                startActivity(intent);
             }
         });
         currentView.findViewById(R.id.cuotiTV).setOnClickListener(new View.OnClickListener() {

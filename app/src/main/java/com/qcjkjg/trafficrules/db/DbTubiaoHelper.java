@@ -81,6 +81,20 @@ public class DbTubiaoHelper {
         }
     }
 
+    public List<Tubiao>  getTubiaoList1(){
+        SQLiteDatabase db =openDatabase(context);
+        List<Tubiao> tubiaoList=new ArrayList<Tubiao>();
+        Cursor cursor =null;
+        cursor = db.rawQuery("select name,type,count(*) as a from tubiao group by type",null);
+        while (cursor.moveToNext()) {
+            Tubiao tubiao=new Tubiao();
+            tubiao.setType(cursor.getString(cursor.getColumnIndex("type")));
+            tubiao.setFlag(cursor.getString(cursor.getColumnIndex("name")));
+            tubiao.setNum(cursor.getString(cursor.getColumnIndex("a")));
+            tubiaoList.add(tubiao);
+        }
+        return tubiaoList;
+    }
     public List<Tubiao>  getTubiaoList(String type){
         SQLiteDatabase db =openDatabase(context);
         List<Tubiao> tubiaoList=new ArrayList<Tubiao>();
@@ -92,6 +106,17 @@ public class DbTubiaoHelper {
             tubiao.setName(cursor.getString(cursor.getColumnIndex("class")));
             tubiao.setNum(cursor.getString(cursor.getColumnIndex("a")));
             tubiaoList.add(tubiao);
+        }
+        return tubiaoList;
+    }
+
+    public List<String>  getTubiaoListLimit1(String type){
+        SQLiteDatabase db =openDatabase(context);
+        List<String> tubiaoList=new ArrayList<String>();
+        Cursor cursor =null;
+        cursor = db.rawQuery("select pic from tubiao where type=? limit 4", new String[]{type});
+        while (cursor.moveToNext()) {
+            tubiaoList.add(cursor.getString(cursor.getColumnIndex("pic")));
         }
         return tubiaoList;
     }

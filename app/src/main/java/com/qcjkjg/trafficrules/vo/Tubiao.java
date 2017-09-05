@@ -9,8 +9,24 @@ public class Tubiao {
     private String pictureUrl;
     private String content;
     private String num;
-    private String type;//科目几
+    private String type;
+    private String flag;
 
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getName() {
         return name;

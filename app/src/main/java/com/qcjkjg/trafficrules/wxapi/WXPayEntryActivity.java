@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 import com.qcjkjg.trafficrules.event.PaySuccessEvent;
 import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
+//import com.sci99.pay.common.Constants;
 import com.sci99.pay.common.Constants;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;

@@ -23,7 +23,7 @@
                       android:textColor="#333333"
                       android:text="科一考规"
                       android:id="@+id/ruleTV"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:gravity="center_horizontal"
                       android:layout_height="match_parent"/>
             <TextView android:layout_width="0dp"
@@ -34,7 +34,7 @@
                       android:drawableTop="@drawable/ic_datijiqiao"
                       android:textColor="#333333"
                       android:text="答题技巧"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:gravity="center_horizontal"
                       android:layout_height="match_parent"/>
             <TextView android:layout_width="0dp"
@@ -45,7 +45,7 @@
                       android:drawableTop="@drawable/ic_tubiaosuji"
                       android:textColor="#333333"
                       android:text="图标速记"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:gravity="center_horizontal"
                       android:layout_height="match_parent"/>
         </LinearLayout>
@@ -66,7 +66,7 @@
                       android:textColor="#333333"
                       android:text="章节练习"
                       android:id="@+id/zhangjieTV"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
@@ -77,7 +77,7 @@
                       android:textColor="#333333"
                       android:id="@+id/zhuanxiangTV"
                       android:text="专项加强"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
@@ -88,7 +88,7 @@
                       android:textColor="#333333"
                       android:text="未做练习"
                       android:id="@+id/weizuoTV"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
@@ -99,7 +99,7 @@
                       android:textColor="#333333"
                       android:text="背题模式"
                       android:id="@+id/beitiTV"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_centerInParent="true"
@@ -112,14 +112,14 @@
                           android:layout_height="wrap_content"
                           android:text="顺序练习"
                           android:textColor="#ffffff"
-                          android:textSize="20sp"/>
+                          android:textSize="17sp"/>
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:text="共1444题"
                           android:id="@+id/seqAnswerTV"
                           android:layout_marginTop="5dp"
                           android:textColor="#ffffff"
-                          android:textSize="16sp"/>
+                          android:textSize="15sp"/>
             </LinearLayout>
         </RelativeLayout>
         <View android:layout_width="match_parent"
@@ -133,24 +133,24 @@
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
                       android:layout_alignParentTop="true"
-                      android:layout_alignParentRight="true"
+                      android:layout_alignParentLeft="true"
                       android:drawableTop="@drawable/ic_vipbaoguo"
                       android:textColor="#333333"
                       android:text="VIP保过"
                       android:id="@+id/vipTV"
                       android:drawablePadding="5dp"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
                       android:layout_alignParentTop="true"
-                      android:layout_alignParentLeft="true"
+                      android:layout_alignParentRight="true"
                       android:drawableTop="@drawable/ic_chengji"
                       android:textColor="#333333"
                       android:text="成绩排行"
                       android:id="@+id/scoreTV"
                       android:drawablePadding="5dp"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
@@ -161,7 +161,7 @@
                       android:textColor="#333333"
                       android:text="攻克难题"
                       android:id="@+id/nantiTV"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:padding="15dp"
@@ -172,7 +172,7 @@
                       android:textColor="#333333"
                       android:text="错题收藏"
                       android:id="@+id/cuotiTV"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_centerInParent="true"
@@ -185,14 +185,14 @@
                           android:layout_height="wrap_content"
                           android:text="模拟练习"
                           android:textColor="#ffffff"
-                          android:textSize="20sp"/>
+                          android:textSize="17sp"/>
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:text="共1444题"
                           android:id="@+id/moniTV"
                           android:layout_marginTop="5dp"
                           android:textColor="#ffffff"
-                          android:textSize="16sp"/>
+                          android:textSize="15sp"/>
             </LinearLayout>
         </RelativeLayout>
         <View android:layout_width="match_parent"

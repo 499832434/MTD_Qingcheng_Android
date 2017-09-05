@@ -93,9 +93,9 @@ public class ExamSecondFragment extends Fragment{
         currentView.findViewById(R.id.aboutTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, TubiaoActivity.class);
-                intent.putExtra("type", fragmentType + "");
-                startActivity(intent);
+//                Intent intent = new Intent(mActivity, TubiaoActivity.class);
+//                intent.putExtra("type", fragmentType + "");
+//                startActivity(intent);
             }
         });
 

@@ -286,7 +286,6 @@
         <meta-data android:name="com.amap.api.v2.apikey"
                    android:value="0f3ff7dbfab56e667326941324134d20"/>
 
-
     </application>
 
 </manifest>

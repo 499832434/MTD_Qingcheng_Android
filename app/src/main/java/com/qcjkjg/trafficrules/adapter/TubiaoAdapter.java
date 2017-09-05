@@ -3,6 +3,7 @@ package com.qcjkjg.trafficrules.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,14 @@ public class TubiaoAdapter extends BaseAdapter {
     private List<Tubiao> mData;
     private Context context;
     private String type;
+    private int flag;
 
-    public TubiaoAdapter(FragmentActivity context, List<Tubiao> data,String type) {
+    public TubiaoAdapter(FragmentActivity context, List<Tubiao> data,String type,int flag) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context=context;
         this.type=type;
+        this.flag=flag;
     }
 
     @Override
@@ -69,18 +72,35 @@ public class TubiaoAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.numTV.setText(mData.get(position).getNum()+"张");
-        holder.nameTV.setText(mData.get(position).getName());
-        DbTubiaoHelper db=new DbTubiaoHelper(context);
-        List<View> views=new ArrayList<View>();
-        views.add(holder.IV1);
-        views.add(holder.IV2);
-        views.add(holder.IV3);
-        views.add(holder.IV4);
-        List<String> list=db.getTubiaoListLimit(type,mData.get(position).getCode());
-        for(int i=0;i<list.size();i++){
-            ((BaseActivity)context).getLocalPicture(list.get(i), (ImageView) views.get(i));
+        if(flag==1){
+            type=mData.get(position).getType();
+            holder.nameTV.setText(mData.get(position).getFlag());
+            holder.numTV.setText(mData.get(position).getNum()+"张");
+            DbTubiaoHelper db=new DbTubiaoHelper(context);
+            List<View> views=new ArrayList<View>();
+            views.add(holder.IV1);
+            views.add(holder.IV2);
+            views.add(holder.IV3);
+            views.add(holder.IV4);
+            List<String> list=db.getTubiaoListLimit1(type);
+            for(int i=0;i<list.size();i++){
+                ((BaseActivity)context).getLocalPicture(list.get(i), (ImageView) views.get(i));
+            }
+        }else{
+            holder.numTV.setText(mData.get(position).getNum()+"张");
+            holder.nameTV.setText(mData.get(position).getName());
+            DbTubiaoHelper db=new DbTubiaoHelper(context);
+            List<View> views=new ArrayList<View>();
+            views.add(holder.IV1);
+            views.add(holder.IV2);
+            views.add(holder.IV3);
+            views.add(holder.IV4);
+            List<String> list=db.getTubiaoListLimit(type,mData.get(position).getCode());
+            for(int i=0;i<list.size();i++){
+                ((BaseActivity)context).getLocalPicture(list.get(i), (ImageView) views.get(i));
+            }
         }
+
         return convertView;
     }
 

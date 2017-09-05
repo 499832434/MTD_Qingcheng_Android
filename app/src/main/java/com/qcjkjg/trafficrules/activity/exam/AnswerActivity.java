@@ -2,6 +2,7 @@ package com.qcjkjg.trafficrules.activity.exam;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.fragment.AnswerFragment;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
+import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.SubDialog;
 import com.qcjkjg.trafficrules.vo.ExamScore;
@@ -195,6 +197,13 @@ public class AnswerActivity extends BaseActivity{
         ((CustomTitleBar)findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if("submoni1".equals(type)||"submoni2".equals(type)){
+                    showAssignDialog();
+                    return;
+                }
+                if("subseq".equals(type)||"submoni2".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)||"submoni1".equals(type)){
+                    setPosition();
+                }
                 finish();
             }
         });
@@ -498,6 +507,10 @@ public class AnswerActivity extends BaseActivity{
                 dialog.dismiss();
                 request();
                 EventBus.getDefault().post(new RefreshExamNumEvent());
+                Intent intent = new Intent(AnswerActivity.this, RankActivity.class);
+                intent.putExtra("type", fragmentType + "");
+                intent.putExtra("name", "score");
+                startActivity(intent);
                 finish();
             }
         });
@@ -544,7 +557,7 @@ public class AnswerActivity extends BaseActivity{
         time2=getTime(time3);
         examScore.setTime(time2);
         DbHelper db=new DbHelper(AnswerActivity.this);
-        db.addExamScore(examScore,fragmentType);
+        db.addExamScore(examScore, fragmentType);
     }
 
 
@@ -596,6 +609,34 @@ public class AnswerActivity extends BaseActivity{
             collectTV.setText("删除");
         }else{
             collectTV.setText("已删除");
+        }
+    }
+
+    public boolean onKeyDown(int keyCode ,KeyEvent keyEvent){
+        if(keyCode==keyEvent.KEYCODE_BACK){//监听返回键，如果可以后退就后退
+            if("submoni1".equals(type)||"submoni2".equals(type)){
+                showAssignDialog();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, keyEvent);
+    }
+
+    //记录用户的答题位置
+    private void setPosition(){
+        String str=getUserInfo(12);
+        if(TextUtils.isEmpty(str)){
+            Map<String,String> map=new HashMap<String,String>();
+            map.put("useid",getUserInfo(1));
+            map.put("fragmentType",fragmentType);
+            map.put("fragmentPositon",fragmentPositon+"");
+            List<Map<String,String>> list=new ArrayList<Map<String, String>>();
+            list.add(map);
+            Map<String,List<Map<String,String>>> map1=new HashMap<String,List<Map<String,String>>>();
+            map1.put("info",list);
+            PrefUtils.putString(AnswerActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.MEMORY_POSITION, map1.toString());
+        }else{
+
         }
     }
 }

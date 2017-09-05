@@ -30,6 +30,7 @@ public class RankActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank);
         initView();
+
     }
 
 
@@ -108,6 +109,12 @@ public class RankActivity extends BaseActivity{
 
             }
         });
+
+        if("rank".equals(getIntent().getStringExtra("name"))){
+            viewPager.setCurrentItem(0);
+        }else{
+            viewPager.setCurrentItem(1);
+        }
 
     }
 

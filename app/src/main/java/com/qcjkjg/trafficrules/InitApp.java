@@ -45,10 +45,11 @@ public class InitApp extends Application{
     public static final String USER_CAR_TYPE_KEY = "USER_CAR_TYPE_KEY";//驾驶证类型
     public static final String USER_CLIENT_ID_KEY_FLAG = "USER_CLIENT_ID_KEY_FLAG";
     public static final String USER_COLLECT_SUB_KEY = "USER_COLLECT_SUB_KEY";//收藏题目
-    public static final String USER_PROVINCE_KEY = "USER_COLLECT_SUB_KEY";//省
-    public static final String USER_CITY_KEY = "USER_COLLECT_SUB_KEY";//市
+    public static final String USER_PROVINCE_KEY = "USER_PROVINCE_KEY";//省
+    public static final String USER_CITY_KEY = "USER_CITY_KEY";//市
     public static final String USER_PHONE_CODE = "USER_PHONE_CODE";
     public static final String FIRST_OPEN_KEY = "FIRST_OPEN_KEY";//判断用户是否是第一次安装
+    public static final String MEMORY_POSITION = "MEMORY_POSITION";//记录用户答题位置
 
 
 

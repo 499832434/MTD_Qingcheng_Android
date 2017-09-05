@@ -130,7 +130,7 @@
             <TextView android:layout_width="100dp"
                       android:layout_height="35dp"
                       android:gravity="center"
-                      android:text="马上考试"
+                      android:text="VIP保过"
                       android:id="@+id/moniTV"
                       android:layout_centerVertical="true"
                       android:background="@drawable/ic_bg_login_button"

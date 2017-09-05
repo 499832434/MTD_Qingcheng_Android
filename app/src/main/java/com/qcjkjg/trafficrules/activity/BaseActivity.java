@@ -274,6 +274,8 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PLATFORM_KEY, "");
             case 11://用户是否第一次安装
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY, "yes");
+            case 12://记录用户的答题位置
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.MEMORY_POSITION, "");
         }
         return "";
     }
@@ -682,16 +684,21 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public String getClip(){
-        ClipboardManager clipboardManager=(ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-        String str=clipboardManager.getText().toString();
-        if(!TextUtils.isEmpty(str)){
-            if(str.indexOf("inviter")!=-1){
-                str=str.split("=")[1];
-            }else{
-                str="";
+        try{
+            ClipboardManager clipboardManager=(ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+            String str=clipboardManager.getText().toString();
+            if(!TextUtils.isEmpty(str)){
+                if(str.indexOf("inviter")!=-1){
+                    str=str.split("=")[1];
+                }else{
+                    str="";
+                }
             }
+            return str;
+        }catch (Exception e){
+            return "";
         }
-        return str;
+
     }
 
     public void loginout(final SHARE_MEDIA platform){

@@ -22,7 +22,8 @@ public class TubiaoActivity extends BaseActivity{
     private ListView tubiaoLV;
     private TubiaoAdapter adapter;
     private List<Tubiao> list=new ArrayList<Tubiao>();
-    private String type;//科目几
+    private String type;
+    private int flag=1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,17 +35,15 @@ public class TubiaoActivity extends BaseActivity{
 
 
     private void initData() {
-        if ("1".equals(getIntent().getStringExtra("type"))) {
-            type="一";
-        }else if("2".equals(getIntent().getStringExtra("type"))){
-            type="二";
-        }else if("3".equals(getIntent().getStringExtra("type"))){
-            type="三";
-        }else {
-            type="四";
-        }
         DbTubiaoHelper helper = new DbTubiaoHelper(TubiaoActivity.this);
-        list = helper.getTubiaoList(type);
+        if ("1".equals(getIntent().getStringExtra("type"))) {
+            list = helper.getTubiaoList1();
+            flag=1;
+        }else{
+            list = helper.getTubiaoList(getIntent().getStringExtra("flag"));
+            type=getIntent().getStringExtra("flag");
+            flag=2;
+        }
     }
     private void initView(){
         ((CustomTitleBar)findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(new View.OnClickListener() {
@@ -54,15 +53,24 @@ public class TubiaoActivity extends BaseActivity{
             }
         });
         tubiaoLV= (ListView) findViewById(R.id.tubiaoLV);
-        adapter=new TubiaoAdapter(TubiaoActivity.this,list,type);
+        adapter=new TubiaoAdapter(TubiaoActivity.this,list,type,flag);
         tubiaoLV.setAdapter(adapter);
         tubiaoLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent=new Intent(TubiaoActivity.this,TubiaoDetailActivity.class);
-                intent.putExtra("code",list.get(i).getCode());
-                intent.putExtra("title",list.get(i).getName());
-                startActivity(intent);
+                if("1".equals(getIntent().getStringExtra("type"))){
+                    Intent intent = new Intent(TubiaoActivity.this, TubiaoActivity.class);
+                    intent.putExtra("type", "2");
+                    intent.putExtra("flag", list.get(i).getType());
+                    startActivity(intent);
+                }else{
+
+                    Intent intent=new Intent(TubiaoActivity.this,TubiaoDetailActivity.class);
+                    intent.putExtra("code",list.get(i).getCode());
+                    intent.putExtra("title",list.get(i).getName());
+                    startActivity(intent);
+                }
+
             }
         });
     }
