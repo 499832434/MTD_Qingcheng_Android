@@ -147,8 +147,14 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             abcdImageList.add(bIV);
             abcdImageList.add(cIV);
             abcdImageList.add(dIV);
-        }else {
+        }else if("3".equals(subjectFlag.getSubType())){
             subType="多选题";
+            abcdImageList.add(aIV);
+            abcdImageList.add(bIV);
+            abcdImageList.add(cIV);
+            abcdImageList.add(dIV);
+        }else{
+            subType="题目";
             abcdImageList.add(aIV);
             abcdImageList.add(bIV);
             abcdImageList.add(cIV);
@@ -163,12 +169,9 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
             animationVV.setVisibility(View.GONE);
         }else{
-            if(subjectFlag.getSubPic().indexOf("jpg")!=-1){
+            if(subjectFlag.getSubPic().indexOf("jpg")!=-1||subjectFlag.getSubPic().indexOf("png")!=-1){
                 animationVV.setVisibility(View.GONE);
                 mActivity.getLocalPicture(subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
-//                String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
-//                Log.e("aaaa2",subjectFlag.getSubPic()+"=="+uri);
-//                mActivity.getNetWorkPicture("file:///android_asset/a"+subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
             }else if(subjectFlag.getSubPic().indexOf("mp4")!=-1){
                 ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
                 String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
@@ -494,7 +497,11 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }else if("subseq".equals(type)||"subnodone".equals(type)){
             subjectSelect.setSeqAnswer("0");
         }else if("subchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            if("110".equals(subjectFlag.getSubChapter())||"210".equals(subjectFlag.getSubChapter())){
+                subjectSelect.setChapterAnswer(subjectFlag.getSubChapter()+"-"+mActivity.getUserInfo(8));
+            }else{
+                subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            }
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
         }else if("subnanti".equals(type)){
@@ -541,7 +548,11 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }else if("subseq".equals(type)||"subnodone".equals(type)){
             subjectSelect.setSeqAnswer("0");
         }else if("subchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            if("110".equals(subjectFlag.getSubChapter())||"210".equals(subjectFlag.getSubChapter())){
+                subjectSelect.setChapterAnswer(subjectFlag.getSubChapter()+"-"+mActivity.getUserInfo(8));
+            }else{
+                subjectSelect.setChapterAnswer(subjectFlag.getSubChapter());
+            }
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectFlag.getSubVip());
         }else if("subnanti".equals(type)){

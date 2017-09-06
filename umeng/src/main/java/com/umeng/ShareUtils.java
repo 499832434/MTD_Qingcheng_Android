@@ -102,10 +102,10 @@ public class ShareUtils {
 
     public static void share(int  flag,String url,Activity activity, UMShareListener umShareListener) {
         UMWeb  web = new UMWeb(url);
-        web.setTitle("启程交规");//标题
+        web.setTitle("启程考驾照,学员过关法宝");//标题
         web.setThumb(new UMImage(activity, R.drawable.ic_qicheng));
 //        web.setThumb(thumb);  //缩略图
-        web.setDescription("驾考新形式下的驾校的招生利器、让文盲学员都能成功学驾照的独门绝技。");//描述
+        web.setDescription("掌握技巧,考试在难都不怕,分享给你呀~");//描述
 
         SHARE_MEDIA platform=null;
         switch (flag){

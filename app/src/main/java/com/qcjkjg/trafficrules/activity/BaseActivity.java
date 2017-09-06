@@ -42,6 +42,7 @@ import com.qcjkjg.trafficrules.activity.login.BindPhoneActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
+import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.event.LoginSuccessEvent;
 import com.qcjkjg.trafficrules.event.PaySuccessEvent;
@@ -59,6 +60,7 @@ import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.Base;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.apache.http.HttpEntity;
@@ -102,6 +104,8 @@ public class BaseActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText contentET;
     private TextView num1TV, num2TV;
+    public static int subtypePosition1=-1;
+    public static int subtypePosition4=-1;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +123,7 @@ public class BaseActivity extends AppCompatActivity {
         options = new RequestOptions()
                 .placeholder(R.drawable.aio_image_fail_round)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
+
     }
 
 

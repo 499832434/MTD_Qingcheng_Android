@@ -20,6 +20,8 @@ import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.event.LoginSuccessEvent;
+import com.qcjkjg.trafficrules.event.LoginoutSuccessEvent;
 import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Subject;
@@ -39,6 +41,7 @@ public class ExamOneFragment extends Fragment{
     protected MainActivity mActivity;
     private int seqNum=0,moniNum=0;
     private CycleViewPager cycleViewPager;
+    private TextView seqAnswerTV;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class ExamOneFragment extends Fragment{
         }else{
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科四考规");
         }
-
+        seqAnswerTV=((TextView)currentView.findViewById(R.id.seqAnswerTV));
 
 
         currentView.findViewById(R.id.scoreTV).setOnClickListener(new View.OnClickListener() {
@@ -211,6 +214,15 @@ public class ExamOneFragment extends Fragment{
         refresh();
     }
 
+    public void onEvent(LoginoutSuccessEvent event) {
+        refresh();
+    }
+
+
+    public void onEvent(LoginSuccessEvent event) {
+        refresh();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -220,9 +232,15 @@ public class ExamOneFragment extends Fragment{
     private void refresh(){
         DbCreateHelper helper=new DbCreateHelper(mActivity);
         seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
-        ((TextView)currentView.findViewById(R.id.seqAnswerTV)).setText("共" + seqNum + "题");
         DbHelper helper1=new DbHelper(mActivity);
-        int score=helper1.selectExamScoreMax(fragmentType+"");
+        BaseActivity.subtypePosition1=helper1.selectPosition("1");
+        DbHelper helper4=new DbHelper(mActivity);
+        BaseActivity.subtypePosition4=helper4.selectPosition("4");
+
+
+
+        DbHelper helper2=new DbHelper(mActivity);
+        int score=helper2.selectExamScoreMax(fragmentType+"");
         String str="";
         if(score==-1){
             str="没有成绩";
@@ -230,5 +248,24 @@ public class ExamOneFragment extends Fragment{
             str="最高"+score+"分";
         }
         ((TextView) currentView.findViewById(R.id.moniTV)).setText(str);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(fragmentType==1){
+            if(BaseActivity.subtypePosition1==-1){
+                seqAnswerTV.setText("共" + seqNum + "题");
+            }else{
+                seqAnswerTV.setText((BaseActivity.subtypePosition1+1)+"/" + seqNum + "题");
+            }
+        }else{
+            if(BaseActivity.subtypePosition4==-1){
+                seqAnswerTV.setText("共" + seqNum + "题");
+            }else{
+                seqAnswerTV.setText((BaseActivity.subtypePosition4+1)+"/" + seqNum + "题");
+            }
+        }
     }
 }

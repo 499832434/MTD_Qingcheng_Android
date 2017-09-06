@@ -16,7 +16,7 @@ import com.qcjkjg.trafficrules.R;
  */
 public class CustomTitleBar extends LinearLayout {
     private ImageView leftImageView,rightImageView;
-    private TextView titleTextView;
+    private TextView titleTextView,leftTextView;
 
     private String text;
     private int imageLeft,imageRight;
@@ -25,6 +25,7 @@ public class CustomTitleBar extends LinearLayout {
         super(context, attrs);
         View titleBar = LayoutInflater.from(context).inflate(R.layout.custom_title_bar_view, null);
         titleTextView = (TextView) titleBar.findViewById(R.id.titleTextView);
+        leftTextView = (TextView) titleBar.findViewById(R.id.leftTextView);
         leftImageView = (ImageView) titleBar.findViewById(R.id.leftImageView);
         rightImageView= (ImageView) titleBar.findViewById(R.id.rightImageView);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleBar);
@@ -50,6 +51,10 @@ public class CustomTitleBar extends LinearLayout {
         rightImageView.setOnClickListener(listener);
     }
 
+    public void setLeftTextViewOnClickListener(OnClickListener listener) {
+        leftTextView.setOnClickListener(listener);
+    }
+
 
     /**
      * 修改中间标题
@@ -57,6 +62,16 @@ public class CustomTitleBar extends LinearLayout {
     public void setTitleTextView(String title) {
         if (title != null)
             titleTextView.setText(title);
+    }
+
+    /**
+     * 修改中间标题
+     */
+    public void setLeftTextView(String str) {
+        if (str != null){
+            leftTextView.setText(str);
+            leftTextView.setVisibility(View.VISIBLE);
+        }
     }
 
 

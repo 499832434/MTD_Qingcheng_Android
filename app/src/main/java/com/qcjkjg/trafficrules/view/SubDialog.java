@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import com.qcjkjg.trafficrules.R;
+import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
 import com.qcjkjg.trafficrules.adapter.AnswerGridAdapter;
 import com.qcjkjg.trafficrules.db.DbHelper;
@@ -29,7 +30,7 @@ public class SubDialog extends Dialog {
     private Context context;
     private GridView subGV;
     private List<Subject> subjectList=new ArrayList<Subject>();
-    private String collectFlag,rightStr,wrongStr,numStr,historyscore;
+    private String collectFlag,rightStr,wrongStr,numStr,historyscore,fragmentType,deleteFlag;
     private int fragmentPositon;
 
 
@@ -37,7 +38,7 @@ public class SubDialog extends Dialog {
     private String type;
     private String delete;//是否删除
 
-    public SubDialog(Context context, int themeResId,List<Subject> subjectList,String collectFlag,String rightStr,String wrongStr,String numStr,int fragmentPositon,String type,String historyscore,String delete) {
+    public SubDialog(Context context, int themeResId,List<Subject> subjectList,String collectFlag,String rightStr,String wrongStr,String numStr,int fragmentPositon,String type,String historyscore,String delete,String fragmentType,String deleteFlag) {
         super(context, themeResId);
         this.context=context;
         this.subjectList=subjectList;
@@ -49,6 +50,8 @@ public class SubDialog extends Dialog {
         this.type=type;
         this.historyscore=historyscore;
         this.delete=delete;
+        this.fragmentType=fragmentType;
+        this.deleteFlag=deleteFlag;
     }
 
     @Override
@@ -94,13 +97,6 @@ public class SubDialog extends Dialog {
         });
 
 
-        if("0".equals(collectFlag)){
-            collectIV.setImageResource(R.drawable.ic_collection_s);
-            collectIV.setTag("0");//收藏
-        }else{
-            collectIV.setImageResource(R.drawable.ic_collection_02);
-            collectIV.setTag("1");//取消收藏
-        }
 
         if("submoni1".equals(type)||"submoni2".equals(type)){
             collectIV.setImageResource(R.drawable.ic_validation);
@@ -132,6 +128,35 @@ public class SubDialog extends Dialog {
                     ((AnswerActivity)context).deleteError(subjectList.get(fragmentPositon).getSubId());
                 }
             });
+        } else if ("subseq".equals(type) || "subclass".equals(type) || "subchapter".equals(type) || "subnanti".equals(type) || "subvip".equals(type)) {
+            collectIV.setImageResource(R.drawable.rtt);
+            collectTV.setText("清空记录");
+            collectIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((AnswerActivity)context).setFragmentPositon(-1);
+                    DbHelper helper = new DbHelper(context);
+                    helper.delectSub(fragmentType, deleteFlag, type);
+                    ((AnswerActivity)context).finish();
+                }
+            });
+            collectTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((AnswerActivity)context).setFragmentPositon(-1);
+                    DbHelper helper = new DbHelper(context);
+                    helper.delectSub(fragmentType, deleteFlag, type);
+                    ((AnswerActivity)context).finish();
+                }
+            });
+        }else {
+            if("0".equals(collectFlag)){
+                collectIV.setImageResource(R.drawable.ic_collection_s);
+                collectIV.setTag("0");//收藏
+            }else{
+                collectIV.setImageResource(R.drawable.ic_collection_02);
+                collectIV.setTag("1");//取消收藏
+            }
         }
 
         ((TextView)findViewById(R.id.rightTV)).setText(rightStr);
@@ -219,7 +244,11 @@ public class SubDialog extends Dialog {
         }else if("subseq".equals(type)||"subnodone".equals(type)){
             subjectSelect.setSeqAnswer("0");
         }else if("subchapter".equals(type)){
-            subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
+            if("110".equals(subjectList.get(0).getSubChapter())||"210".equals(subjectList.get(0).getSubChapter())){
+                subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter() + "-" + ((BaseActivity) context).getUserInfo(8));
+            }else{
+                subjectSelect.setChapterAnswer(subjectList.get(0).getSubChapter());
+            }
         }else if("subvip".equals(type)){
             subjectSelect.setVipAnswer(subjectList.get(0).getSubVip());
         }else if("subnanti".equals(type)){

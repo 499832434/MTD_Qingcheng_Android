@@ -59,12 +59,21 @@ public class TubiaoActivity extends BaseActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if("1".equals(getIntent().getStringExtra("type"))){
-                    Intent intent = new Intent(TubiaoActivity.this, TubiaoActivity.class);
-                    intent.putExtra("type", "2");
-                    intent.putExtra("flag", list.get(i).getType());
-                    startActivity(intent);
-                }else{
+                    DbTubiaoHelper helper = new DbTubiaoHelper(TubiaoActivity.this);
+                    List<Tubiao> list1 = helper.getTubiaoList(list.get(i).getType());
+                    if(list1.size()==1){
+                        Intent intent=new Intent(TubiaoActivity.this,TubiaoDetailActivity.class);
+                        intent.putExtra("code",list1.get(0).getCode());
+                        intent.putExtra("title",list1.get(0).getName());
+                        startActivity(intent);
+                    }else {
+                        Intent intent = new Intent(TubiaoActivity.this, TubiaoActivity.class);
+                        intent.putExtra("type", "2");
+                        intent.putExtra("flag", list.get(i).getType());
+                        startActivity(intent);
+                    }
 
+                }else{
                     Intent intent=new Intent(TubiaoActivity.this,TubiaoDetailActivity.class);
                     intent.putExtra("code",list.get(i).getCode());
                     intent.putExtra("title",list.get(i).getName());

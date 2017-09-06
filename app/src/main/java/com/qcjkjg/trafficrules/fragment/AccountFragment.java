@@ -24,8 +24,11 @@ import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
+import com.qcjkjg.trafficrules.event.LoginSuccessEvent;
+import com.qcjkjg.trafficrules.event.LoginoutSuccessEvent;
 import com.qcjkjg.trafficrules.view.CircleImageView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 
 /**
@@ -61,6 +64,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         currentView.findViewById(R.id.logoutRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EventBus.getDefault().post(new LoginoutSuccessEvent());
                 if ("0".equals(mActivity.getUserInfo(10))) {
                     mActivity.loginout(SHARE_MEDIA.QQ);
                 } else {
@@ -71,6 +75,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         });
 
         mActivity.setShareView(currentView.findViewById(R.id.shareLL));
+        currentView.findViewById(R.id.wechatTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                intent.putExtra("url",ApiConstants.WECHAT_CODE);
+                intent.putExtra("title","联系我们");
+                startActivity(intent);
+            }
+        });
 
     }
 

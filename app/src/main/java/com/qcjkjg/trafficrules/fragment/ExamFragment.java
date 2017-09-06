@@ -19,12 +19,15 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
+import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
+import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.zaaach.citypicker.CityPickerActivity;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ public class ExamFragment extends Fragment{
     public List<Fragment> fragments;
     protected MainActivity mActivity;
     private TabLayout tabLayout;
+    private CustomTitleBar customTitleBar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +52,23 @@ public class ExamFragment extends Fragment{
     }
 
     private void initView(){
+
+        customTitleBar=((CustomTitleBar) currentView.findViewById(R.id.customTitleBar));
+        customTitleBar.setRightImageOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(mActivity, MessageMainActivity.class));
+                    }
+                });
+        customTitleBar.setLeftTextView(mActivity.getUserInfo(8));
+        customTitleBar.setLeftTextViewOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.startActivityForResult(new Intent(mActivity, CityPickerActivity.class), MainActivity.REQUEST_CODE_PICK_CITY);
+            }
+        });
+
         fragments=new ArrayList<Fragment>();
         fragments.add(ExamOneFragment.newInstance(1));
         fragments.add(ExamSecondFragment.newInstance(2));
@@ -99,12 +120,6 @@ public class ExamFragment extends Fragment{
         //然后让TabLayout和ViewPager关联，只需要一句话，简直也是没谁了.
         tabLayout.setupWithViewPager(viewPager);
 
-        currentView.findViewById(R.id.areaIV).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActivity.startActivityForResult(new Intent(mActivity, CityPickerActivity.class),MainActivity.REQUEST_CODE_PICK_CITY);
-            }
-        });
     }
 
 
@@ -127,6 +142,7 @@ public class ExamFragment extends Fragment{
                     PrefUtils.putString(mActivity, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, city.split("-")[0]);
                     PrefUtils.putString(mActivity, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY,city.split("-")[1]);
                     PrefUtils.putString(mActivity, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY,"no");
+                    customTitleBar.setLeftTextView(city.split("-")[1]);
                     Toast.makeText(mActivity, city, Toast.LENGTH_SHORT).show();
                 }
             }

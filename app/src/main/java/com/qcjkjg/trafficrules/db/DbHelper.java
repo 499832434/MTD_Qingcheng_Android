@@ -68,7 +68,14 @@ public class DbHelper extends AbstractDatabaseHelper {
                     "  [date] varchar(10), " +//答题日期
                     "  [answer] text, "+//答案
                     "  [subs] text, " +//题号
-                    "  [sub_type] INTEGER DEFAULT 1) " //科目
+                    "  [sub_type] INTEGER DEFAULT 1); ", //科目
+
+            "CREATE TABLE IF NOT EXISTS [exam_position] (" +
+                    "  [id] INTEGER NOT NULL PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT, " +
+                    "  [user_id] varchar(10) , " +//用户
+                    "  [car_id] INTEGER DEFAULT 1, " +//车型id
+                    "  [position] INTEGER DEFAULT 0 , " +//位置
+                    "  [sub_type] INTEGER DEFAULT 1 );" //科目
 
     };
 
@@ -210,6 +217,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             this.close();
         }
     }
+
     //查询该题目答过次数
     public final int querySubAnswerNum(SubjectSelect subjectSelect) {
         Cursor cursor = null;
@@ -229,6 +237,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             this.close();
         }
     }
+
     //查询该题目答错次数
     public final int querySubErrorNum(SubjectSelect subjectSelect) {
         Cursor cursor = null;
@@ -298,6 +307,7 @@ public class DbHelper extends AbstractDatabaseHelper {
         }
 }
 
+    //删除收藏题目
     public final void delectCollectSub(Boolean flag,String subId,String sub_type) {
         this.open(this.ctx);
         try {
@@ -305,6 +315,32 @@ public class DbHelper extends AbstractDatabaseHelper {
                 this.mDb.delete("qc_sub_collect", "user_id=? and sub_id=? and car_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId, ((BaseActivity) ctx).getUserInfo(5), sub_type});
             }else{
                 this.mDb.delete("qc_sub_error", "user_id=? and sub_id=? and car_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1), subId, ((BaseActivity) ctx).getUserInfo(5), sub_type});
+            }
+        } catch (Exception e) {
+
+        } finally {
+            this.close();
+        }
+    }
+
+    //删除答题题目
+    public final void delectSub(String examType,String subClass,String type) {
+        this.open(this.ctx);
+        try {
+            if("subseq".equals(type)){
+                this.mDb.delete("qc_sub_answer", "user_id=? and car_id=? and sub_type=? and seq_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1),  ((BaseActivity) ctx).getUserInfo(5), examType,"0"});
+            }else if("subclass".equals(type)){
+                this.mDb.delete("qc_sub_answer", "user_id=? and car_id=? and sub_type=? and class_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1),  ((BaseActivity) ctx).getUserInfo(5), examType,subClass});
+            }else if("subchapter".equals(type)){
+                if(subClass.equals("110")||subClass.equals("210")){
+                    this.mDb.delete("qc_sub_answer", "user_id=? and car_id=? and sub_type=? and chapter_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1),  ((BaseActivity) ctx).getUserInfo(5), examType,subClass+"-"+((BaseActivity) ctx).getUserInfo(8)});
+                }else{
+                    this.mDb.delete("qc_sub_answer", "user_id=? and car_id=? and sub_type=? and chapter_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1),  ((BaseActivity) ctx).getUserInfo(5), examType,subClass});
+                }
+            }else if("subvip".equals(type)){
+                this.mDb.delete("qc_sub_answer", "user_id=? and car_id=? and sub_type=? and vip_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1),  ((BaseActivity) ctx).getUserInfo(5), examType,subClass});
+            }else if("subnanti".equals(type)){
+                this.mDb.delete("qc_sub_answer", "user_id=? and car_id=? and sub_type=? and seq_answer=?", new String[]{((BaseActivity) ctx).getUserInfo(1),  ((BaseActivity) ctx).getUserInfo(5), examType,"1"});
             }
         } catch (Exception e) {
 
@@ -357,6 +393,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             this.close();
         }
     }
+
     //查询收藏表中 按章节分类的题目id
     public final List<String> selectCollectChapterSubid(Boolean flag,String sub_chapter,String sub_type) {
         Cursor cursor = null;
@@ -452,7 +489,6 @@ public class DbHelper extends AbstractDatabaseHelper {
         }
     }
 
-
     //添加考试记录
     public final void addExamScore(ExamScore examScore,String fragmentType) {
         try {
@@ -465,7 +501,7 @@ public class DbHelper extends AbstractDatabaseHelper {
             values.put("date",examScore.getDate());
             values.put("answer", examScore.getAnswer());
             values.put("subs",examScore.getSubs());
-            values.put("sub_type",fragmentType);
+            values.put("sub_type", fragmentType);
 
             this.mDb.insert("exam_result", null, values);
             this.mDb.setTransactionSuccessful();
@@ -516,7 +552,6 @@ public class DbHelper extends AbstractDatabaseHelper {
         try {
             int max=0;
             this.open(this.ctx);
-//            cursor = this.mDb.rawQuery("select max(score) as a from exam_result where user_id=? and sub_type=?", new String[]{((BaseActivity) ctx).getUserInfo(1),"1"});
             cursor = this.mDb.rawQuery("select * from exam_result where user_id=? and sub_type=? order by score desc limit 1", new String[]{((BaseActivity) ctx).getUserInfo(1), fragmentType});
             if(cursor.getCount()==0){
                 return -1;
@@ -531,6 +566,62 @@ public class DbHelper extends AbstractDatabaseHelper {
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
+            }
+            this.close();
+        }
+    }
+
+    //查询顺序答题位置
+    public final int selectPosition(String fragmentType) {
+        Cursor cursor = null;
+        try {
+            int position=0;
+            this.open(this.ctx);
+            cursor = this.mDb.rawQuery("select * from exam_position where user_id=? and sub_type=? and car_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), fragmentType,((BaseActivity) ctx).getUserInfo(5)});
+            if(cursor.getCount()==0){
+                return -1;
+            }
+            while (cursor.moveToNext()) {
+                position=Integer.parseInt(cursor.getString(cursor.getColumnIndex("position")));
+            }
+            return position;
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+
+
+    //添加顺序答题位置
+    public final void addPosition(String fragmentType,String position) {
+        Cursor cursor = null;
+        try {
+            this.open(this.ctx);
+            cursor = this.mDb.rawQuery("select * from exam_position where user_id=? and sub_type=? and car_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), fragmentType,((BaseActivity) ctx).getUserInfo(5)});
+            this.mDb.beginTransaction();
+            ContentValues values = new ContentValues();
+            if(cursor.getCount()==0){
+                values.put("user_id", ((BaseActivity)ctx).getUserInfo(1));
+                values.put("car_id", ((BaseActivity)ctx).getUserInfo(5));
+                values.put("position", position);
+                values.put("sub_type", fragmentType);
+                this.mDb.insert("exam_position", null, values);
+            }else{
+                values.put("position", position);
+                this.mDb.update("exam_position", values, "user_id=? and sub_type=? and car_id=?", new String[]{((BaseActivity) ctx).getUserInfo(1), fragmentType,((BaseActivity) ctx).getUserInfo(5)});
+            }
+            this.mDb.setTransactionSuccessful();
+        } catch (Exception e) {
+
+        } finally {
+            try {
+                this.mDb.endTransaction();
+            } catch (Exception e) {
+
             }
             this.close();
         }

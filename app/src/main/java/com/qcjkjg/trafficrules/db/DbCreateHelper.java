@@ -93,7 +93,11 @@ public class DbCreateHelper {
             }else if("subclass".equals(type)){
                 cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_class=? order by sub_id", new String[]{examType,subClass});
             }else if("subchapter".equals(type)){
-                cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_chapter=? order by sub_id", new String[]{examType,subClass});
+                if(subClass.equals("110")||subClass.equals("210")){
+                    cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_chapter=? and city=? order by sub_id", new String[]{examType,subClass,((BaseActivity)context).getUserInfo(8)});
+                }else{
+                    cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and sub_chapter=? order by sub_id", new String[]{examType,subClass});
+                }
             }else if("subvip".equals(type)){
                 cursor = db.rawQuery("select * from tiku where car_type like "+getCarType()+" and exam_type=? and vip=? order by vip_id", new String[]{examType,subClass});
             }
