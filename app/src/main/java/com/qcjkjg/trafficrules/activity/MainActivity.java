@@ -59,6 +59,8 @@ public class MainActivity extends BaseActivity {
     public CustomViewPager masterViewPager;
     public static String SINGUPTAG = "singup";
     public CircleFragment circleFragment;
+    public SignupFragment signupFragment;
+    public ExamFragment examFragment;
     public static final int REQUEST_CODE_PICK_CITY = 0;
     public static List<String> errorList=new ArrayList<String>();
     @Override
@@ -136,9 +138,9 @@ public class MainActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return new SignupFragment();
+                return signupFragment=new SignupFragment();
             } else if (position == 1) {
-                return new ExamFragment();
+                return examFragment=new ExamFragment();
             } else if (position == 2) {
                 circleFragment=new CircleFragment();
                 return circleFragment;
@@ -195,6 +197,9 @@ public class MainActivity extends BaseActivity {
                     PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY,city.split("-")[0]);
                     PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY,city.split("-")[1]);
                     PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY,"no");
+                    examFragment.setArea(city.split("-")[1]);
+                    signupFragment.setArea(city.split("-")[1]);
+                    circleFragment.setArea(city.split("-")[1]);
                     Toast.makeText(MainActivity.this,city,Toast.LENGTH_SHORT).show();
                 }
             }

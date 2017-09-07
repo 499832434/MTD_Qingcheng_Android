@@ -130,23 +130,8 @@ public class ExamFragment extends Fragment{
         this.mActivity= (MainActivity)context;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == mActivity.REQUEST_CODE_PICK_CITY && resultCode == mActivity.RESULT_OK){
-            if("yes".equals(mActivity.getUserInfo(11))){
-                startActivity(new Intent(mActivity, SettingQuestionActivity.class));
-            }
-            if (data != null){
-                String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
-                if(city.indexOf("-")!=-1){
-                    PrefUtils.putString(mActivity, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, city.split("-")[0]);
-                    PrefUtils.putString(mActivity, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY,city.split("-")[1]);
-                    PrefUtils.putString(mActivity, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY,"no");
-                    customTitleBar.setLeftTextView(city.split("-")[1]);
-                    Toast.makeText(mActivity, city, Toast.LENGTH_SHORT).show();
-                }
-            }
 
-        }
+    public void setArea(String str){
+        customTitleBar.setLeftTextView(str);
     }
 }

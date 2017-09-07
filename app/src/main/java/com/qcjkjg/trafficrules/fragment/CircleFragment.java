@@ -34,6 +34,7 @@ import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.MyListView;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
+import com.zaaach.citypicker.CityPickerActivity;
 import de.greenrobot.event.EventBus;
 import me.codeboy.android.cycleviewpager.CycleViewPager;
 import org.json.JSONArray;
@@ -58,6 +59,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     public static String CIRCLEFLAG = "circleflag";
     private SwipeToLoadLayout swipeToLoadLayout;
+    private CustomTitleBar customTitleBar;
 
     @Nullable
     @Override
@@ -69,13 +71,21 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     }
 
     private void initView(){
-        ((CustomTitleBar) currentView.findViewById(R.id.customTitleBar)).setRightImageOnClickListener(
+        customTitleBar=((CustomTitleBar) currentView.findViewById(R.id.customTitleBar));
+        customTitleBar.setRightImageOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         startActivity(new Intent(mActivity, MessageMainActivity.class));
                     }
                 });
+        customTitleBar.setLeftTextView(mActivity.getUserInfo(8));
+        customTitleBar.setLeftTextViewOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.startActivityForResult(new Intent(mActivity, CityPickerActivity.class), MainActivity.REQUEST_CODE_PICK_CITY);
+            }
+        });
         currentView.findViewById(R.id.publishIV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +96,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                 }
             }
         });
+
         swipeToLoadLayout = (SwipeToLoadLayout) currentView.findViewById(R.id.swipeToLoadLayout);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
@@ -252,7 +263,7 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
                 if(!TextUtils.isEmpty(cid)){
                     params.put("c_id", cid);
                 }
-                params.put("city", "淄博市");
+                params.put("city",mActivity.getUserInfo(8));
                 if(mActivity.getUserIsLogin()){
                     params.put("phone", mActivity.getUserInfo(1));
                 }
@@ -365,5 +376,8 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
     }
 
 
+    public void setArea(String str){
+        customTitleBar.setLeftTextView(str);
+    }
 
 }

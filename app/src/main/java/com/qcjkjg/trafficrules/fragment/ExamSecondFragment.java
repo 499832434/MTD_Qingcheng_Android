@@ -19,6 +19,7 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.tubiao.TubiaoActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.VideoAdapter;
@@ -90,12 +91,43 @@ public class ExamSecondFragment extends Fragment{
             ((TextView)currentView.findViewById(R.id.ruleTV)).setText("科三考规");
         }
 
+        currentView.findViewById(R.id.ruleTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, BaseListViewActivity.class);
+                intent.putExtra("flag", 4);
+                intent.putExtra("type", fragmentType+"");
+                intent.putExtra("sub_type", "1");
+                if(fragmentType==2){
+                    intent.putExtra("title", "科二考规");
+                }else{
+                    intent.putExtra("title", "科三考规");
+                }
+                startActivity(intent);
+            }
+        });
+
+        currentView.findViewById(R.id.questionTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, BaseListViewActivity.class);
+                intent.putExtra("flag", 4);
+                intent.putExtra("type", fragmentType+"");
+                intent.putExtra("sub_type", "2");
+                intent.putExtra("title", "学车技巧");
+                startActivity(intent);
+            }
+        });
+
         currentView.findViewById(R.id.aboutTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(mActivity, TubiaoActivity.class);
-//                intent.putExtra("type", fragmentType + "");
-//                startActivity(intent);
+                Intent intent = new Intent(mActivity, BaseListViewActivity.class);
+                intent.putExtra("flag", 4);
+                intent.putExtra("type", fragmentType+"");
+                intent.putExtra("sub_type", "3");
+                intent.putExtra("title", "考试秘笈");
+                startActivity(intent);
             }
         });
 

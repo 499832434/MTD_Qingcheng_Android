@@ -36,6 +36,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.zaaach.citypicker.CityPickerActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +55,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
     private List<Signup> signList=new ArrayList<Signup>();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private SwipeToLoadLayout swipeToLoadLayout;
+    private CustomTitleBar customTitleBar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,13 +65,21 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
     }
 
     private void initView(){
-        ((CustomTitleBar) currentView.findViewById(R.id.customTitleBar)).setRightImageOnClickListener(
+        customTitleBar=((CustomTitleBar) currentView.findViewById(R.id.customTitleBar));
+        customTitleBar.setRightImageOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         startActivity(new Intent(mActivity, MessageMainActivity.class));
                     }
                 });
+        customTitleBar.setLeftTextView(mActivity.getUserInfo(8));
+        customTitleBar.setLeftTextViewOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.startActivityForResult(new Intent(mActivity, CityPickerActivity.class), MainActivity.REQUEST_CODE_PICK_CITY);
+            }
+        });
         signupLV= (ListView) currentView.findViewById(R.id.swipe_target);
         adapter=new SignupAdapter(mActivity,signList);
         signupLV.setAdapter(adapter);
@@ -174,5 +184,9 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
     @Override
     public void onRefresh() {
         request("");
+    }
+
+    public void setArea(String str){
+        customTitleBar.setLeftTextView(str);
     }
 }

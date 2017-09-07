@@ -281,6 +281,8 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.FIRST_OPEN_KEY, "yes");
             case 12://记录用户的答题位置
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.MEMORY_POSITION, "");
+            case 13://题库更新时间
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.UPDATE_TIKU, "");
         }
         return "";
     }

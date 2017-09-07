@@ -2,6 +2,7 @@ package com.qcjkjg.trafficrules.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,10 +69,12 @@ public class CustomTitleBar extends LinearLayout {
      * 修改中间标题
      */
     public void setLeftTextView(String str) {
-        if (str != null){
+        if(TextUtils.isEmpty(str)){
+            leftTextView.setText("区域选择");
+        }else {
             leftTextView.setText(str);
-            leftTextView.setVisibility(View.VISIBLE);
         }
+        leftTextView.setVisibility(View.VISIBLE);
     }
 
 

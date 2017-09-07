@@ -26,8 +26,7 @@
 
     <ListView android:layout_width="match_parent"
               android:id="@+id/swipe_target"
-              android:dividerHeight="0.3dp"
-              android:divider="#e1e1e1"
+              android:divider="@null"
               android:layout_height="match_parent">
     </ListView>
 

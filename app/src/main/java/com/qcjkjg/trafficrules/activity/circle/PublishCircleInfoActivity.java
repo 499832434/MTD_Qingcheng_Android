@@ -117,7 +117,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
                     texts.add(new BasicNameValuePair("content", content));
                 }
                 texts.add(new BasicNameValuePair("phone", getUserInfo(1)));
-                texts.add(new BasicNameValuePair("belong_area", "淄博市"));
+                texts.add(new BasicNameValuePair("belong_area", getUserInfo(8)));
 
                 if (locationInfo != null) {
                     texts.add(new BasicNameValuePair("longitude", locationInfo.getLongitude() + ""));

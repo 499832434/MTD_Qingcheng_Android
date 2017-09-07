@@ -50,6 +50,7 @@ public class InitApp extends Application{
     public static final String USER_PHONE_CODE = "USER_PHONE_CODE";
     public static final String FIRST_OPEN_KEY = "FIRST_OPEN_KEY";//判断用户是否是第一次安装
     public static final String MEMORY_POSITION = "MEMORY_POSITION";//记录用户答题位置
+    public static final String UPDATE_TIKU = "UPDATE_TIKU";//更新题库时间
 
 
 

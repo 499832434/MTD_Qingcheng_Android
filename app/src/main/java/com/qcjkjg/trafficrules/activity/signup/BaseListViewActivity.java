@@ -19,6 +19,7 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.MainActivity;
+import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.*;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
@@ -44,12 +45,14 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
     private MyThemeAdapter adapter1;
     private MessageFabulousAdapter adapter2;
     private CircleFabulousAdapter adapter3;
-    private int flag;//0:系统消息1:我的主题2:收到的赞3:赞的车友
+    private SignupAdapter adapter4;
+    private int flag;//0:系统消息1:我的主题2:收到的赞3:赞的车友4:考规
     private List<Signup> signList=new ArrayList<Signup>();//0:系统消息
     private List<MessageInfo> infoList=new ArrayList<MessageInfo>();//3:赞的车友
     private List<MessageTheme> themeList=new ArrayList<MessageTheme>();//1:我的主题
     private List<ReplyInfo> newThemeList=new ArrayList<ReplyInfo>();//1:我的主题
     private List<MessageInfo> fabulousList=new ArrayList<MessageInfo>();//2:收到的赞
+    private List<Signup> ruleList=new ArrayList<Signup>();//4:考规
     private SwipeToLoadLayout swipeToLoadLayout;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private int cid;
@@ -77,11 +80,11 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (flag){
+                switch (flag) {
                     case 0:
                         Intent intent = new Intent(BaseListViewActivity.this, SignupContentActivity.class);
                         intent.putExtra("id", signList.get(i).getNewsId());
-                        intent.putExtra("flag","news");
+                        intent.putExtra("flag", "news");
                         startActivity(intent);
                         break;
                     case 1:
@@ -89,6 +92,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                         break;
                     case 2:
 
+                        break;
+                    case 4:
+                        Intent intent4 = new Intent(BaseListViewActivity.this, SignupContentActivity.class);
+                        intent4.putExtra("id", ruleList.get(i).getNewsId());
+                        intent4.putExtra("flag","news");
+                        startActivity(intent4);
                         break;
                 }
             }
@@ -115,11 +124,19 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 adapter3=new CircleFabulousAdapter(BaseListViewActivity.this,infoList);
                 listView.setAdapter(adapter3);
                 break;
+            case 4:
+                adapter4=new SignupAdapter(BaseListViewActivity.this,ruleList);
+                listView.setAdapter(adapter4);
+                break;
         }
 
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoadLayout);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
+        if(flag==4){
+            onRefresh();
+            return;
+        }
         swipeToLoadLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -130,7 +147,6 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
 
     @Override
     public void onLoadMore() {
-        swipeToLoadLayout.setLoadingMore(false);
         if(signList.size()>0){
             switch (flag){
                 case 0:
@@ -145,7 +161,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                 case 3:
                     request3(infoList.get(infoList.size() - 1).getZanId() + "");
                     break;
+                case 4:
+                    swipeToLoadLayout.setLoadingMore(false);
+                    break;
             }
+        }else{
+            swipeToLoadLayout.setLoadingMore(false);
         }
     }
 
@@ -166,6 +187,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
             case 3:
                 request3("");
                 break;
+            case 4:
+                ruleList.clear();
+                String type=getIntent().getStringExtra("type");
+                String sub_type=getIntent().getStringExtra("sub_type");
+                request4(type, sub_type);
+                break;
         }
     }
 
@@ -175,6 +202,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
      */
     private void request0(final String page) {
         if (!NetworkUtils.isNetworkAvailable(BaseListViewActivity.this)) {
+            swipeToLoadLayout.setRefreshing(false);
+            swipeToLoadLayout.setLoadingMore(false);
             return;
         }
 
@@ -211,6 +240,7 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                             e.printStackTrace();
                         }finally {
                             swipeToLoadLayout.setRefreshing(false);
+                            swipeToLoadLayout.setLoadingMore(false);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -240,6 +270,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
      */
     private void request3(final String zanid) {
         if (!NetworkUtils.isNetworkAvailable(BaseListViewActivity.this)) {
+            swipeToLoadLayout.setRefreshing(false);
+            swipeToLoadLayout.setLoadingMore(false);
             return;
         }
 
@@ -271,6 +303,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                             e.printStackTrace();
                         }finally {
                             swipeToLoadLayout.setRefreshing(false);
+                            swipeToLoadLayout.setLoadingMore(false);
+
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -295,12 +329,80 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
         };
         InitApp.initApp.addToRequestQueue(request);
     }
+    /**
+     * 网络请求
+     */
+    private void request4(final String type,final String sub_type) {
+        if (!NetworkUtils.isNetworkAvailable(BaseListViewActivity.this)) {
+            swipeToLoadLayout.setRefreshing(false);
+            swipeToLoadLayout.setLoadingMore(false);
+            return;
+        }
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.RULE_LIST_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("request4Re", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                JSONArray infoArr=jsonObject.getJSONArray("info");
+                                for(int i=0;i<infoArr.length();i++){
+                                    JSONObject obj=infoArr.getJSONObject(i);
+                                    Signup signup=new Signup();
+                                    signup.setNewsId(obj.getInt("news_id"));
+                                    signup.setTitle(obj.getString("title"));
+                                    signup.setPage(obj.getString("pubtime"));
+                                    signup.setPubtime(sdf.format(new Date(obj.getLong("pubtime") * 1000)));
+                                    ruleList.add(signup);
+                                }
+                                if(ruleList.size()==1){
+                                    Intent intent = new Intent(BaseListViewActivity.this, SignupContentActivity.class);
+                                    intent.putExtra("id", ruleList.get(0).getNewsId());
+                                    intent.putExtra("flag","news");
+                                    startActivity(intent);
+                                    overridePendingTransition(0, 0);
+                                    finish();
+                                }else{
+                                    adapter4.notifyDataSetChanged();
+                                }
+                                String title=getIntent().getStringExtra("title");
+                                ((CustomTitleBar) findViewById(R.id.customTitleBar)).setTitleTextView(title);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }finally {
+                            swipeToLoadLayout.setRefreshing(false);
+                            swipeToLoadLayout.setLoadingMore(false);
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("type", type);
+                params.put("sub_type", sub_type);
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
 
     /**
      * 网络请求
      */
     private void request1() {
         if (!NetworkUtils.isNetworkAvailable(this)) {
+            swipeToLoadLayout.setRefreshing(false);
+            swipeToLoadLayout.setLoadingMore(false);
             return;
         }
 
@@ -389,6 +491,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                             e.printStackTrace();
                         }finally {
                             swipeToLoadLayout.setRefreshing(false);
+                            swipeToLoadLayout.setLoadingMore(false);
+
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -418,6 +522,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
      */
     private void request2(final String zanid) {
         if (!NetworkUtils.isNetworkAvailable(this)) {
+            swipeToLoadLayout.setRefreshing(false);
+            swipeToLoadLayout.setLoadingMore(false);
             return;
         }
 
@@ -461,6 +567,8 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
                             e.printStackTrace();
                         }finally {
                             swipeToLoadLayout.setRefreshing(false);
+                            swipeToLoadLayout.setLoadingMore(false);
+
                         }
                     }
                 }, new Response.ErrorListener() {
