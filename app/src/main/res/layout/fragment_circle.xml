@@ -43,7 +43,7 @@
                         android:visibility="visible"
                         android:layout_below="@+id/customTitleBar"
                         android:layout_width="match_parent"
-                        android:layout_height="148dp"/>
+                        android:layout_height="120dp"/>
                 <com.qcjkjg.trafficrules.view.MyListView
                         android:layout_width="match_parent"
                         android:id="@+id/systemLV"

@@ -138,7 +138,12 @@ public class CircleListAdapter extends BaseAdapter {
                 ((MainActivity) context).circleFragment.requestZan((Integer) holder.fabulousIV.getTag(), position);
             }
         });
-        addImageView(holder.pictureMGL, list);
+        if(list.size()>0){
+            addImageView(holder.pictureMGL, list);
+            holder.pictureMGL.setVisibility(View.VISIBLE);
+        }else{
+            holder.pictureMGL.setVisibility(View.GONE);
+        }
         return convertView;
     }
 

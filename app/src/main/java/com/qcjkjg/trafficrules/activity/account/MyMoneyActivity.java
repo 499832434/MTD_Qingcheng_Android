@@ -36,7 +36,7 @@ public class MyMoneyActivity extends BaseActivity implements OnRefreshListener, 
     private MyMoneyAdapter adapter;
     private SwipeToLoadLayout swipeToLoadLayout;
     private List<AccountMoney> list=new ArrayList<AccountMoney>();
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

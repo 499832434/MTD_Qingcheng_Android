@@ -220,22 +220,22 @@ public class ExamOneFragment extends Fragment{
         currentView.findViewById(R.id.vipTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if("0".equals(mActivity.getUserInfo(3))){
-//                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
-//                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
-//                    intent.putExtra("fragmentType", fragmentType+ "");
-//                    intent.putExtra("title","VIP特权");
-//                    startActivity(intent);
-//                }else{
-//                    Intent intent = new Intent(mActivity, VipActivity.class);
-//                    intent.putExtra("fragmentType", fragmentType + "");
-//                    startActivity(intent);
-//                }
-                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
-                intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
-                intent.putExtra("fragmentType", fragmentType+ "");
-                intent.putExtra("title","VIP特权");
-                startActivity(intent);
+                if("0".equals(mActivity.getUserInfo(3))){
+                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+                    intent.putExtra("fragmentType", fragmentType+ "");
+                    intent.putExtra("title","VIP特权");
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(mActivity, VipActivity.class);
+                    intent.putExtra("fragmentType", fragmentType + "");
+                    startActivity(intent);
+                }
+//                Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+//                intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+//                intent.putExtra("fragmentType", fragmentType+ "");
+//                intent.putExtra("title","VIP特权");
+//                startActivity(intent);
             }
         });
         currentView.findViewById(R.id.cuotiTV).setOnClickListener(new View.OnClickListener() {
@@ -302,21 +302,30 @@ public class ExamOneFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        int num=queryWholeNum();
         if(fragmentType==1){
-            if(BaseActivity.subtypePosition1==-1){
+            if(num==0){
                 seqAnswerTV.setText("共" + seqNum + "题");
             }else{
-                seqAnswerTV.setText((BaseActivity.subtypePosition1+1)+"/" + seqNum + "题");
+                seqAnswerTV.setText(num+"/" + seqNum + "题");
             }
         }else{
-            if(BaseActivity.subtypePosition4==-1){
+            if(num==0){
                 seqAnswerTV.setText("共" + seqNum + "题");
             }else{
-                seqAnswerTV.setText((BaseActivity.subtypePosition4+1)+"/" + seqNum + "题");
+                seqAnswerTV.setText(num+"/" + seqNum + "题");
             }
         }
     }
 
+
+    private int queryWholeNum() {//true:正确false:错误
+        SubjectSelect subjectSelect = new SubjectSelect();
+        subjectSelect.setSubType(fragmentType);
+        subjectSelect.setSeqAnswer("0");
+        DbHelper db = new DbHelper(mActivity);
+        return db.queryWholeSubNum1(subjectSelect);
+    }
 
 
 }

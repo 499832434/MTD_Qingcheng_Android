@@ -29,6 +29,7 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
+import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.fragment.AccountFragment;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.fragment.ExamFragment;
@@ -42,8 +43,11 @@ import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.view.CustomViewPager;
 import com.qcjkjg.trafficrules.vo.AccountMoney;
+import com.qcjkjg.trafficrules.vo.AddSub;
+import com.qcjkjg.trafficrules.vo.Subject;
 import com.umeng.socialize.UMShareAPI;
 import com.zaaach.citypicker.CityPickerActivity;
+import de.greenrobot.event.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +72,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //updateTiku();//更新题库
 
         if("yes".equals(getUserInfo(11))){
             startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),REQUEST_CODE_PICK_CITY);
@@ -200,6 +205,7 @@ public class MainActivity extends BaseActivity {
                     examFragment.setArea(city.split("-")[1]);
                     signupFragment.setArea(city.split("-")[1]);
                     circleFragment.setArea(city.split("-")[1]);
+                    EventBus.getDefault().post(new RefreshExamNumEvent());
                     Toast.makeText(MainActivity.this,city,Toast.LENGTH_SHORT).show();
                 }
             }
@@ -242,6 +248,82 @@ public class MainActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+
+    private void updateTiku(){
+        if (!NetworkUtils.isNetworkAvailable(MainActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.UPDATE_TIKU_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("updateTikuRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+                                List<AddSub> list=new ArrayList<AddSub>();
+                                PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.UPDATE_TIKU, jsonObject.getString("update_time"));
+                                JSONArray infoArr=jsonObject.getJSONArray("info");
+                                if(infoArr.length()>0){
+                                    for(int i=0;i<infoArr.length();i++){
+                                        JSONObject obj=infoArr.getJSONObject(i);
+                                        AddSub addSub=new AddSub();
+                                        addSub.setJqyy(obj.getString("jqyy"));
+                                        addSub.setVip(obj.getString("vip"));
+                                        addSub.setId(obj.getString("id"));
+                                        addSub.setErrorNum(obj.getString("error_num"));
+                                        addSub.setExamType(obj.getString("exam_type"));
+                                        addSub.setCity(obj.getString("city"));
+                                        addSub.setSubInfos(obj.getString("sub_infos"));
+                                        addSub.setSubTitle(obj.getString("sub_title"));
+                                        addSub.setSubType(obj.getString("sub_type"));
+                                        addSub.setAnswer(obj.getString("answer"));
+                                        addSub.setVipPic(obj.getString("vip_pic"));
+                                        addSub.setSubPic(obj.getString("sub_pic"));
+                                        addSub.setSubClass(obj.getString("sub_class"));
+                                        addSub.setDtjq(obj.getString("dtjq"));
+                                        addSub.setSubChapte(obj.getString("sub_chapte"));
+                                        addSub.setInfoPic(obj.getString("info_pic"));
+                                        addSub.setD(obj.getString("d"));
+                                        addSub.setA(obj.getString("a"));
+                                        addSub.setCarType(obj.getString("car_type"));
+                                        addSub.setC(obj.getString("c"));
+                                        addSub.setB(obj.getString("b"));
+                                        addSub.setVipId(obj.getString("vip_id"));
+                                        addSub.setSubId(obj.getString("sub_id"));
+                                        addSub.setPubtime(obj.getString("pubtime"));
+                                        list.add(addSub);
+                                    }
+                                    if(list.size()>0){
+                                        DbCreateHelper helper=new DbCreateHelper(MainActivity.this);
+                                        for(int i=0;i<list.size();i++){
+                                            helper.updateTiku(list.get(i));
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("pubtime",getUserInfo(13));
                 return params;
             }
         };

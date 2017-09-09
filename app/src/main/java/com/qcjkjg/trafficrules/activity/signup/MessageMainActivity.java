@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
+import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.Defaultcontent;
 import com.umeng.ShareUtils;
@@ -56,62 +57,35 @@ public class MessageMainActivity extends BaseActivity{
         findViewById(R.id.themeRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!getUserIsLogin()){
+                    startActivity(new Intent(MessageMainActivity.this, LoginActivity.class));
+                    return;
+                }
                 Intent intent = new Intent(MessageMainActivity.this, BaseListViewActivity.class);
                 intent.putExtra("flag", 1);
                 startActivity(intent);
-//                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
-//                        , Defaultcontent.text, Defaultcontent.imageurl,   R.drawable.ic_qq, null
-//                );
             }
         });
         findViewById(R.id.replyRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
-//                        , Defaultcontent.text, Defaultcontent.imageurl,  R.drawable.ic_qq, null
-//                );
+                if(!getUserIsLogin()){
+                    startActivity(new Intent(MessageMainActivity.this, LoginActivity.class));
+                    return;
+                }
                 startActivity(new Intent(MessageMainActivity.this, MessageReplyActivity.class));
             }
         });
         findViewById(R.id.praiseRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!getUserIsLogin()){
+                    startActivity(new Intent(MessageMainActivity.this, LoginActivity.class));
+                    return;
+                }
                 Intent intent = new Intent(MessageMainActivity.this, BaseListViewActivity.class);
                 intent.putExtra("flag", 2);
                 startActivity(intent);
-//                shareGetIntegral("11111", R.drawable.ic_qq, null);
-//                ShareUtils.shareWeb(MessageMainActivity.this, Defaultcontent.url, Defaultcontent.title
-//                        , Defaultcontent.text, Defaultcontent.imageurl, R.drawable.ic_qq, null
-//                );
-//                UMShareAPI.get(MessageMainActivity.this).deleteOauth(MessageMainActivity.this, SHARE_MEDIA.QQ, new UMAuthListener() {
-//
-//                    @Override
-//                    public void onStart(SHARE_MEDIA share_media) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-//
-//                        Toast.makeText(MessageMainActivity.this, "删除成功.", Toast.LENGTH_SHORT).show();
-////                        if (i == 200) {
-////                            Toast.makeText(MessageMainActivity.this, "删除成功.", Toast.LENGTH_SHORT).show();
-////                        } else {
-////                            Toast.makeText(MessageMainActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
-////                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancel(SHARE_MEDIA share_media, int i) {
-//
-//                    }
-//                });
-
             }
         });
     }

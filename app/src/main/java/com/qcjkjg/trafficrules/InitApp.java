@@ -13,6 +13,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.Volley;
+import com.facebook.common.internal.Supplier;
+import com.facebook.common.util.ByteConstants;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.cache.MemoryCacheParams;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.mob.MobSDK;
 import com.qcjkjg.trafficrules.service.LocationService;
 import com.qcjkjg.trafficrules.utils.Md5;
@@ -82,6 +87,7 @@ public class InitApp extends Application{
     }
 
     private void initApp() {
+        Fresco.initialize(this,getConfigureCaches(getApplicationContext()));
         initApp=this;
         VERSION = PackageUtils.getAppVersionName(this);
         initUmeng();
@@ -104,7 +110,7 @@ public class InitApp extends Application{
         PlatformConfig.setWeixin("wxd2a8a6d807625124", "8798b3a08be04f6cf493dd907e1ffa01");
         //新浪微博(第三个参数为回调地址)
 //        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
-        PlatformConfig.setSinaWeibo("3566099207", "6960dfc3805f1967b773ed812bc43b14","http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setSinaWeibo("3566099207", "6960dfc3805f1967b773ed812bc43b14", "http://sns.whalecloud.com/sina2/callback");
         //QQ
         PlatformConfig.setQQZone("1106277938", "FVCOAjS49n9P53UN");
     }
@@ -233,4 +239,25 @@ public class InitApp extends Application{
             e.printStackTrace();
         }
     }
+
+    private static int MAX_MEM = 100* ByteConstants.MB;
+    private ImagePipelineConfig getConfigureCaches(Context context) {
+        final MemoryCacheParams bitmapCacheParams = new MemoryCacheParams(
+                MAX_MEM,// 内存缓存中总图片的最大大小,以字节为单位。
+                Integer.MAX_VALUE,// 内存缓存中图片的最大数量。
+                MAX_MEM,// 内存缓存中准备清除但尚未被删除的总图片的最大大小,以字节为单位。
+                Integer.MAX_VALUE,// 内存缓存中准备清除的总图片的最大数量。
+                Integer.MAX_VALUE);// 内存缓存中单个图片的最大大小。
+
+        Supplier<MemoryCacheParams> mSupplierMemoryCacheParams = new Supplier<MemoryCacheParams>() {
+            @Override
+            public MemoryCacheParams get() {
+                return bitmapCacheParams;
+            }
+        };
+        ImagePipelineConfig.Builder builder = ImagePipelineConfig.newBuilder(context);
+        builder.setBitmapMemoryCacheParamsSupplier(mSupplierMemoryCacheParams);
+        return builder.build();
+    }
+
 }

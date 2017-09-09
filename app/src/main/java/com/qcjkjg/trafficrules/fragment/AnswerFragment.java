@@ -1,6 +1,7 @@
 package com.qcjkjg.trafficrules.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -16,10 +17,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipeline;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.exam.AnswerActivity;
+import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.vo.Subject;
@@ -166,14 +172,14 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
         animationVV= (VideoView) currentView.findViewById(R.id.animationVV);
         if(TextUtils.isEmpty(subjectFlag.getSubPic())){
-            ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+            ((SimpleDraweeView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
             animationVV.setVisibility(View.GONE);
         }else{
             if(subjectFlag.getSubPic().indexOf("jpg")!=-1||subjectFlag.getSubPic().indexOf("png")!=-1){
                 animationVV.setVisibility(View.GONE);
-                mActivity.getLocalPicture(subjectFlag.getSubPic(), ((ImageView) currentView.findViewById(R.id.subPicIV)));
+                mActivity.getLocalPicture(subjectFlag.getSubPic(), ((SimpleDraweeView) currentView.findViewById(R.id.subPicIV)));
             }else if(subjectFlag.getSubPic().indexOf("mp4")!=-1){
-                ((ImageView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+                ((SimpleDraweeView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
                 String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
                 Log.e("aaaa1",uri);
                 animationVV.setVideoURI(Uri.parse(uri));
@@ -278,6 +284,14 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 //                        }
 //                    });
 //                }
+                if((!mActivity.getUserIsLogin())||("0".equals(mActivity.getUserInfo(3)))){
+                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+                    intent.putExtra("fragmentType", fragmentType+ "");
+                    intent.putExtra("title","VIP特权");
+                    startActivity(intent);
+                    return;
+                }
                 if (!NetworkUtils.isNetworkAvailable(mActivity)) {
                     mActivity.toast(mActivity,"无网络连接");
                     return;
@@ -708,5 +722,13 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             mediaPlayer=null;
         }
 
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ImagePipeline imagePipeline = Fresco.getImagePipeline();
+        imagePipeline.clearCaches();
     }
 }

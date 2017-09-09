@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
 import com.luck.picture.lib.tools.StringUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
@@ -63,7 +66,9 @@ public class AnswerActivity extends BaseActivity {
     public Boolean nodoneFlag = true;//未做练习是否开始作答
     private List<String> noRecordList = new ArrayList<String>();//答题结果记录到list
     private String time = "00:00";
-    private long useTime = 45 * 60 * 1000;
+    private long useTime =0;
+    private long fragment1Time = 45 * 60 * 1000;
+    private long fragment4Time = 30 * 60 * 1000;
     private String historyscore;//历史成绩
     private String time2;
     private List<Integer> errorList = new ArrayList<Integer>();//记录删除的错题
@@ -77,7 +82,7 @@ public class AnswerActivity extends BaseActivity {
         initData();
         initView();
         getCollectStatus(fragmentPositon);
-
+        handler.sendEmptyMessageDelayed(0, 100);
     }
 
     private void initData() {
@@ -237,7 +242,13 @@ public class AnswerActivity extends BaseActivity {
                     showAssignDialog();
                 }
             });
-            CountDownTimer timer = new CountDownTimer(45 * 60 * 1000, 1000) {
+            long time1=0;
+            if("1".equals(fragmentType)){
+                time1=fragment1Time;
+            }else{
+                time1=fragment4Time;
+            }
+            CountDownTimer timer = new CountDownTimer(time1, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     time = getTime(millisUntilFinished);
@@ -277,12 +288,22 @@ public class AnswerActivity extends BaseActivity {
                     }
                 }
             });
+            collectTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if ("1".equals(collectIV.getTag())) {
+                        setCollectIV(true, subjectList.get(fragmentPositon).getSubId());
+                    } else {
+                        setCollectIV(false, subjectList.get(fragmentPositon).getSubId());
+                    }
+                }
+            });
         }
 
 
         numFlagTV = (TextView) findViewById(R.id.numFlagTV);
         numFlagTV.setText("1/" + subjectList.size());
-        numFlagTV.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bottomRL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCart();
@@ -295,7 +316,7 @@ public class AnswerActivity extends BaseActivity {
         wrongTV.setText(wholeWrong + "");
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-//        viewPager.setOffscreenPageLimit(subjectList.size());
+        viewPager.setOffscreenPageLimit(3);
         //给viewPager设置适配器
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -578,7 +599,12 @@ public class AnswerActivity extends BaseActivity {
             }
         }
         examScore.setSubs(sb.toString());
-        long time3 = 45 * 60 * 1000 - useTime;
+        long time3 = 0;
+        if("1".equals(fragmentType)){
+            time3 = fragment1Time - useTime;
+        }else{
+            time3 = fragment4Time - useTime;
+        }
         time2 = getTime(time3);
         examScore.setTime(time2);
         DbHelper db = new DbHelper(AnswerActivity.this);
@@ -663,4 +689,12 @@ public class AnswerActivity extends BaseActivity {
     public void setFragmentPositon(int fragmentPositon) {
         this.fragmentPositon = fragmentPositon;
     }
+
+    private Handler handler = new Handler(){
+        public void handleMessage(android.os.Message msg){
+            viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+            handler.sendEmptyMessageDelayed(0, 100);
+        }
+    };
+
 }

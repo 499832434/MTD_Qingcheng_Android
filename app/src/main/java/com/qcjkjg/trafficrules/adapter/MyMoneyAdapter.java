@@ -1,6 +1,7 @@
 package com.qcjkjg.trafficrules.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,14 +62,22 @@ public class MyMoneyAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if(0==mData.get(position).getType()){
+            holder.leftIV.setImageResource(R.drawable.ic_tixian);
             holder.topTV.setText("提现:"+mData.get(position).getScore()+"元");
             holder.rightTV.setText("-"+mData.get(position).getScore()+"元");
-        }else{
-            holder.topTV.setText("分享获得:"+mData.get(position).getScore()+"元");
+            holder.rightTV.setTextColor(Color.parseColor("#34A853"));
+        }else if(1==mData.get(position).getType()){
+            holder.topTV.setText("邀请好友:"+mData.get(position).getNickName());
             holder.rightTV.setText("+"+mData.get(position).getScore()+"元");
+            holder.rightTV.setTextColor(Color.parseColor("#e85349"));
+            ((BaseActivity) context).getNetWorkPicture(mData.get(position).getAvatar(), holder.leftIV);
+        }else{
+            holder.leftIV.setImageResource(R.drawable.ic_share_1);
+            holder.topTV.setText("分享奖励:" + mData.get(position).getScore() + "元");
+            holder.rightTV.setTextColor(Color.parseColor("#e85349"));
+            holder.rightTV.setText("+" + mData.get(position).getScore()+"元");
         }
         holder.bottomTV.setText(mData.get(position).getDate());
-        ((BaseActivity) context).getNetWorkPicture(mData.get(position).getAvatar(), holder.leftIV);
         return convertView;
     }
 

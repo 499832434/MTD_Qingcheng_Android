@@ -1,14 +1,19 @@
 package com.qcjkjg.trafficrules.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,8 +32,10 @@ import com.android.volley.toolbox.Volley;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
@@ -39,6 +46,7 @@ import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.login.BindPhoneActivity;
+import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
@@ -83,6 +91,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -92,7 +101,7 @@ import java.util.*;
 public class BaseActivity extends AppCompatActivity {
     private String url;
     private DefaultHttpClient defaultHttpClient;
-    private RequestOptions options;
+    private RequestOptions options,options1;
     private List<BasicNameValuePair> texts;
     private HashMap<File, String> files;
     private List<LocalMedia> selectList = new ArrayList<LocalMedia>();
@@ -106,6 +115,8 @@ public class BaseActivity extends AppCompatActivity {
     private TextView num1TV, num2TV;
     public static int subtypePosition1=-1;
     public static int subtypePosition4=-1;
+    private AssetManager assetManager =null;
+
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +133,11 @@ public class BaseActivity extends AppCompatActivity {
 
         options = new RequestOptions()
                 .placeholder(R.drawable.aio_image_fail_round)
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        options1 = new RequestOptions()
+                .placeholder(R.drawable.aio_image_fail_round)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
     }
 
@@ -251,6 +266,17 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 跳转登录页
+     */
+
+    public void goLogin(Activity activity) {
+        if(!getUserIsLogin()){
+            startActivity(new Intent(activity, LoginActivity.class));
+            return;
+        }
+    }
+
+    /**
      * 获取用户的登录信息
      */
     public String getUserInfo(int flag) {
@@ -282,7 +308,7 @@ public class BaseActivity extends AppCompatActivity {
             case 12://记录用户的答题位置
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.MEMORY_POSITION, "");
             case 13://题库更新时间
-                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.UPDATE_TIKU, "");
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.UPDATE_TIKU, "1504195200");
         }
         return "";
     }
@@ -669,11 +695,22 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+
     public void getLocalPicture(String path,ImageView imageView){
         if(!TextUtils.isEmpty(path)){
             String url="file:///android_asset/" + path;
-            Log.e("url",url);
-            getNetWorkPicture(url,imageView);
+            Log.e("url", url);
+//            try{
+//                assetManager=BaseActivity.this.getAssets();
+//                InputStream in=assetManager.open(path);
+//                Bitmap bmp= BitmapFactory.decodeStream(in);
+//                imageView.setImageBitmap(bmp);
+//            }catch (Exception e){
+//
+//            }
+            //Glide.with(BaseActivity.this).load(url).apply(options1).into(imageView);
+            Uri uri=Uri.parse(url);
+            ((SimpleDraweeView)imageView).setImageURI("asset:///" + path);
             imageView.setVisibility(View.VISIBLE);
         }else{
             imageView.setVisibility(View.GONE);
@@ -834,4 +871,19 @@ public class BaseActivity extends AppCompatActivity {
         };
         InitApp.initApp.addToRequestQueue(request);
     }
+
+    /**
+     * 清除图片内存缓存
+     */
+    public void clearImageMemoryCache(Context context) {
+        try {
+            if (Looper.myLooper() == Looper.getMainLooper()) { //只能在主线程执行
+                Glide.get(context).clearMemory();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

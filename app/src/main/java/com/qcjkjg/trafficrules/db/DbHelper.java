@@ -278,6 +278,26 @@ public class DbHelper extends AbstractDatabaseHelper {
         }
     }
 
+    //查询一套题答过次数
+    public final int queryWholeSubNum1(SubjectSelect subjectSelect) {
+        Cursor cursor = null;
+        try {
+            this.open(this.ctx);
+            cursor = this.mDb.rawQuery("select sub_id from qc_sub_answer where user_id=? and car_id=? and seq_answer=? and chapter_answer=? and class_answer=? and vip_answer=? and top_answer=? and collect_answer=? and error_answer=? and sub_type=? order by sub_id", new String[]{((BaseActivity)ctx).getUserInfo(1),((BaseActivity)ctx).getUserInfo(5),subjectSelect.getSeqAnswer(),subjectSelect.getChapterAnswer(),subjectSelect.getClassAnswer(),subjectSelect.getVipAnswer(),subjectSelect.getTopAnswer(),subjectSelect.getCollectAnswer(),subjectSelect.getErrorAnswer(),subjectSelect.getSubType()+""});
+            while (cursor.moveToNext()) {
+                cursor.getString(cursor.getColumnIndex("sub_id"));
+            }
+            return cursor.getCount();
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            this.close();
+        }
+    }
+
     //flag: true 收藏 ,false 错题
     public final void addCollectSub(Boolean flag,String subId,String sub_type,String chapter_answer){
         try {

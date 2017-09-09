@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:scrollbars="none"
@@ -15,22 +16,26 @@
             <TextView android:layout_width="wrap_content"
                       android:text=""
                       android:id="@+id/subTypeTV"
+                      android:textSize="16sp"
+                      android:paddingRight="5dp"
                       android:background="@drawable/bg_label"
                       android:layout_height="wrap_content"/>
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:id="@+id/subTitleTV"
+                      android:textSize="16sp"
                       android:lineSpacingExtra="5dp"
                       android:text="11"/>
         </RelativeLayout>
 
-        <ImageView android:layout_width="match_parent"
+        <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:id="@+id/subPicIV"
                    android:minHeight="150dp"
                    android:layout_marginBottom="10dp"
                    android:layout_marginTop="10dp"
-                   android:scaleType="fitCenter"
+                fresco:actualImageScaleType="fitCenter"
                 />
         <VideoView android:layout_width="match_parent"
                    android:layout_height="250dp"

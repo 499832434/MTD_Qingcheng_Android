@@ -16,7 +16,7 @@
     <TextView android:layout_width="wrap_content"
               android:layout_toRightOf="@+id/leftIV"
               android:textSize="16sp"
-              android:text="提现:2元"
+              android:text=""
               android:layout_marginTop="5dp"
               android:id="@+id/topTV"
               android:gravity="center_vertical"
@@ -28,7 +28,7 @@
               android:textSize="14sp"
               android:id="@+id/bottomTV"
               android:layout_marginTop="5dp"
-              android:text="2017-07-17"
+              android:text=""
               android:gravity="center_vertical"
               android:textColor="#999999"
               android:layout_height="20dp"/>
@@ -36,12 +36,11 @@
     <TextView android:layout_width="wrap_content"
               android:textSize="14sp"
               android:layout_marginTop="5dp"
-              android:text="+10元"
+              android:text=""
               android:id="@+id/rightTV"
               android:layout_marginRight="10dp"
               android:layout_centerVertical="true"
               android:layout_alignParentRight="true"
-              android:textColor="#999999"
               android:layout_height="wrap_content"/>
 
 </RelativeLayout>

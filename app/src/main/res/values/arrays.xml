@@ -47,21 +47,21 @@
     </string-array>
 
     <string-array name="vip1">
-        <item>1.经编技巧题库(一)-VIP1</item>
-        <item>2.经编技巧题库(二)-VIP2</item>
-        <item>3.经编技巧题库(三)-VIP3</item>
-        <item>4.经编技巧题库(四)-VIP4</item>
-        <item>5.经编技巧题库(五)-VIP5</item>
-        <item>6.经编技巧题库(六)-VIP6</item>
-        <item>7.经编技巧题库(七)-VIP7</item>
+        <item>1.精编技巧题库(一)-VIP1</item>
+        <item>2.精编技巧题库(二)-VIP2</item>
+        <item>3.精编技巧题库(三)-VIP3</item>
+        <item>4.精编技巧题库(四)-VIP4</item>
+        <item>5.精编技巧题库(五)-VIP5</item>
+        <item>6.精编技巧题库(六)-VIP6</item>
+        <item>7.精编技巧题库(七)-VIP7</item>
     </string-array>
     <string-array name="vip2">
-        <item>1.经编技巧题库(一)-vip1</item>
-        <item>2.经编技巧题库(二)-vip2</item>
-        <item>3.经编技巧题库(三)-vip3</item>
-        <item>4.经编技巧题库(四)-vip4</item>
-        <item>5.经编技巧题库(五)-vip5</item>
-        <item>6.经编技巧题库(六)-vip6</item>
-        <item>7.经编技巧题库(七)-vip7</item>
+        <item>1.精编技巧题库(一)-vip1</item>
+        <item>2.精编技巧题库(二)-vip2</item>
+        <item>3.精编技巧题库(三)-vip3</item>
+        <item>4.精编技巧题库(四)-vip4</item>
+        <item>5.精编技巧题库(五)-vip5</item>
+        <item>6.精编技巧题库(六)-vip6</item>
+        <item>7.精编技巧题库(七)-vip7</item>
     </string-array>
 </resources>
