@@ -35,7 +35,7 @@ public abstract class AbstractDatabaseHelper {
      * @param ctx
      */
     public void open(Context ctx) {
-        Log.e(getTag(), "Open database '" + getDatabaseName() + "'");
+//        Log.e(getTag(), "Open database '" + getDatabaseName() + "'");
         synchronized(Lock) {
             if(mDbHelper == null) mDbHelper = new InnerDBHelper(ctx);
             try {
@@ -52,7 +52,7 @@ public abstract class AbstractDatabaseHelper {
     public void close() {
         try {
             if (mDbHelper != null) {
-                Log.e(getTag(), "Close database '" + getDatabaseName() + "'");
+//                Log.e(getTag(), "Close database '" + getDatabaseName() + "'");
                 mDbHelper.close();
             }
         } catch (Exception e) {
@@ -72,14 +72,14 @@ public abstract class AbstractDatabaseHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            Log.e(getTag(), "creating database " + InitApp.DB_NAME);
+//            Log.e(getTag(), "creating database " + InitApp.DB_NAME);
             String[] createSql = createDBTables();
             if (createSql.length > 0) executeBatch(createDBTables(), db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.e(getTag(), InitApp.DB_NAME + "Upgrading database '" + "' from version " + oldVersion + " to " + newVersion);
+//            Log.e(getTag(), InitApp.DB_NAME + "Upgrading database '" + "' from version " + oldVersion + " to " + newVersion);
             String[] dropSql = updateDBTables();
             if (dropSql.length > 0) {
                 executeBatch(updateDBTables(), db);

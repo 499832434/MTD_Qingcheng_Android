@@ -105,7 +105,7 @@ public class ShareUtils {
         web.setTitle("启程考驾照,学员过关法宝");//标题
         web.setThumb(new UMImage(activity, R.drawable.ic_qicheng));
 //        web.setThumb(thumb);  //缩略图
-        web.setDescription("掌握技巧,考试在难都不怕,分享给你呀~");//描述
+        web.setDescription("掌握技巧,考试再难都不怕,分享给你呀~");//描述
 
         SHARE_MEDIA platform=null;
         switch (flag){

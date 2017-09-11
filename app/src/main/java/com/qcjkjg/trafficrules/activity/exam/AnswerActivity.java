@@ -3,11 +3,15 @@ package com.qcjkjg.trafficrules.activity.exam;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
@@ -20,9 +24,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.core.ImagePipeline;
-import com.luck.picture.lib.tools.StringUtils;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
@@ -82,7 +83,7 @@ public class AnswerActivity extends BaseActivity {
         initData();
         initView();
         getCollectStatus(fragmentPositon);
-        handler.sendEmptyMessageDelayed(0, 100);
+//        handler.sendEmptyMessageDelayed(0, 100);
     }
 
     private void initData() {
@@ -316,9 +317,9 @@ public class AnswerActivity extends BaseActivity {
         wrongTV.setText(wholeWrong + "");
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(0);
         //给viewPager设置适配器
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return fragments.get(position);
@@ -696,5 +697,6 @@ public class AnswerActivity extends BaseActivity {
             handler.sendEmptyMessageDelayed(0, 100);
         }
     };
+
 
 }

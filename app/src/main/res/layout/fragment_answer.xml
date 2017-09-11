@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:paddingLeft="15dp"
+            android:id="@+id/scollview"
             android:paddingRight="15dp"
             android:scrollbars="none"
             android:layout_width="match_parent"
@@ -28,14 +29,23 @@
                       android:text="11"/>
         </RelativeLayout>
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <!--<com.facebook.drawee.view.SimpleDraweeView-->
+                <!--android:layout_width="match_parent"-->
+                   <!--android:layout_height="wrap_content"-->
+                   <!--android:id="@+id/subPicIV"-->
+                   <!--android:minHeight="150dp"-->
+                   <!--android:layout_marginBottom="10dp"-->
+                   <!--android:layout_marginTop="10dp"-->
+                <!--fresco:actualImageScaleType="fitCenter"-->
+                <!--/>-->
+        <ImageView
                 android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:id="@+id/subPicIV"
-                   android:minHeight="150dp"
-                   android:layout_marginBottom="10dp"
-                   android:layout_marginTop="10dp"
-                fresco:actualImageScaleType="fitCenter"
+                android:layout_height="wrap_content"
+                android:id="@+id/subPicIV"
+                android:minHeight="150dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="fitCenter"
                 />
         <VideoView android:layout_width="match_parent"
                    android:layout_height="250dp"
@@ -287,7 +297,7 @@
                       android:layout_centerVertical="true"
                       android:textSize="16sp"
                       android:id="@+id/vipTV"
-                      android:visibility="gone"
+                      android:visibility="visible"
                       android:layout_marginTop="10dp"
                       android:text="@string/content"
                       android:textColor="#333333"
@@ -295,7 +305,7 @@
                     />
             <ImageView android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:visibility="gone"
+                       android:visibility="visible"
                        android:layout_marginBottom="10dp"
                        android:layout_marginTop="10dp"
                        android:scaleType="fitXY"

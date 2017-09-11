@@ -35,7 +35,6 @@ import com.bumptech.glide.MemoryCategory;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
@@ -137,7 +136,7 @@ public class BaseActivity extends AppCompatActivity {
         options1 = new RequestOptions()
                 .placeholder(R.drawable.aio_image_fail_round)
                 .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+                .diskCacheStrategy(DiskCacheStrategy.NONE);
 
     }
 
@@ -700,18 +699,41 @@ public class BaseActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(path)){
             String url="file:///android_asset/" + path;
             Log.e("url", url);
-//            try{
-//                assetManager=BaseActivity.this.getAssets();
-//                InputStream in=assetManager.open(path);
-//                Bitmap bmp= BitmapFactory.decodeStream(in);
-//                imageView.setImageBitmap(bmp);
-//            }catch (Exception e){
-//
-//            }
-            //Glide.with(BaseActivity.this).load(url).apply(options1).into(imageView);
-            Uri uri=Uri.parse(url);
-            ((SimpleDraweeView)imageView).setImageURI("asset:///" + path);
+            Glide.with(BaseActivity.this).load(url).apply(options1).into(imageView);
             imageView.setVisibility(View.VISIBLE);
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    public void getLocalPicture1(String path,ImageView imageView){
+        if(!TextUtils.isEmpty(path)){
+            String url="file:///android_asset/" + path;
+            Log.e("url", url);
+            try{
+                BitmapFactory.Options opt = new BitmapFactory.Options();
+                opt.inPreferredConfig = Bitmap.Config.RGB_565;
+                opt.inPurgeable = true;
+                opt.inInputShareable = true;
+
+                assetManager=BaseActivity.this.getAssets();
+                InputStream in=assetManager.open(path);
+                Bitmap bmp= BitmapFactory.decodeStream(in,null,opt);
+                imageView.setImageBitmap(bmp);
+                imageView.setVisibility(View.VISIBLE);
+//                imageView.setImageDrawable(null);
+//
+//                if(bmp !=  null){
+//                    bmp.recycle();
+//                    bmp =  null;
+//                }
+            }catch (Exception e){
+
+            }
+//            Glide.with(BaseActivity.this).load(url).apply(options1).into(imageView);
+//            Uri uri=Uri.parse(url);
+//            ((SimpleDraweeView)imageView).setImageURI("asset:///" + path);
+//            imageView.setVisibility(View.VISIBLE);
         }else{
             imageView.setVisibility(View.GONE);
         }

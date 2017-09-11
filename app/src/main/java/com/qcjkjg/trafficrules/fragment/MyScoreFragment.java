@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.exam.*;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.adapter.ExamScoreAdapter;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.view.CircleImageView;
@@ -115,9 +117,21 @@ public class MyScoreFragment extends Fragment{
         currentView.findViewById(R.id.moniTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, MockExamActivity.class);
-                intent.putExtra("fragmentType", fragmentType + "");
-                startActivity(intent);
+//                Intent intent = new Intent(mActivity, MockExamActivity.class);
+//                intent.putExtra("fragmentType", fragmentType + "");
+//                startActivity(intent);
+                if((!mActivity.getUserIsLogin())||("0".equals(mActivity.getUserInfo(3)))){
+                    Intent intent=new Intent(mActivity, BaseWebViewActivity.class);
+                    intent.putExtra("url", ApiConstants.VIP_PERMISSION_API);
+                    intent.putExtra("fragmentType", fragmentType+ "");
+                    intent.putExtra("title","VIP特权");
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(mActivity, VipActivity.class);
+                    intent.putExtra("fragmentType", fragmentType + "");
+                    startActivity(intent);
+                }
+                mActivity.finish();
             }
         });
 

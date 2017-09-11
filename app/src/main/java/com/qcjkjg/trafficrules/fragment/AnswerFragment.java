@@ -2,6 +2,8 @@ package com.qcjkjg.trafficrules.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,12 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.core.ImagePipeline;
 import com.qcjkjg.trafficrules.ApiConstants;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
@@ -54,7 +54,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private TextView subTypeTV,subTitleTV,aTV,bTV,cTV,dTV;
     private TextView subAnswerTV,subInfosTV,soundTV,vipTV,myErrorTV,errorNumTV;
     private ImageView subPicIV,aIV,bIV,cIV,dIV,starIV1,starIV2,starIV3,starIV4,starIV5;
-    private ImageView vipIV;
+    private ImageView vipIV,infoPicIV;
     private List<ImageView> abcdImageList=new ArrayList<ImageView>();
     private List<ImageView> starsList=new ArrayList<ImageView>();
     private String answerStr;//正确选项
@@ -170,18 +170,20 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         ((TextView)currentView.findViewById(R.id.subTypeTV)).setText(subType);
         ((TextView)currentView.findViewById(R.id.subTitleTV)).setText("                " + subjectFlag.getSubTitle().toString().trim());
 
+        subPicIV=((ImageView) currentView.findViewById(R.id.subPicIV));
+        vipIV=((ImageView) currentView.findViewById(R.id.vipIV));
+        infoPicIV=((ImageView) currentView.findViewById(R.id.infoPicIV));
         animationVV= (VideoView) currentView.findViewById(R.id.animationVV);
         if(TextUtils.isEmpty(subjectFlag.getSubPic())){
-            ((SimpleDraweeView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+            subPicIV.setVisibility(View.GONE);
             animationVV.setVisibility(View.GONE);
         }else{
             if(subjectFlag.getSubPic().indexOf("jpg")!=-1||subjectFlag.getSubPic().indexOf("png")!=-1){
                 animationVV.setVisibility(View.GONE);
-                mActivity.getLocalPicture(subjectFlag.getSubPic(), ((SimpleDraweeView) currentView.findViewById(R.id.subPicIV)));
+                mActivity.getLocalPicture1(subjectFlag.getSubPic(), subPicIV);
             }else if(subjectFlag.getSubPic().indexOf("mp4")!=-1){
-                ((SimpleDraweeView) currentView.findViewById(R.id.subPicIV)).setVisibility(View.GONE);
+                subPicIV.setVisibility(View.GONE);
                 String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
-                Log.e("aaaa1",uri);
                 animationVV.setVideoURI(Uri.parse(uri));
                 animationVV.start();
                 animationVV.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -439,16 +441,16 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             ((TextView)currentView.findViewById(R.id.subInfosTV)).setText(subjectFlag.getSubInfos());
             ((TextView)currentView.findViewById(R.id.subInfosTV)).setVisibility(View.VISIBLE);
         }
-        mActivity.getLocalPicture(subjectFlag.getSubInfoPic(), ((ImageView) currentView.findViewById(R.id.infoPicIV)));
-        ((TextView)currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
+        mActivity.getLocalPicture1(subjectFlag.getSubInfoPic(), infoPicIV);
+        ((TextView) currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
         if(!mActivity.getUserInfo(3).equals("0")){
             if(!TextUtils.isEmpty(subjectFlag.getVipInfos())){
                 ((TextView)currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
                 ((TextView)currentView.findViewById(R.id.vipTV)).setVisibility(View.VISIBLE);
             }
-            mActivity.getLocalPicture(subjectFlag.getVipPic(), ((ImageView) currentView.findViewById(R.id.vipIV)));
+            mActivity.getLocalPicture1(subjectFlag.getVipPic(),vipIV);
         }
-        ((TextView)currentView.findViewById(R.id.myErrorTV)).setText("共做过" + answerNum + "次,做错" + errorNum + "次");
+        ((TextView) currentView.findViewById(R.id.myErrorTV)).setText("共做过" + answerNum + "次,做错" + errorNum + "次");
 
         try {
             if(MainActivity.errorList.size()!=0){
@@ -481,7 +483,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     }
 
     private void add(int flag){
-        Log.e("eee",type);
+        Log.e("eee", type);
         if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
             List<String> list=((AnswerActivity)mActivity).getNoRecordList();
             String str="";
@@ -727,8 +729,21 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onStop() {
+        clearBitmap(subPicIV);
+        clearBitmap(vipIV);
+        clearBitmap(infoPicIV);
         super.onStop();
-        ImagePipeline imagePipeline = Fresco.getImagePipeline();
-        imagePipeline.clearCaches();
+
+    }
+
+    private void clearBitmap(ImageView iv){
+        if(iv !=  null &&  iv.getDrawable() != null){
+            Bitmap oldBitmap =  ((BitmapDrawable) iv.getDrawable()).getBitmap();
+            iv.setImageDrawable(null);
+            if(oldBitmap !=  null){
+                oldBitmap.recycle();
+                oldBitmap =  null;
+            }
+        }
     }
 }
