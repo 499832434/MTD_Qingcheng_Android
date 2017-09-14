@@ -36,8 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.qcjkjg.trafficrules.adapter.GridImageAdapter;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
 import com.qcjkjg.trafficrules.service.LocationService;
 import com.qcjkjg.trafficrules.utils.FullyGridLayoutManager;
+import de.greenrobot.event.EventBus;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -45,6 +47,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 /**
  * Created by zongshuo on 2017/7/25 0025.
@@ -291,6 +294,8 @@ public class PublishCircleInfoActivity extends BaseActivity {
         super.onStop();
     }
 
+
+
     public void upload(final List<BasicNameValuePair> texts,
                        final HashMap<File, String> files,final String url) {
         pd.show();
@@ -308,7 +313,7 @@ public class PublishCircleInfoActivity extends BaseActivity {
                         // 上传成功
                         closeConnect();
                         //由于我这边服务器编码为gbk，所以编码设置gbk，如果乱码就改为utf-8
-                        String result = EntityUtils.toString(
+                       final String result = EntityUtils.toString(
                                 httpResponse.getEntity(), "utf-8");
                         Log.e("上传成功........", result);
                         PictureFileUtils.deleteCacheDirFile(PublishCircleInfoActivity.this);
@@ -316,7 +321,18 @@ public class PublishCircleInfoActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 pd.dismiss();
-                                Toast.makeText(PublishCircleInfoActivity.this, "成功", Toast.LENGTH_SHORT).show();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    if (jsonObject.getString("code").equals("0")) {
+                                        toast(PublishCircleInfoActivity.this,"成功");
+                                    } else if (jsonObject.getString("code").equals("404")) {
+                                        toast(PublishCircleInfoActivity.this,jsonObject.getString("msg"));
+                                    } else {
+                                        toast(PublishCircleInfoActivity.this,jsonObject.getString("msg"));
+                                    }
+                                } catch (Exception e) {
+
+                                }
                                 finish();
                             }
                         });

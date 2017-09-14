@@ -1,5 +1,6 @@
 package com.qcjkjg.trafficrules.activity.signup;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -37,10 +38,15 @@ public class MessageReplyActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_reply);
         initImageView();
-        initView();
+        if(getIntent().hasExtra("flag")){
+            initView(1);
+        }else{
+            initView(0);
+        }
+
     }
 
-    private void initView(){
+    private void initView(int flag){
         ((CustomTitleBar) findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -66,7 +72,7 @@ public class MessageReplyActivity extends BaseActivity{
 
         fragments=new ArrayList<Fragment>();
         fragments.add(MessageReplyFragment.newInstance(MessageReplyActivity.this,0));//我的回复
-        fragments.add(MessageReplyFragment.newInstance(MessageReplyActivity.this,1));//回复我的
+        fragments.add(MessageReplyFragment.newInstance(MessageReplyActivity.this, 1));//回复我的
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         //给viewPager设置适配器
@@ -90,6 +96,7 @@ public class MessageReplyActivity extends BaseActivity{
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -118,7 +125,11 @@ public class MessageReplyActivity extends BaseActivity{
         });
 
         try{
-            viewPager.setCurrentItem(0);
+            if(0==flag){
+                viewPager.setCurrentItem(0);
+            }else {
+                viewPager.setCurrentItem(1);
+            }
         }catch (Exception e){
 
         }
@@ -146,5 +157,13 @@ public class MessageReplyActivity extends BaseActivity{
         animation.setFillAfter(true);// True:图片停在动画结束位置
         animation.setDuration(300);
         cursorIV.startAnimation(animation);
+    }
+
+
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        initImageView();
+        initView(1);
     }
 }

@@ -48,19 +48,22 @@ public class SignupContentActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_content);
 
+
+
+        initView();
+
         id=getIntent().getIntExtra("id",0);
         flag=getIntent().getStringExtra("flag");
-
-        Log.e("zzz",id+"==="+flag);
-        initView();
         if("news".equals(flag)){
             initData();
         }else if("advert".equals(flag)){
             initAdvertData();
         }
 
-
     }
+
+
+
     private void initView(){
         ((CustomTitleBar)findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,5 +281,19 @@ public class SignupContentActivity extends BaseActivity{
                 "}" +
                 "})()");
     }
+
+
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        id=getIntent().getIntExtra("id", 0);
+        flag=getIntent().getStringExtra("flag");
+        if("news".equals(flag)){
+            initData();
+        }else if("advert".equals(flag)){
+            initAdvertData();
+        }
+    }
+
 
 }

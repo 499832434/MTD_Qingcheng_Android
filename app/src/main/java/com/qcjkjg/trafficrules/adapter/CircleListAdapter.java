@@ -124,7 +124,6 @@ public class CircleListAdapter extends BaseAdapter {
                     context.startActivity(new Intent(context, LoginActivity.class));
                     return;
                 }
-                Toast.makeText(context,mData.get(position).getReplyCnt()+"",Toast.LENGTH_SHORT).show();
                 ((BaseActivity) context).showReplyDialog(-1, null, mData.get(position).getCid(), mData.get(position), position);
             }
         });

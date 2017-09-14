@@ -90,25 +90,24 @@ public class QingChenIntentService extends GTIntentService {
                     Intent intent = new Intent(context, BaseListViewActivity.class);
                     intent.putExtra("flag", 2);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    PendingIntent pendingIntent =PendingIntent.getActivity(context, 0, intent, 0);
+                    PendingIntent pendingIntent =PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder1.setContentIntent(pendingIntent);
                     Notification notification1 = builder1.build();
                     notificationManager.notify((int) (System.currentTimeMillis() / 1000) + random.nextInt(), notification1); // 通过通知管理器发送通知
                 }else if(0==pushType){
                     Intent intent = new Intent(context, MessageReplyActivity.class);
+                    intent.putExtra("flag",0);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    PendingIntent pendingIntent =PendingIntent.getActivity(context, 0, intent, 0);
+                    PendingIntent pendingIntent =PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder1.setContentIntent(pendingIntent);
                     Notification notification1 = builder1.build();
                     notificationManager.notify((int) (System.currentTimeMillis() / 1000) + random.nextInt(), notification1);
                 }else{
-                    Signup sign=new Signup();
-                    sign.setNewsId(jo.getInt("news_id"));
                     Intent intent = new Intent(context, SignupContentActivity.class);
                     intent.putExtra("id", jo.getInt("news_id"));
-                    intent.putExtra("flag","news");
+                    intent.putExtra("flag", "news");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    PendingIntent pendingIntent =PendingIntent.getActivity(context, 0, intent, 0);
+                    PendingIntent pendingIntent =PendingIntent.getActivity(context,  random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder1.setContentIntent(pendingIntent);
                     Notification notification1 = builder1.build();
                     notificationManager.notify((int) (System.currentTimeMillis() / 1000) + random.nextInt(), notification1);

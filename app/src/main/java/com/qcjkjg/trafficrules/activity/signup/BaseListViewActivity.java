@@ -633,4 +633,12 @@ public class BaseListViewActivity extends BaseActivity implements OnRefreshListe
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        initData();
+        initView();
+    }
 }
