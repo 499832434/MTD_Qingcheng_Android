@@ -778,8 +778,8 @@ public class BaseActivity extends AppCompatActivity {
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                String showText = "解除" + platform.toString() + "平台授权成功";
-                Toast.makeText(BaseActivity.this, showText, Toast.LENGTH_SHORT).show();
+//                String showText = "解除" + platform.toString() + "平台授权成功";
+//                Toast.makeText(BaseActivity.this, showText, Toast.LENGTH_SHORT).show();
             }
 
             @Override

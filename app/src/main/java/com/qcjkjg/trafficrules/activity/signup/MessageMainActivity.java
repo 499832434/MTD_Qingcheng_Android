@@ -33,12 +33,6 @@ public class MessageMainActivity extends BaseActivity{
     }
 
     private void initView(){
-        ((CustomTitleBar) findViewById(R.id.customTitleBar)).setRightImageOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                });
         ((CustomTitleBar) findViewById(R.id.customTitleBar)).setLeftImageOnClickListener(
                 new View.OnClickListener() {
                     @Override
