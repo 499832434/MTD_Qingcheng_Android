@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:text="考试"
-            app:imageRight="@drawable/ic_message"
+            app:imageRight="@drawable/ic_message1"
             />
     <View android:layout_width="match_parent"
           android:layout_height="0.5dp"

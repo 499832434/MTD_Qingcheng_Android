@@ -26,9 +26,11 @@ import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
+import com.qcjkjg.trafficrules.event.NewMessageEvent;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.zaaach.citypicker.CityPickerActivity;
+import de.greenrobot.event.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,7 @@ public class ExamFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentView = inflater.inflate(R.layout.fragment_exam, container, false);
         initView();
+        EventBus.getDefault().register(this);
         return currentView;
     }
 
@@ -133,5 +136,15 @@ public class ExamFragment extends Fragment{
 
     public void setArea(String str){
         customTitleBar.setLeftTextView(str);
+    }
+
+
+    public void onEvent(NewMessageEvent event) {
+        boolean flag=event.isFlag();
+        if(flag){
+            customTitleBar.setRightImage(R.drawable.ic_message1);
+        }else{
+            customTitleBar.setRightImage(R.drawable.ic_message);
+        }
     }
 }

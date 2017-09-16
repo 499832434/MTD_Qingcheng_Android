@@ -307,11 +307,7 @@ public class BaseWebViewActivity extends BaseActivity{
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -365,5 +361,19 @@ public class BaseWebViewActivity extends BaseActivity{
         params.gravity = Gravity.CENTER;
         params.dimAmount = 0.5f;
         window.setAttributes(params);
+    }
+
+    @Override
+    public void onPause() {
+        wv.reload ();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+//        wv.destroy();
+//        wv = null;
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

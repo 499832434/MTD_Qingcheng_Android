@@ -29,6 +29,8 @@ import com.qcjkjg.trafficrules.InitApp;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.account.SettingQuestionActivity;
 import com.qcjkjg.trafficrules.db.DbCreateHelper;
+import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.event.NewMessageEvent;
 import com.qcjkjg.trafficrules.event.RefreshExamNumEvent;
 import com.qcjkjg.trafficrules.fragment.AccountFragment;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
@@ -72,7 +74,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //updateTiku();//更新题库
+        updateTiku();//更新题库
 
         if("yes".equals(getUserInfo(11))){
             startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),REQUEST_CODE_PICK_CITY);
@@ -83,6 +85,7 @@ public class MainActivity extends BaseActivity {
         initView();
         sign();
         getErrcnt();//获取错题数跟星级
+
 
 
     }
@@ -217,6 +220,20 @@ public class MainActivity extends BaseActivity {
 
     private void getErrcnt(){
         if (!NetworkUtils.isNetworkAvailable(MainActivity.this)) {
+            if(!TextUtils.isEmpty(getUserInfo(14))){
+                try {
+                    JSONObject jsonObject = new JSONObject(getUserInfo(14));
+                    if (jsonObject.getString("code").equals("0")) {
+                        JSONArray infoArr=jsonObject.getJSONArray("info");
+                        for(int i=0;i<infoArr.length();i++){
+                            JSONObject obj=infoArr.getJSONObject(i);
+                            errorList.add(obj.getString("sub_id")+","+obj.getString("stars")+","+obj.getString("err_cnt")+","+obj.getString("total_cnt"));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
             return;
         }
 
@@ -231,8 +248,9 @@ public class MainActivity extends BaseActivity {
                                 JSONArray infoArr=jsonObject.getJSONArray("info");
                                 for(int i=0;i<infoArr.length();i++){
                                     JSONObject obj=infoArr.getJSONObject(i);
-                                    errorList.add(obj.getString("sub_id")+","+obj.getString("stars")+","+obj.getString("err_cnt"));
+                                    errorList.add(obj.getString("sub_id")+","+obj.getString("stars")+","+obj.getString("err_cnt")+","+obj.getString("total_cnt"));
                                 }
+                                PrefUtils.putString(MainActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.STARS_RECORD, response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

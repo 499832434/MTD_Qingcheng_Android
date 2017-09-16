@@ -52,6 +52,9 @@ public class CustomTitleBar extends LinearLayout {
         rightImageView.setOnClickListener(listener);
     }
 
+    public void setRightImage(int id){
+        rightImageView.setImageResource(id);
+    }
     public void setLeftTextViewOnClickListener(OnClickListener listener) {
         leftTextView.setOnClickListener(listener);
     }

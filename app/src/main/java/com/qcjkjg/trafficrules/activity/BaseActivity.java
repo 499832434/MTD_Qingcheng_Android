@@ -295,9 +295,9 @@ public class BaseActivity extends AppCompatActivity {
             case 6://收藏题目
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_COLLECT_SUB_KEY, "");
             case 7://省
-                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, "山东省");
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PROVINCE_KEY, "北京市");
             case 8://市
-                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY, "淄博市");
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_CITY_KEY, "北京市");
             case 9://phone_code
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.USER_PHONE_CODE, "");
             case 10://0:QQ 1:WEIXIN
@@ -308,6 +308,8 @@ public class BaseActivity extends AppCompatActivity {
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.MEMORY_POSITION, "");
             case 13://题库更新时间
                 return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.UPDATE_TIKU, "1504195200");
+            case 14://记录星级、错题数、答题数
+                return PrefUtils.getString(BaseActivity.this, InitApp.USER_PRIVATE_DATA, InitApp.STARS_RECORD, "");
         }
         return "";
     }
@@ -894,6 +896,46 @@ public class BaseActivity extends AppCompatActivity {
         InitApp.initApp.addToRequestQueue(request);
     }
 
+
+    public void addError(final String subid,final String error) {
+        if (!NetworkUtils.isNetworkAvailable(BaseActivity.this)) {
+            return;
+        }
+
+        HighRequest request = new HighRequest(Request.Method.POST, ApiConstants.ADD_ERROR,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("addErrorRe", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("code").equals("0")) {
+
+                            }else{
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("sub_id", subid);
+                params.put("error", error);
+                return params;
+            }
+        };
+        InitApp.initApp.addToRequestQueue(request);
+    }
+
+
     /**
      * 清除图片内存缓存
      */
@@ -906,6 +948,8 @@ public class BaseActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 
 
 }

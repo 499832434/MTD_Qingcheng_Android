@@ -9,7 +9,7 @@
             android:id="@+id/customTitleBar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            custom:imageRight="@drawable/ic_message"
+            custom:imageRight="@drawable/ic_message1"
             custom:text="报名"
             />
 

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.qcjkjg.trafficrules.R;
 import com.qcjkjg.trafficrules.activity.BaseActivity;
 import com.qcjkjg.trafficrules.activity.login.LoginActivity;
+import com.qcjkjg.trafficrules.event.NewMessageEvent;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
 import com.qcjkjg.trafficrules.vo.Defaultcontent;
 import com.umeng.ShareUtils;
@@ -17,6 +18,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import de.greenrobot.event.EventBus;
 
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class MessageMainActivity extends BaseActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
+        EventBus.getDefault().post(new NewMessageEvent(false));
         initView();
     }
 

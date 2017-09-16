@@ -85,12 +85,11 @@ android {
 
 }
 
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':umeng')
     compile(name: 'swipetoloadLayout', ext: 'aar')
-    compile(name: 'citypicker', ext: 'aar')
+    compile(name: 'citypicker-debug', ext: 'aar')
     compile(name: 'qichengpay', ext: 'aar')
     compile(name: 'CommonbarLib-1.0.2', ext: 'aar')
     compile 'com.android.support:appcompat-v7:23.0.1'

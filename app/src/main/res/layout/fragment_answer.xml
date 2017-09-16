@@ -372,7 +372,7 @@
                     <TextView android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
                               android:textSize="16sp"
-                              android:text="考友错误人数"
+                              android:text="考友错误率"
                               android:layout_marginBottom="10dp"
                               android:textColor="#333333"
                             />

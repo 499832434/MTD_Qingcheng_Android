@@ -51,6 +51,7 @@ public class InitApp extends Application{
     public static final String FIRST_OPEN_KEY = "FIRST_OPEN_KEY";//判断用户是否是第一次安装
     public static final String MEMORY_POSITION = "MEMORY_POSITION";//记录用户答题位置
     public static final String UPDATE_TIKU = "UPDATE_TIKU";//更新题库时间
+    public static final String STARS_RECORD = "STARS_RECORD";//记录星级、错题数、答题数
 
 
 

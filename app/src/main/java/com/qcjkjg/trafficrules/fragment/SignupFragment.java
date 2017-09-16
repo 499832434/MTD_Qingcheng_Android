@@ -26,6 +26,7 @@ import com.qcjkjg.trafficrules.activity.MainActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageMainActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.adapter.SignupAdapter;
+import com.qcjkjg.trafficrules.event.NewMessageEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
 import com.qcjkjg.trafficrules.view.CustomTitleBar;
@@ -37,6 +38,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.zaaach.citypicker.CityPickerActivity;
+import de.greenrobot.event.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +63,7 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentView = inflater.inflate(R.layout.fragment_signup, container, false);
         initView();
+        EventBus.getDefault().register(this);
         return currentView;
     }
 
@@ -188,5 +191,14 @@ public class SignupFragment extends Fragment implements OnRefreshListener, OnLoa
 
     public void setArea(String str){
         customTitleBar.setLeftTextView(str);
+    }
+
+    public void onEvent(NewMessageEvent event) {
+        boolean flag=event.isFlag();
+        if(flag){
+            customTitleBar.setRightImage(R.drawable.ic_message1);
+        }else{
+            customTitleBar.setRightImage(R.drawable.ic_message);
+        }
     }
 }

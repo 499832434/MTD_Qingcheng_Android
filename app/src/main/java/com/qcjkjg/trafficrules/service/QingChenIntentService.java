@@ -26,10 +26,12 @@ import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.signup.BaseListViewActivity;
 import com.qcjkjg.trafficrules.activity.signup.MessageReplyActivity;
 import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
+import com.qcjkjg.trafficrules.event.NewMessageEvent;
 import com.qcjkjg.trafficrules.fragment.CircleFragment;
 import com.qcjkjg.trafficrules.utils.PrefUtils;
 import com.qcjkjg.trafficrules.vo.MessageInfo;
 import com.qcjkjg.trafficrules.vo.Signup;
+import de.greenrobot.event.EventBus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -113,6 +115,7 @@ public class QingChenIntentService extends GTIntentService {
                     notificationManager.notify((int) (System.currentTimeMillis() / 1000) + random.nextInt(), notification1);
                 }
 
+                EventBus.getDefault().post(new NewMessageEvent(true));
             } catch (Exception e) {
                 e.printStackTrace();
             }

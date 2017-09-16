@@ -27,6 +27,7 @@ import com.qcjkjg.trafficrules.activity.signup.SignupContentActivity;
 import com.qcjkjg.trafficrules.adapter.CircleListAdapter;
 import com.qcjkjg.trafficrules.adapter.SystemMessageAdapter;
 import com.qcjkjg.trafficrules.event.CircleDataUpEvent;
+import com.qcjkjg.trafficrules.event.NewMessageEvent;
 import com.qcjkjg.trafficrules.net.HighRequest;
 import com.qcjkjg.trafficrules.utils.DateUtils;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
@@ -380,4 +381,13 @@ public class CircleFragment extends Fragment implements OnRefreshListener, OnLoa
         customTitleBar.setLeftTextView(str);
     }
 
+
+    public void onEvent(NewMessageEvent event) {
+        boolean flag=event.isFlag();
+        if(flag){
+            customTitleBar.setRightImage(R.drawable.ic_message1);
+        }else{
+            customTitleBar.setRightImage(R.drawable.ic_message);
+        }
+    }
 }

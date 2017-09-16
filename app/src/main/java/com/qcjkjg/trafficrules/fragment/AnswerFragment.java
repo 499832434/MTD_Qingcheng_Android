@@ -457,7 +457,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                 for(int i=0;i<MainActivity.errorList.size();i++){
                     if(subjectFlag.getSubId().equals(MainActivity.errorList.get(i).split(",")[0])){
                         setStar(Integer.parseInt(MainActivity.errorList.get(i).split(",")[1]));
-                        ((TextView)currentView.findViewById(R.id.errorNumTV)).setText("共"+MainActivity.errorList.get(i).split(",")[2]+"人做错");
+                        ((TextView)currentView.findViewById(R.id.errorNumTV)).setText("共做过"+MainActivity.errorList.get(i).split(",")[3]+"次,做错"+MainActivity.errorList.get(i).split(",")[2]+"次");
                         break;
                     }
                 }
@@ -484,6 +484,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     private void add(int flag){
         Log.e("eee", type);
+        mActivity.addError(subjectFlag.getSubId(),flag+"");
         if("subcollectchapter".equals(type)||"subcollectall".equals(type)||"suberrorchapter".equals(type)||"suberrorall".equals(type)||"submoni1".equals(type)||"submoni2".equals(type)){
             List<String> list=((AnswerActivity)mActivity).getNoRecordList();
             String str="";

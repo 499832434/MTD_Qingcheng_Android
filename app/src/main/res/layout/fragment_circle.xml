@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:text="考友圈"
-            app:imageRight="@drawable/ic_message"
+            app:imageRight="@drawable/ic_message1"
             />
 
 
