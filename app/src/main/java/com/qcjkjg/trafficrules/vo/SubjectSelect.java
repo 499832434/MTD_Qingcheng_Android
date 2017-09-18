@@ -19,6 +19,7 @@ public class SubjectSelect {
     private int subType;
     private String carId;//车型
     private String errorAnswer;//错题
+    private String orderId;
 
     public SubjectSelect() {
         this.seqAnswer = "-1";
@@ -151,5 +152,13 @@ public class SubjectSelect {
 
     public void setErrorAnswer(String errorAnswer) {
         this.errorAnswer = errorAnswer;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

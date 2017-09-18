@@ -712,6 +712,7 @@ public class BaseActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(path)){
             String url="file:///android_asset/" + path;
             Log.e("url", url);
+            InputStream in=null;
             try{
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inPreferredConfig = Bitmap.Config.RGB_565;
@@ -719,23 +720,21 @@ public class BaseActivity extends AppCompatActivity {
                 opt.inInputShareable = true;
 
                 assetManager=BaseActivity.this.getAssets();
-                InputStream in=assetManager.open(path);
+                in=assetManager.open(path);
                 Bitmap bmp= BitmapFactory.decodeStream(in,null,opt);
                 imageView.setImageBitmap(bmp);
                 imageView.setVisibility(View.VISIBLE);
-//                imageView.setImageDrawable(null);
-//
-//                if(bmp !=  null){
-//                    bmp.recycle();
-//                    bmp =  null;
-//                }
             }catch (Exception e){
 
+            }finally {
+                if(in!=null){
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-//            Glide.with(BaseActivity.this).load(url).apply(options1).into(imageView);
-//            Uri uri=Uri.parse(url);
-//            ((SimpleDraweeView)imageView).setImageURI("asset:///" + path);
-//            imageView.setVisibility(View.VISIBLE);
         }else{
             imageView.setVisibility(View.GONE);
         }

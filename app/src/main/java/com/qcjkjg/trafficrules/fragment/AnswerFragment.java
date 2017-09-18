@@ -42,11 +42,11 @@ import java.util.List;
 public class AnswerFragment extends Fragment implements View.OnClickListener{
     private View currentView = null;
     protected AnswerActivity mActivity;
-    private final static String POSITION = "position";
-    private final static String SUBJECT = "Subject";
-    private final static String TYPE = "type";
-    private final static String FRAGMENTTYPE = "fragmentType";
-    private final static String HISTORYSCORE = "historyscore";
+//    private final static String POSITION = "position";
+//    private final static String SUBJECT = "Subject";
+//    private final static String TYPE = "type";
+//    private final static String FRAGMENTTYPE = "fragmentType";
+//    private final static String HISTORYSCORE = "historyscore";
     private int positionFlag=0;//第几题
     private Subject subjectFlag;
     private String fragmentType;//科目几
@@ -77,20 +77,20 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     public static AnswerFragment newInstance(int position,Parcelable subject,String type,String fragmentType,String historyscore) {
         AnswerFragment fr = new AnswerFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(POSITION, position);
-        bundle.putParcelable(SUBJECT, subject);
-        bundle.putString(TYPE, type);
-        bundle.putString(FRAGMENTTYPE, fragmentType);
-        bundle.putString(HISTORYSCORE, historyscore);
+        bundle.putInt("position", position);
+        bundle.putParcelable("Subject", subject);
+        bundle.putString("type", type);
+        bundle.putString("fragmentType", fragmentType);
+        bundle.putString("historyscore", historyscore);
         fr.setArguments(bundle);
         return fr;
     }
 
     private void initData(){
-        positionFlag = getArguments().getInt(POSITION);
-        subjectFlag = getArguments().getParcelable(SUBJECT);
-        type=getArguments().getString(TYPE);
-        fragmentType=getArguments().getString(FRAGMENTTYPE);
+        positionFlag = getArguments().getInt("position");
+        subjectFlag = getArguments().getParcelable("Subject");
+        type=getArguments().getString("type");
+        fragmentType=getArguments().getString("fragmentType");
         answerStr=subjectFlag.getSubAnswer();
         if("subnodone".equals(type)){
             if(((AnswerActivity)mActivity).getNodoneFlag()){
@@ -524,6 +524,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }else if("subnanti".equals(type)){
             subjectSelect.setSeqAnswer("1");
         }
+        subjectSelect.setOrderId(subjectFlag.getOrderId());
         DbHelper db=new DbHelper(mActivity);
         db.addSub(subjectSelect);
     }
@@ -544,7 +545,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }
         if("historyscore".equals(type)){
             SubjectSelect subjectSelect=new SubjectSelect();
-            String historyscore=getArguments().getString(HISTORYSCORE);
+            String historyscore=getArguments().getString("historyscore");
             if(!TextUtils.isEmpty(historyscore)){
                 for(int i=0;i<historyscore.split(",").length;i++){
                     if(subjectFlag.getSubId().equals(historyscore.split(",")[i].split("-")[0])){
@@ -735,6 +736,18 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         clearBitmap(infoPicIV);
         super.onStop();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("fragment"+positionFlag,"onDestroy");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("fragment"+positionFlag,"onDestroyView");
     }
 
     private void clearBitmap(ImageView iv){

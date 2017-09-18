@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        updateTiku();//更新题库
+        //updateTiku();//更新题库
 
         if("yes".equals(getUserInfo(11))){
             startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),REQUEST_CODE_PICK_CITY);

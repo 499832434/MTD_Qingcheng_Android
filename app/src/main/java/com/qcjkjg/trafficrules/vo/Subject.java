@@ -26,6 +26,15 @@ public class Subject implements Parcelable {
     private String subChapter;//题目章节
     private String subClass;//题目专项
     private String subVip;//vip题目
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public String getSubChapter() {
         return subChapter;
@@ -206,6 +215,7 @@ public class Subject implements Parcelable {
         parcel.writeString(subChapter);
         parcel.writeString(subClass);
         parcel.writeString(subVip);
+        parcel.writeString(orderId);
     }
 
     public static final Parcelable.Creator<Subject> CREATOR = new Creator(){
@@ -234,6 +244,7 @@ public class Subject implements Parcelable {
             subject.setSubChapter(source.readString());
             subject.setSubClass(source.readString());
             subject.setSubVip(source.readString());
+            subject.setOrderId(source.readString());
             return subject;
         }
 

@@ -125,6 +125,7 @@ public class DbCreateHelper {
                 subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
                 subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
                 subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+                subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
                 subjectList.add(subject);
             }
             return subjectList;
@@ -170,6 +171,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             if(1==flag){
                 subject.setSubClass("图片题");
             }else if(0==flag){
@@ -211,6 +213,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             if(1==flag){
                 subject.setSubClass("判断题");
             }else if(2==flag){
@@ -253,6 +256,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             subjectList.add(subject);
         }
         return subjectList;
@@ -287,6 +291,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             subjectList.add(subject);
         }
         return subjectList;
@@ -325,6 +330,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             subjectList.add(subject);
         }
         return subjectList;
@@ -363,6 +369,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             subjectList.add(subject);
         }
         return subjectList;
@@ -396,6 +403,7 @@ public class DbCreateHelper {
             subject.setSubChapter(cursor.getString(cursor.getColumnIndex("sub_chapter")));
             subject.setSubClass(cursor.getString(cursor.getColumnIndex("sub_class")));
             subject.setSubVip(cursor.getString(cursor.getColumnIndex("vip")));
+            subject.setOrderId(cursor.getString(cursor.getColumnIndex("order_id")));
             subjectList.add(subject);
         }
         return subjectList;
