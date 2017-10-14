@@ -63,18 +63,18 @@ public class MainActivity extends BaseActivity {
     public MyFragAdapter mAdapter;
     private FragmentManager mFragmentManager;
     public CustomViewPager masterViewPager;
-    public static String SINGUPTAG = "singup";
     public CircleFragment circleFragment;
     public SignupFragment signupFragment;
     public ExamFragment examFragment;
     public static final int REQUEST_CODE_PICK_CITY = 0;
     public static List<String> errorList=new ArrayList<String>();
+    private List<Fragment> fragmentList=new ArrayList<Fragment>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //updateTiku();//更新题库
+        updateTiku();//更新题库
 
         if("yes".equals(getUserInfo(11))){
             startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class),REQUEST_CODE_PICK_CITY);
@@ -91,6 +91,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView(){
+        signupFragment=new SignupFragment();
+        examFragment=new ExamFragment();
+        circleFragment=new CircleFragment();
+        fragmentList.add(signupFragment);
+        fragmentList.add(examFragment);
+        fragmentList.add(circleFragment);
+        fragmentList.add(new AccountFragment());
         masterViewPager = (CustomViewPager) findViewById(R.id.masterViewPager);
         mFragmentManager = getSupportFragmentManager();
         mAdapter = new MyFragAdapter(mFragmentManager);
@@ -140,20 +147,19 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return fragmentList.size();
         }
 
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return signupFragment=new SignupFragment();
+                return fragmentList.get(0);
             } else if (position == 1) {
-                return examFragment=new ExamFragment();
+                return fragmentList.get(1);
             } else if (position == 2) {
-                circleFragment=new CircleFragment();
-                return circleFragment;
+                return fragmentList.get(2);
             } else if (position == 3) {
-                return new AccountFragment();
+                return fragmentList.get(3);
             }
             return null;
         }
@@ -317,6 +323,7 @@ public class MainActivity extends BaseActivity {
                                         addSub.setVipId(obj.getString("vip_id"));
                                         addSub.setSubId(obj.getString("sub_id"));
                                         addSub.setPubtime(obj.getString("pubtime"));
+                                        addSub.setOrderId(obj.getString("order_id"));
                                         list.add(addSub);
                                     }
                                     if(list.size()>0){
@@ -346,5 +353,14 @@ public class MainActivity extends BaseActivity {
             }
         };
         InitApp.initApp.addToRequestQueue(request);
+    }
+
+    public void refresh(){
+        fragmentList.clear();
+        fragmentList.add(new AccountFragment());
+        fragmentList.add(new AccountFragment());
+        fragmentList.add(new AccountFragment());
+        fragmentList.add(new AccountFragment());
+        mAdapter.notifyDataSetChanged();
     }
 }

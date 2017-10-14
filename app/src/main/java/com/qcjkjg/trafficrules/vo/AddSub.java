@@ -28,6 +28,15 @@ public class AddSub {
     private String vipId;
     private String subId;
     private String pubtime;
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public String getJqyy() {
         return jqyy;

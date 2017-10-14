@@ -677,11 +677,11 @@ public class AnswerActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if ("1".equals(fragmentType)) {
-            BaseActivity.subtypePosition1 = fragmentPositon;
-        } else {
-            BaseActivity.subtypePosition4 = fragmentPositon;
-        }
+//        if ("1".equals(fragmentType)) {
+//            BaseActivity.subtypePosition1 = fragmentPositon;
+//        } else {
+//            BaseActivity.subtypePosition4 = fragmentPositon;
+//        }
         DbHelper helper = new DbHelper(AnswerActivity.this);
         helper.addPosition(fragmentType, fragmentPositon + "");
         Log.e("yyyy1", fragmentPositon + "");
@@ -698,5 +698,12 @@ public class AnswerActivity extends BaseActivity {
         }
     };
 
-
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        toast(AnswerActivity.this, "11111111");
+//        fragments.clear();
+//        viewPager.removeAllViews();
+//
+//    }
 }

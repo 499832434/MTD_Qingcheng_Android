@@ -280,10 +280,10 @@ public class ExamOneFragment extends Fragment{
     private void refresh(){
         DbCreateHelper helper=new DbCreateHelper(mActivity);
         seqNum=helper.getSubjectList(fragmentType+"","","subseq").size();
-        DbHelper helper1=new DbHelper(mActivity);
-        BaseActivity.subtypePosition1=helper1.selectPosition("1");
-        DbHelper helper4=new DbHelper(mActivity);
-        BaseActivity.subtypePosition4=helper4.selectPosition("4");
+//        DbHelper helper1=new DbHelper(mActivity);
+//        BaseActivity.subtypePosition1=helper1.selectPosition("1");
+//        DbHelper helper4=new DbHelper(mActivity);
+//        BaseActivity.subtypePosition4=helper4.selectPosition("4");
 
 
 

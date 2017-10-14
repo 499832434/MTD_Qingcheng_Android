@@ -28,6 +28,7 @@ import com.qcjkjg.trafficrules.activity.login.LoginActivity;
 import com.qcjkjg.trafficrules.activity.web.BaseWebViewActivity;
 import com.qcjkjg.trafficrules.db.DbHelper;
 import com.qcjkjg.trafficrules.utils.NetworkUtils;
+import com.qcjkjg.trafficrules.view.MyImageView;
 import com.qcjkjg.trafficrules.vo.Subject;
 import com.qcjkjg.trafficrules.vo.SubjectSelect;
 
@@ -41,7 +42,7 @@ import java.util.List;
  */
 public class AnswerFragment extends Fragment implements View.OnClickListener{
     private View currentView = null;
-    protected AnswerActivity mActivity;
+    private AnswerActivity mActivity;
 //    private final static String POSITION = "position";
 //    private final static String SUBJECT = "Subject";
 //    private final static String TYPE = "type";
@@ -53,8 +54,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private String type;//答题类型
     private TextView subTypeTV,subTitleTV,aTV,bTV,cTV,dTV;
     private TextView subAnswerTV,subInfosTV,soundTV,vipTV,myErrorTV,errorNumTV;
-    private ImageView subPicIV,aIV,bIV,cIV,dIV,starIV1,starIV2,starIV3,starIV4,starIV5;
-    private ImageView vipIV,infoPicIV;
+    private ImageView aIV,bIV,cIV,dIV,starIV1,starIV2,starIV3,starIV4,starIV5;
+    private ImageView vipIV,infoPicIV,subPicIV;
     private List<ImageView> abcdImageList=new ArrayList<ImageView>();
     private List<ImageView> starsList=new ArrayList<ImageView>();
     private String answerStr;//正确选项
@@ -180,10 +181,19 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         }else{
             if(subjectFlag.getSubPic().indexOf("jpg")!=-1||subjectFlag.getSubPic().indexOf("png")!=-1){
                 animationVV.setVisibility(View.GONE);
-                mActivity.getLocalPicture1(subjectFlag.getSubPic(), subPicIV);
+                if(subjectFlag.getSubPic().indexOf("http")!=-1){
+                    mActivity.getNetWorkPicture(subjectFlag.getSubPic(), subPicIV);
+                }else{
+                    mActivity.getLocalPicture1(subjectFlag.getSubPic(), subPicIV);
+                }
             }else if(subjectFlag.getSubPic().indexOf("mp4")!=-1){
                 subPicIV.setVisibility(View.GONE);
-                String uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
+                String uri ="";
+                if(subjectFlag.getSubPic().indexOf("http")!=-1){
+                    uri =subjectFlag.getSubPic();
+                }else{
+                    uri = "android.resource://com.qcjkjg.trafficrules/raw/a"+subjectFlag.getSubPic().substring(0,subjectFlag.getSubPic().length()-4);
+                }
                 animationVV.setVideoURI(Uri.parse(uri));
                 animationVV.start();
                 animationVV.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -441,14 +451,26 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
             ((TextView)currentView.findViewById(R.id.subInfosTV)).setText(subjectFlag.getSubInfos());
             ((TextView)currentView.findViewById(R.id.subInfosTV)).setVisibility(View.VISIBLE);
         }
-        mActivity.getLocalPicture1(subjectFlag.getSubInfoPic(), infoPicIV);
+        if(!TextUtils.isEmpty(subjectFlag.getSubInfoPic())){
+            if(subjectFlag.getSubInfoPic().indexOf("http")!=-1){
+                mActivity.getNetWorkPicture(subjectFlag.getSubInfoPic(), infoPicIV);
+            }else{
+                mActivity.getLocalPicture1(subjectFlag.getSubInfoPic(), infoPicIV);
+            }
+        }
         ((TextView) currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
         if(!mActivity.getUserInfo(3).equals("0")){
             if(!TextUtils.isEmpty(subjectFlag.getVipInfos())){
                 ((TextView)currentView.findViewById(R.id.vipTV)).setText(subjectFlag.getVipInfos());
                 ((TextView)currentView.findViewById(R.id.vipTV)).setVisibility(View.VISIBLE);
             }
-            mActivity.getLocalPicture1(subjectFlag.getVipPic(),vipIV);
+            if(!TextUtils.isEmpty(subjectFlag.getVipPic())){
+                if(subjectFlag.getVipPic().indexOf("http")!=-1){
+                    mActivity.getNetWorkPicture(subjectFlag.getVipPic(), vipIV);
+                }else{
+                    mActivity.getLocalPicture1(subjectFlag.getVipPic(), vipIV);
+                }
+            }
         }
         ((TextView) currentView.findViewById(R.id.myErrorTV)).setText("共做过" + answerNum + "次,做错" + errorNum + "次");
 
@@ -731,33 +753,54 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onStop() {
+        subjectSelect=null;
+        subjectFlag=null;
+        abcdImageList.clear();
+        starsList.clear();
+        moreList.clear();
         clearBitmap(subPicIV);
         clearBitmap(vipIV);
         clearBitmap(infoPicIV);
+        for(int i=0;i<abcdImageList.size();i++){
+            abcdImageList.get(i).setImageDrawable(null);
+        }
+        for(int i=0;i<starsList.size();i++){
+            starsList.get(i).setImageDrawable(null);
+        }
         super.onStop();
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("fragment"+positionFlag,"onDestroy");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.e("fragment"+positionFlag,"onDestroyView");
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        Log.e("fragment"+positionFlag,"onDestroy");
+//    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        Log.e("fragment"+positionFlag,"onDestroyView");
+//    }
 
     private void clearBitmap(ImageView iv){
-        if(iv !=  null &&  iv.getDrawable() != null){
-            Bitmap oldBitmap =  ((BitmapDrawable) iv.getDrawable()).getBitmap();
-            iv.setImageDrawable(null);
-            if(oldBitmap !=  null){
-                oldBitmap.recycle();
-                oldBitmap =  null;
+        try{
+            if(iv !=  null &&  iv.getDrawable() != null){
+                Bitmap oldBitmap =  ((BitmapDrawable) iv.getDrawable()).getBitmap();
+                iv.setImageDrawable(null);
+                if(oldBitmap !=  null&& !oldBitmap.isRecycled()){
+                    if(subjectFlag.getSubPic().indexOf("http")!=1||subjectFlag.getSubInfoPic().indexOf("http")!=1||subjectFlag.getVipPic().indexOf("http")!=1){
+
+                    }else{
+                        oldBitmap.recycle();
+                        oldBitmap =  null;
+                    }
+
+                }
             }
+        }catch (Exception e){
+
         }
+
     }
 }

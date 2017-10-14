@@ -35,6 +35,8 @@ import com.bumptech.glide.MemoryCategory;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
@@ -112,8 +114,8 @@ public class BaseActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText contentET;
     private TextView num1TV, num2TV;
-    public static int subtypePosition1=-1;
-    public static int subtypePosition4=-1;
+//    public static int subtypePosition1=-1;
+//    public static int subtypePosition4=-1;
     private AssetManager assetManager =null;
 
 
@@ -131,6 +133,7 @@ public class BaseActivity extends AppCompatActivity {
         pd.setIndeterminate(false);
 
         options = new RequestOptions()
+                .skipMemoryCache(true)
                 .placeholder(R.drawable.aio_image_fail_round)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         options1 = new RequestOptions()
@@ -412,8 +415,13 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void getNetWorkPicture(String url,ImageView imageView){
-        Glide.with(BaseActivity.this).load(url).apply(options).into(imageView);
+        try{
+            Glide.with(BaseActivity.this).load(url).apply(options).into(imageView);
+        }catch (Exception e){
+
+        }
     }
+
 
     public void toast(String str){
         if(!TextUtils.isEmpty(str)){
